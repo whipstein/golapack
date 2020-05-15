@@ -1,8 +1,10 @@
 package goblas
 
-import "math"
-import 
-// \brief \b Dznrm2
+import (
+	"math"
+)
+
+// Dznrm2 ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,13 +14,13 @@ import
 //  Definition:
 //  ===========
 //
-//       DOUBLE PRECISION FUNCTION Dznrm2(N,X,incx)
+//       DOUBLE PRECISION FUNCTION Dznrm2(n,x,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 X(//)
+//       COMPLEX*16 x(*)
 //       ..
 //
 //
@@ -27,31 +29,31 @@ import
 //
 // \verbatim
 //
-// Dznrm2 returns the euclidean norm of a vector via the function
+// Dznrm2 returns the euclidean dznrm2Return of a vector via the function
 // name, so that
 //
-//    Dznrm2 := sqrt( x////H//x)
+//    Dznrm2 := sqrt( x**H*x )
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is COMPLEX//16 array, dimension (N)
-//         complex vector with N elements
+//          x is COMPLEX*16 array, dimension n
+//         complex vector with n elements
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of X
+//         storage spacing between elements of x
 // \endverbatim
 //
 //  Authors:
@@ -77,72 +79,46 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Dznrm2(n *int, x *[]complex128, incx *int) (dznrm2Return *float64) {
-	dznrm2return := new(float64)
-	one := new(float64)
-	zero := new(float64)
-	norm := new(float64)
-	scale := new(float64)
-	ssq := new(float64)
-	temp := new(float64)
-	ix := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*one) = 1.0e+0
-	(*zero) = 0.0e+0
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	if (*n) < 1 || (*incx) < 1 {
-		(*norm) = (*zero)
+func Dznrm2(n *int, x *[]complex128, incx *int) (dznrm2Return float64) {
+	var scale, ssq, temp float64
+	var ix int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n < 1 || *incx < 1 {
+		dznrm2Return = 0.0
 	} else {
-		(*scale) = (*zero)
-		(*ssq) = (*one)
-		//*        The following loop is equivalent to this call to the LAPACK
-		//*        auxiliary routine:
-		//*        CALL ZLASSQ( N, X, incx, SCALE, SSQ)
-		//*
-		for (*ix) = 1; (*ix) <= 1+((*n)-1)*(*incx); (*ix) += (*incx) {
-			if DBLE(((*x)[(*ix)-1])) != (*zero) {
-				(*temp) = (ABS(DBLE(((*x)[(*ix)-1]))))
-				if (*scale) < (*temp) {
-					(*ssq) = (*one) + (*ssq)*math.pow(((*scale)/(*temp)), 2)
-					(*scale) = (*temp)
+		scale = 0.0
+		ssq = 1.0
+		//        The following loop is equivalent to this call to the LAPACK
+		//        auxiliary routine:
+		//        CALL ZLASSQ( n, x, incx, scale, ssq )
+		//
+		for ix = 1; ix <= 1+((*n)-1)*(*incx); ix += *incx {
+			if real((*x)[ix-1]) != 0.0 {
+				temp = math.Abs(real((*x)[ix-1]))
+				if scale < temp {
+					ssq = 1.0 + ssq*math.Pow(scale/temp, 2)
+					scale = temp
 				} else {
-					(*ssq) = (*ssq) + math.pow(((*temp)/(*scale)), 2)
+					ssq += math.Pow(temp/scale, 2)
 				}
 			}
-			if DIMAG(&((*x)[(*ix)-1])) != (*zero) {
-				(*temp) = (ABS(DIMAG(&((*x)[(*ix)-1]))))
-				if (*scale) < (*temp) {
-					(*ssq) = (*one) + (*ssq)*math.pow(((*scale)/(*temp)), 2)
-					(*scale) = (*temp)
+			if imag((*x)[ix-1]) != 0.0 {
+				temp = math.Abs(imag((*x)[ix-1]))
+				if scale < temp {
+					ssq = 1.0 + ssq*math.Pow(scale/temp, 2)
+					scale = temp
 				} else {
-					(*ssq) = (*ssq) + math.pow(((*temp)/(*scale)), 2)
+					ssq += math.Pow(temp/scale, 2)
 				}
 			}
-		//Label10:
 		}
-		(*norm) = (*scale) * SQRT((*ssq))
+		dznrm2Return = scale * math.Sqrt(ssq)
 	}
-	//*
-	(*dznrm2) = (*norm)
+
 	return
-	//*
-	//*     End of Dznrm2.
-	//*
 }

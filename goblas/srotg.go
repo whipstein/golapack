@@ -1,8 +1,6 @@
 package goblas
 
-import "math"
-import 
-// \brief \b Srotg
+// Srotg ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,10 +10,10 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Srotg(SA,SB,C,S)
+//       SUBROUTINE SROTG(sa,sb,c,s)
 //
 //       .. Scalar Arguments ..
-//       REAL C,S,SA,SB
+//       REAL c,s,sa,sb
 //       ..
 //
 //
@@ -24,30 +22,30 @@ import
 //
 // \verbatim
 //
-//    Srotg construct givens plane rotation.
+//    SROTG construct givens plane rotation.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] SA
+// \param[in] sa
 // \verbatim
-//          SA is REAL
+//          sa is REAL
 // \endverbatim
 //
-// \param[in] SB
+// \param[in] sb
 // \verbatim
-//          SB is REAL
+//          sb is REAL
 // \endverbatim
 //
-// \param[out] C
+// \param[out] c
 // \verbatim
-//          C is REAL
+//          c is REAL
 // \endverbatim
 //
-// \param[out] S
+// \param[out] s
 // \verbatim
-//          S is REAL
+//          s is REAL
 // \endverbatim
 //
 //  Authors:
@@ -71,50 +69,38 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Srotg(sa *float64, sb *float64, c *float64, s *float64) {
-	r := new(float64)
-	roe := new(float64)
-	scale := new(float64)
-	z := new(float64)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*roe) = (*sb)
-	if ABS((*sa)) > ABS(sb) {
-		(*roe) = (*sa)
+func Srotg(major *byte, sa, sb, c, s *float32) {
+	var r, roe, scale, z float32
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	roe = *sb
+	if absf32(*sa) > absf32(*sb) {
+		roe = *sa
 	}
-	(*scale) = ABS((*sa)) + ABS((*sb))
-	if (*scale) == 0.0 {
-		(*c) = 1.0
-		(*s) = 0.0
-		(*r) = 0.0
-		(*z) = 0.0
+	scale = absf32(*sa) + absf32(*sb)
+	if scale == 0.0 {
+		*c = 1.0
+		*s = 0.0
+		r = 0.0
+		z = 0.0
 	} else {
-		(*r) = (*scale) * SQRT(math.pow(((*sa)/(*scale)), 2)+math.pow(((*sb)/(*scale)), 2))
-		(*r) = sign(func() *float64{y := 1.0; return &y }(), roe) * (*r)
-		(*c) = (*sa) / (*r)
-		(*s) = (*sb) / (*r)
-		(*z) = 1.0
-		if ABS((*sa)) > ABS(sb) {
-			(*z) = (*s)
+		r = scale * sqrtf32(powf32((*sa)/scale, 2)+powf32((*sb)/scale, 2))
+		r = signf32(1, roe) * r
+		*c = (*sa) / r
+		*s = (*sb) / r
+		z = 1.0
+		if absf32(*sa) > absf32(*sb) {
+			z = (*s)
 		}
-		if abs ((*sb)) >= abs ((*sa)) && (*c) != 0.0 {
-			(*z) = 1.0 / (*c)
+		if absf32(*sb) >= absf32(*sa) && *c != 0.0 {
+			z = 1.0 / (*c)
 		}
 	}
-	(*sa) = (*r)
-	(*sb) = (*z)
+	*sa = r
+	*sb = z
 	return
 }

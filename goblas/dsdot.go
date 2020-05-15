@@ -1,7 +1,6 @@
 package goblas
 
-import 
-// \brief \b Dsdot
+// Dsdot ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -11,19 +10,19 @@ import
 //  Definition:
 //  ===========
 //
-//       DOUBLE PRECISION FUNCTION Dsdot(N,SX,incx,SY,incy)
+//       DOUBLE PRECISION FUNCTION Dsdot(n,sx,incx,sy,incy)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,incy,N
+//       INTEGER incx,incy,n
 //       ..
 //       .. Array Arguments ..
-//       REAL SX(//),SY(//)
+//       REAL sx(*),sy(*)
 //       ..
 //
 //    AUTHORS
 //    =======
-//    Lawson, C. L., (JPL), Hanson, R. J., (SNLA),
-//    Kincaid, D. R., (U. of Texas), Krogh, F. T., (JPL)
+//    Lawson, c. l., (JPL), Hanson, r. j., (SNLA),
+//    Kincaid, D. r., (U. of Texas), Krogh, F. T., (JPL)
 //
 //
 // \par Purpose:
@@ -34,49 +33,49 @@ import
 // Compute the inner product of two vectors with extended
 // precision accumulation and result.
 //
-// Returns D.P. dot product accumulated in D.P., for S.P. SX and SY
-// Dsdot = sum for I = 0 to N-1 of  SX(LX+I//incx) // SY(LY+I//incy),
-// where LX = 1 if incx .GE. 0, else LX = 1+(1-N)//incx, and LY is
+// Returns D.P. dot product accumulated in D.P., for s.P. sx and sy
+// Dsdot = sum for i = 0 to n-1 of  sx(LX+i*incx) * sy(LY+i*incy),
+// where LX = 1 if incx .GE. 0, else LX = 1+(1-n)*incx, and LY is
 // defined in a similar way using incy.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] SX
+// \param[in] sx
 // \verbatim
-//          SX is REAL array, dimension(N)
-//         single precision vector with N elements
+//          sx is REAL array, dimensionn
+//         single precision vector with n elements
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//          storage spacing between elements of SX
+//          storage spacing between elements of sx
 // \endverbatim
 //
-// \param[in] SY
+// \param[in] sy
 // \verbatim
-//          SY is REAL array, dimension(N)
-//         single precision vector with N elements
+//          sy is REAL array, dimensionn
+//         single precision vector with n elements
 // \endverbatim
 //
 // \param[in] incy
 // \verbatim
 //          incy is INTEGER
-//         storage spacing between elements of SY
+//         storage spacing between elements of sy
 // \endverbatim
 //
 // \result Dsdot
 // \verbatim
 //          Dsdot is DOUBLE PRECISION
-//         Dsdot  double precision dot product (zero if N.LE.0)
+//         Dsdot  double precision dot product (zero if n.LE.0)
 // \endverbatim
 //
 //  Authors:
@@ -103,7 +102,7 @@ import
 // \verbatim
 //
 //
-//  C. L. Lawson, R. J. Hanson, D. R. Kincaid and F. T.
+//  c. l. Lawson, r. j. Hanson, D. r. Kincaid and F. T.
 //  Krogh, Basic linear algebra subprograms for Fortran
 //  usage, Algorithm No. 539, Transactions on Mathematical
 //  Software 5, 3 (September 1979), pp. 308-323.
@@ -120,62 +119,41 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Dsdot(n *int, sx *[]float64, incx *int, sy *[]float64, incy *int) (dsdotReturn *float64) {
-	dsdotreturn := new(float64)
-	i := new(int)
-	kx := new(int)
-	ky := new(int)
-	ns := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.7.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     December 2016
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  Authors:
-	//*  ========
-	//*  Lawson, C. L., (JPL), Hanson, R. J., (SNLA),
-	//*  Kincaid, D. R., (U. of Texas), Krogh, F. T., (JPL)
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*dsdot) = 0.0
-	if (*n) <= 0 {
+func Dsdot(major *byte, n *int, sx *[]float32, incx *int, sy *[]float32, incy *int) (dsdotReturn float64) {
+	var i, kx, ky, ns int
+	//
+	//  -- Reference BLAS level1 routine (version 3.7.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     December 2016
+	//
+	if *n <= 0 {
 		return
 	}
-	if (*incx) == (*incy) && (*incx) > 0 {
-		//*
-		//*     Code for equal, positive, non-unit increments.
-		//*
-		(*ns) = (*n) * (*incx)
-		for (*i) = 1; (*i) <= (*ns); (*i) += (*incx) {
-			(*dsdot) = (*dsdot) + DBLE(((*sx)[(*i)-(1)]))*DBLE(((*sy)[(*i)-(1)]))
+	if *incx == *incy && *incx > 0 {
+		//
+		//     Code for equal, positive, non-unit increments.
+		//
+		ns = (*n) * (*incx)
+		for i = 1; i <= ns; i += *incx {
+			dsdotReturn += float64((*sx)[i-1]) * float64((*sy)[i-1])
 		}
 	} else {
-		//*
-		//*     Code for unequal or nonpositive increments.
-		//*
-		(*kx) = 1
-		(*ky) = 1
-		if (*incx) < 0 {
-			(*kx) = 1 + (1-(*n))*(*incx)
+		//
+		//     Code for unequal or nonpositive increments.
+		//
+		kx = 1
+		ky = 1
+		if *incx < 0 {
+			kx = 1 + (1-(*n))*(*incx)
 		}
-		if (*incy) < 0 {
-			(*ky) = 1 + (1-(*n))*(*incy)
+		if *incy < 0 {
+			ky = 1 + (1-(*n))*(*incy)
 		}
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*dsdot) = (*dsdot) + DBLE(((*sx)[(*kx)-(1)]))*DBLE(((*sy)[(*ky)-(1)]))
-			(*kx) = (*kx) + (*incx)
-			(*ky) = (*ky) + (*incy)
+		for i = 1; i <= *n; i++ {
+			dsdotReturn += float64((*sx)[kx-1]) * float64((*sy)[ky-1])
+			kx += *incx
+			ky += *incy
 		}
 	}
 	return

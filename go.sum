@@ -1,0 +1,5 @@
+github.com/Konstantin8105/f4go v0.0.0-20191119131205-b8b620203b82 h1:Ynh17yezK8Se6fxnP8TpjVua3NvPbf/vxxF5oQFYjKA=
+github.com/Konstantin8105/f4go v0.0.0-20191119131205-b8b620203b82/go.mod h1:vZxW3sVrJfWNzLsO8EYioT8eWMzkdOVu8AqFqj+IWhs=
+github.com/bradleyjkemp/cupaloy v2.3.0+incompatible/go.mod h1:Au1Xw1sgaJ5iSFktEhYsS0dbQiS1B0/XMXl+42y9Ilk=
+github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

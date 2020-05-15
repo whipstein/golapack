@@ -1,8 +1,10 @@
 package goblas
 
-import 
+import (
+	"math/cmplx"
+)
 
-// \brief \b Zgerc
+// Zgerc ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,14 +14,14 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Zgerc(M,N,ALPHA,X,incx,Y,incy,A,LDA)
+//       SUBROUTINE Zgerc(m,n,alpha,x,incx,y,incy,a,lda)
 //
 //       .. Scalar Arguments ..
-//       COMPLEX//16 ALPHA
-//       INTEGER incx,incy,LDA,M,N
+//       COMPLEX*16 alpha
+//       INTEGER incx,incy,lda,m,n
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 A(LDA,//),X(//),Y(//)
+//       COMPLEX*16 a(lda,*),x(*),y(*)
 //       ..
 //
 //
@@ -30,40 +32,40 @@ import
 //
 // Zgerc  performs the rank 1 operation
 //
-//    A := alpha//x//y////H + A,
+//    a := alpha*x*y**H + a,
 //
 // where alpha is a scalar, x is an m element vector, y is an n element
-// vector and A is an m by n matrix.
+// vector and a is an m by n matrix.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] M
+// \param[in] m
 // \verbatim
-//          M is INTEGER
-//           On entry, M specifies the number of rows of the matrix A.
-//           M must be at least zero.
+//          m is INTEGER
+//           On entry, m specifies the number of rows of the matrix a.
+//           m must be at least zero.
 // \endverbatim
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
-//           On entry, N specifies the number of columns of the matrix A.
-//           N must be at least zero.
+//          n is INTEGER
+//           On entry, n specifies the number of columns of the matrix a.
+//           n must be at least zero.
 // \endverbatim
 //
-// \param[in] ALPHA
+// \param[in] alpha
 // \verbatim
-//          ALPHA is COMPLEX//16
-//           On entry, ALPHA specifies the scalar alpha.
+//          alpha is COMPLEX*16
+//           On entry, alpha specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is COMPLEX//16 array, dimension at least
-//           ( 1 + ( m - 1)//abs( incx)).
-//           Before entry, the incremented array X must contain the m
+//          x is COMPLEX*16 array, dimension at least
+//           ( 1 + ( m - 1 )*abs( incx ) ).
+//           Before entry, the incremented array x must contain the m
 //           element vector x.
 // \endverbatim
 //
@@ -71,14 +73,14 @@ import
 // \verbatim
 //          incx is INTEGER
 //           On entry, incx specifies the increment for the elements of
-//           X. incx must not be zero.
+//           x. incx must not be zero.
 // \endverbatim
 //
-// \param[in] Y
+// \param[in] y
 // \verbatim
-//          Y is COMPLEX//16 array, dimension at least
-//           ( 1 + ( n - 1)//abs( incy)).
-//           Before entry, the incremented array Y must contain the n
+//          y is COMPLEX*16 array, dimension at least
+//           ( 1 + ( n - 1 )*abs( incy ) ).
+//           Before entry, the incremented array y must contain the n
 //           element vector y.
 // \endverbatim
 //
@@ -86,23 +88,23 @@ import
 // \verbatim
 //          incy is INTEGER
 //           On entry, incy specifies the increment for the elements of
-//           Y. incy must not be zero.
+//           y. incy must not be zero.
 // \endverbatim
 //
-// \param[in,out] A
+// \param[in,out] a
 // \verbatim
-//          A is COMPLEX//16 array, dimension ( LDA, N)
-//           Before entry, the leading m by n part of the array A must
-//           contain the matrix of coefficients. On exit, A is
+//          a is COMPLEX*16 array, dimension ( lda, n )
+//           Before entry, the leading m by n part of the array a must
+//           contain the matrix of coefficients. On exit, a is
 //           overwritten by the updated matrix.
 // \endverbatim
 //
-// \param[in] LDA
+// \param[in] lda
 // \verbatim
-//          LDA is INTEGER
-//           On entry, LDA specifies the first dimension of A as declared
-//           in the calling (sub) program. LDA must be at least
-//           max( 1, m).
+//          lda is INTEGER
+//           On entry, lda specifies the first dimension of a as declared
+//           in the calling (sub) program. lda must be at least
+//           max( 1, m ).
 // \endverbatim
 //
 //  Authors:
@@ -132,106 +134,75 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Zgerc(m *int, n *int, alpha *complex128, x *[]complex128, incx *int, y *[]complex128, incy *int, a *[][]complex128, lda *int) {
-	zero := new(complex128)
-	temp := new(complex128)
-	i := new(int)
-	info := new(int)
-	ix := new(int)
-	j := new(int)
-	jy := new(int)
-	kx := new(int)
-	//*
-	//*  -- Reference BLAS level2 routine (version 3.7.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     December 2016
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*zero) = (0.0e+0 + (0.0e+0)*1i)
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. External Subroutines ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	//*
-	//*     Test the input parameters.
-	//*
-	(*info) = 0
-	if (*m) < 0 {
-		(*info) = 1
-	} else if (*n) < 0 {
-		(*info) = 2
-	} else if (*incx) == 0 {
-		(*info) = 5
-	} else if (*incy) == 0 {
-		(*info) = 7
-	} else if (*lda) < max(func() *int {y := 1; return &y}(), m) {
-		(*info) = 9
+func Zgerc(major *byte, m, n *int, alpha *complex128, x *[]complex128, incx *int, y *[]complex128, incy *int, a *[][]complex128, lda *int) {
+	var temp complex128
+	var i, info, ix, j, jy, kx int
+	//
+	//  -- Reference BLAS level2 routine (version 3.7.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     December 2016
+	//
+	//     Test the input parameters.
+	//
+	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
+		info = 1
+	} else if *m < 0 {
+		info = 2
+	} else if *n < 0 {
+		info = 3
+	} else if *incx == 0 {
+		info = 6
+	} else if *incy == 0 {
+		info = 8
+	} else if *lda < max(1, *m) {
+		info = 10
 	}
-	if (*info) != 0 {
-		Xerbla(func() *[]byte {y :=[]byte("zgerc "); return &y}(), info)
+	if info != 0 {
+		Xerbla(func() *string { y := "Zgerc"; return &y }(), &info)
 		return
 	}
-	//*
-	//*     Quick return if possible.
-	//*
-	if ((*m) == 0) || ((*n) == 0) || ((*alpha) == (*zero)) {
+	//
+	//     Quick return if possible.
+	//
+	if *m == 0 || *n == 0 || *alpha == 0.0 {
 		return
 	}
-	//*
-	//*     Start the operations. In this version the elements of A are
-	//*     accessed sequentially with one pass through A.
-	//*
-	if (*incy) > 0 {
-		(*jy) = 1
+	//
+	//     Start the operations. In this version the elements of a are
+	//     accessed sequentially with one pass through a.
+	//
+	if *incy > 0 {
+		jy = 1
 	} else {
-		(*jy) = 1 - ((*n)-1)*(*incy)
+		jy = 1 - ((*n)-1)*(*incy)
 	}
-	if (*incx) == 1 {
-		for (*j) = 1; (*j) <= (*n); (*j)++ {
-			if (*y)[(*jy)-1] != (*zero) {
-				(*temp) = (*alpha) * DCONJG(((*y)[(*jy)-1]))
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*a)[(*i)-1][(*j)-1] = (*a)[(*i)-1][(*j)-1] + (*x)[(*i)-1]*(*temp)
-					//Label10:
+	if *incx == 1 {
+		for j = 1; j <= *n; j++ {
+			if (*y)[jy-1] != 0.0 {
+				temp = (*alpha) * cmplx.Conj((*y)[jy-1])
+				for i = 1; i <= *m; i++ {
+					(*a)[i-1][j-1] += (*x)[i-1] * temp
 				}
 			}
-			(*jy) = (*jy) + (*incy)
-			//Label20:
+			jy += *incy
 		}
 	} else {
-		if (*incx) > 0 {
-			(*kx) = 1
+		if *incx > 0 {
+			kx = 1
 		} else {
-			(*kx) = 1 - ((*m)-1)*(*incx)
+			kx = 1 - ((*m)-1)*(*incx)
 		}
-		for (*j) = 1; (*j) <= (*n); (*j)++ {
-			if (*y)[(*jy)-1] != (*zero) {
-				(*temp) = (*alpha) * DCONJG(((*y)[(*jy)-1]))
-				(*ix) = (*kx)
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*a)[(*i)-1][(*j)-1] = (*a)[(*i)-1][(*j)-1] + (*x)[(*ix)-1]*(*temp)
-					(*ix) = (*ix) + (*incx)
-					//Label30:
+		for j = 1; j <= *n; j++ {
+			if (*y)[jy-1] != 0.0 {
+				temp = (*alpha) * cmplx.Conj((*y)[jy-1])
+				ix = kx
+				for i = 1; i <= *m; i++ {
+					(*a)[i-1][j-1] += (*x)[ix-1] * temp
+					ix += *incx
 				}
 			}
-			(*jy) = (*jy) + (*incy)
-			//Label40:
+			jy += *incy
 		}
 	}
-	//*
-	return
-	//*
-	//*     End of Zgerc .
-	//*
 }

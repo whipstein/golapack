@@ -1,8 +1,6 @@
 package goblas
 
-import 
-
-// \brief \b Dswap
+// Dswap ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,13 +10,13 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Dswap(N,DX,incx,DY,incy)
+//       SUBROUTINE Dswap(n,dx,incx,dy,incy)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,incy,N
+//       INTEGER incx,incy,n
 //       ..
 //       .. Array Arguments ..
-//       DOUBLE PRECISION DX(//),DY(//)
+//       DOUBLE PRECISION dx(*),dy(*)
 //       ..
 //
 //
@@ -34,32 +32,32 @@ import
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in,out] DX
+// \param[in,out] dx
 // \verbatim
-//          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1)//abs( incx))
+//          dx is DOUBLE PRECISION array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of DX
+//         storage spacing between elements of dx
 // \endverbatim
 //
-// \param[in,out] DY
+// \param[in,out] dy
 // \verbatim
-//          DY is DOUBLE PRECISION array, dimension ( 1 + ( N - 1)//abs( incy))
+//          dy is DOUBLE PRECISION array, dimension ( 1 + ( n - 1 )*abs( incy ) )
 // \endverbatim
 //
 // \param[in] incy
 // \verbatim
 //          incy is INTEGER
-//         storage spacing between elements of DY
+//         storage spacing between elements of dy
 // \endverbatim
 //
 //  Authors:
@@ -80,86 +78,60 @@ import
 // \verbatim
 //
 //     jack dongarra, linpack, 3/11/78.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Dswap(n *int, dx *[]float64, incx *int, dy *[]float64, incy *int) {
-	dtemp := new(float64)
-	i := new(int)
-	ix := new(int)
-	iy := new(int)
-	m := new(int)
-	mp1 := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	if (*n) <= 0 {
+func Dswap(major *byte, n *int, dx *[]float64, incx *int, dy *[]float64, incy *int) {
+	var i, ix, iy, m, mp1 int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n <= 0 {
 		return
 	}
-	if (*incx) == 1 && (*incy) == 1 {
-		//*
-		//*       code for both increments equal to 1
-		//*
-		//*
-		//*       clean-up loop
-		//*
-		(*m) = (MOD((*n), int(3)))
-		if (*m) != 0 {
-			for (*i) = 1; (*i) <= (*m); (*i)++ {
-				(*dtemp) = (*dx)[(*i)-1]
-				(*dx)[(*i)-1] = (*dy)[(*i)-1]
-				(*dy)[(*i)-1] = (*dtemp)
+	if *incx == 1 && *incy == 1 {
+		//
+		//       code for both increments equal to 1
+		//
+		//
+		//       clean-up loop
+		//
+		m = (*n) % 3
+		if m != 0 {
+			for i = 1; i <= m; i++ {
+				(*dx)[i-1], (*dy)[i-1] = (*dy)[i-1], (*dx)[i-1]
 			}
-			if (*n) < 3 {
+			if *n < 3 {
 				return
 			}
 		}
-		(*mp1) = (*m) + 1
-		for (*i) = (*mp1); (*i) <= (*n); (*i) += 3 {
-			(*dtemp) = (*dx)[(*i)-1]
-			(*dx)[(*i)-1] = (*dy)[(*i)-1]
-			(*dy)[(*i)-1] = (*dtemp)
-			(*dtemp) = (*dx)[(*i)+0]
-			(*dx)[(*i)+0] = (*dy)[(*i)+0]
-			(*dy)[(*i)+0] = (*dtemp)
-			(*dtemp) = (*dx)[(*i)+1]
-			(*dx)[(*i)+1] = (*dy)[(*i)+1]
-			(*dy)[(*i)+1] = (*dtemp)
+		mp1 = m + 1
+		for i = mp1; i <= *n; i += 3 {
+			(*dx)[i-1], (*dy)[i-1] = (*dy)[i-1], (*dx)[i-1]
+			(*dx)[i], (*dy)[i] = (*dy)[i], (*dx)[i]
+			(*dx)[i+1], (*dy)[i+1] = (*dy)[i+1], (*dx)[i+1]
 		}
 	} else {
-		//*
-		//*       code for unequal increments or equal increments not equal
-		//*         to 1
-		//*
-		(*ix) = 1
-		(*iy) = 1
-		if (*incx) < 0 {
-			(*ix) = (-(*n)+1)*(*incx) + 1
+		//
+		//       code for unequal increments or equal increments not equal
+		//         to 1
+		//
+		ix = 1
+		iy = 1
+		if *incx < 0 {
+			ix = (-(*n)+1)*(*incx) + 1
 		}
-		if (*incy) < 0 {
-			(*iy) = (-(*n)+1)*(*incy) + 1
+		if *incy < 0 {
+			iy = (-(*n)+1)*(*incy) + 1
 		}
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*dtemp) = (*dx)[(*ix)-1]
-			(*dx)[(*ix)-1] = (*dy)[(*iy)-1]
-			(*dy)[(*iy)-1] = (*dtemp)
-			(*ix) = (*ix) + (*incx)
-			(*iy) = (*iy) + (*incy)
+		for i = 1; i <= *n; i++ {
+			(*dx)[ix-1], (*dy)[iy-1] = (*dy)[iy-1], (*dx)[ix-1]
+			ix += *incx
+			iy += *incy
 		}
 	}
 	return

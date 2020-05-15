@@ -1,8 +1,6 @@
 package goblas
 
-import 
-
-// \brief \b Sdsdot
+// Sdsdot ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,14 +10,14 @@ import
 //  Definition:
 //  ===========
 //
-//       REAL FUNCTION Sdsdot(N,SB,SX,incx,SY,incy)
+//       REAL FUNCTION SDSDOT(n,sb,sx,incx,sy,incy)
 //
 //       .. Scalar Arguments ..
-//       REAL SB
-//       INTEGER incx,incy,N
+//       REAL sb
+//       INTEGER incx,incy,n
 //       ..
 //       .. Array Arguments ..
-//       REAL SX(//),SY(//)
+//       REAL sx(*),sy(*)
 //       ..
 //
 // \par Purpose:
@@ -31,48 +29,48 @@ import
 //   precision accumulation.
 //
 //   Returns S.P. result with dot product accumulated in D.P.
-//   Sdsdot = SB + sum for I = 0 to N-1 of SX(LX+I//incx)//SY(LY+I//incy),
-//   where LX = 1 if incx .GE. 0, else LX = 1+(1-N)//incx, and LY is
+//   SDSDOT = sb + sum for i = 0 to n-1 of sx(LX+i*incx)*sy(LY+i*incy),
+//   where LX = 1 if incx .GE. 0, else LX = 1+(1-n)*incx, and LY is
 //   defined in a similar way using incy.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //          number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] SB
+// \param[in] sb
 // \verbatim
-//          SB is REAL
+//          sb is REAL
 //          single precision scalar to be added to inner product
 // \endverbatim
 //
-// \param[in] SX
+// \param[in] sx
 // \verbatim
-//          SX is REAL array, dimension ( 1 + ( N - 1)//abs( incx))
-//          single precision vector with N elements
+//          sx is REAL array, dimension ( 1 + ( n - 1 )*abs( incx ) )
+//          single precision vector with n elements
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//          storage spacing between elements of SX
+//          storage spacing between elements of sx
 // \endverbatim
 //
-// \param[in] SY
+// \param[in] sy
 // \verbatim
-//          SY is REAL array, dimension ( 1 + ( N - 1)//abs( incx))
-//          single precision vector with N elements
+//          sy is REAL array, dimension ( 1 + ( n - 1 )*abs( incx ) )
+//          single precision vector with n elements
 // \endverbatim
 //
 // \param[in] incy
 // \verbatim
 //          incy is INTEGER
-//          storage spacing between elements of SY
+//          storage spacing between elements of sy
 // \endverbatim
 //
 //  Authors:
@@ -115,57 +113,51 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Sdsdot(n *int, sb *float64, sx *[]float64, incx *int, sy *[]float64, incy *int) (sdsdotReturn *float64) {
-	sdsdotreturn := new(float64)
-	dsdot := new(float64)
-	i := new(int)
-	kx := new(int)
-	ky := new(int)
-	ns := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*dsdot) = (*sb)
-	if (*n) <= 0 {
-		(*sdsdot) = (*dsdot)
-		return
+func Sdsdot(major *byte, n *int, sb *float32, sx *[]float32, incx *int, sy *[]float32, incy *int) float32 {
+	var dsdot float32
+	var i, kx, ky, ns int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	//     .. Scalar Arguments ..
+	//     ..
+	//     .. Array Arguments ..
+	//     .. Local Scalars ..
+	//     ..
+	//     .. Intrinsic Functions ..
+	//     ..
+	dsdot = *sb
+	if *n <= 0 {
+		return dsdot
 	}
-	if (*incx) == (*incy) && (*incx) > 0 {
-		//*
-		//*     Code for equal and positive increments.
-		//*
-		(*ns) = (*n) * (*incx)
-		for (*i) = 1; (*i) <= (*ns); (*i) += (*incx) {
-			(*dsdot) = (*dsdot) + DBLE(((*sx)[(*i)-1]))*DBLE(((*sy)[(*i)-1]))
+	if *incx == *incy && *incx > 0 {
+		//
+		//     Code for equal and positive increments.
+		//
+		ns = (*n) * (*incx)
+		for i = 1; i <= ns; i += *incx {
+			dsdot += (*sx)[i-1] * (*sy)[i-1]
 		}
 	} else {
-		//*
-		//*     Code for unequal or nonpositive increments.
-		//*
-		(*kx) = 1
-		(*ky) = 1
-		if (*incx) < 0 {
-			(*kx) = 1 + (1-(*n))*(*incx)
+		//
+		//     Code for unequal or nonpositive increments.
+		//
+		kx = 1
+		ky = 1
+		if *incx < 0 {
+			kx = 1 + (1-(*n))*(*incx)
 		}
-		if (*incy) < 0 {
-			(*ky) = 1 + (1-(*n))*(*incy)
+		if *incy < 0 {
+			ky = 1 + (1-(*n))*(*incy)
 		}
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*dsdot) = (*dsdot) + DBLE(((*sx)[(*kx)-1]))*DBLE(((*sy)[(*ky)-1]))
-			(*kx) = (*kx) + (*incx)
-			(*ky) = (*ky) + (*incy)
+		for i = 1; i <= *n; i++ {
+			dsdot += (*sx)[kx-1] * (*sy)[ky-1]
+			kx += *incx
+			ky += *incy
 		}
 	}
-	(*sdsdot) = (*dsdot)
-	return
+	return dsdot
 }

@@ -1,8 +1,8 @@
 package goblas
 
-import 
+import "math/cmplx"
 
-// \brief \b Cdotc
+// Cdotc ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,13 +12,13 @@ import
 //  Definition:
 //  ===========
 //
-//       COMPLEX FUNCTION Cdotc(N,CX,incx,CY,incy)
+//       COMPLEX FUNCTION Cdotc(n,cx,incx,cy,incy)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,incy,N
+//       INTEGER incx,incy,n
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX CX(//),CY(//)
+//       COMPLEX cx(*),cy(*)
 //       ..
 //
 //
@@ -28,39 +28,39 @@ import
 // \verbatim
 //
 // Cdotc forms the dot product of two complex vectors
-//      Cdotc = X^H // Y
+//      Cdotc = x^H * y
 //
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] CX
+// \param[in] cx
 // \verbatim
-//          CX is REAL array, dimension ( 1 + ( N - 1)//abs( incx))
+//          cx is REAL array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of CX
+//         storage spacing between elements of cx
 // \endverbatim
 //
-// \param[in] CY
+// \param[in] cy
 // \verbatim
-//          CY is REAL array, dimension ( 1 + ( N - 1)//abs( incy))
+//          cy is REAL array, dimension ( 1 + ( n - 1 )*abs( incy ) )
 // \endverbatim
 //
 // \param[in] incy
 // \verbatim
 //          incy is INTEGER
-//         storage spacing between elements of CY
+//         storage spacing between elements of cy
 // \endverbatim
 //
 //  Authors:
@@ -81,64 +81,46 @@ import
 // \verbatim
 //
 //     jack dongarra, linpack,  3/11/78.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Cdotc(n *int, cx *[]complex128, incx *int, cy *[]complex128, incy *int) (cdotcReturn *complex128) {
-	cdotcreturn := new(complex128)
-	ctemp := new(complex128)
-	i := new(int)
-	ix := new(int)
-	iy := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*ctemp) = (0.0 + (0.0)*1i)
-	(*cdotc) = (0.0 + (0.0)*1i)
-	if (*n) <= 0 {
+func Cdotc(n *int, cx *[]complex64, incx *int, cy *[]complex64, incy *int) (ctemp complex64) {
+	var i, ix, iy int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n <= 0 {
 		return
 	}
-	if (*incx) == 1 && (*incy) == 1 {
-		//*
-		//*        code for both increments equal to 1
-		//*
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*ctemp) = (*ctemp) + CONJG(((*cx)[(*i)-1]))*(*cy)[(*i)-1]
+	if *incx == 1 && *incy == 1 {
+		//
+		//        code for both increments equal to 1
+		//
+		for i = 1; i <= *n; i++ {
+			ctemp += complex64(cmplx.Conj(complex128((*cx)[i-1]))) * (*cy)[i-1]
 		}
 	} else {
-		//*
-		//*        code for unequal increments or equal increments
-		//*          not equal to 1
-		//*
-		(*ix) = 1
-		(*iy) = 1
-		if (*incx) < 0 {
-			(*ix) = (-(*n)+1)*(*incx) + 1
+		//
+		//        code for unequal increments or equal increments
+		//          not equal to 1
+		//
+		ix = 1
+		iy = 1
+		if *incx < 0 {
+			ix = (-(*n)+1)*(*incx) + 1
 		}
-		if (*incy) < 0 {
-			(*iy) = (-(*n)+1)*(*incy) + 1
+		if *incy < 0 {
+			iy = (-(*n)+1)*(*incy) + 1
 		}
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*ctemp) = (*ctemp) + CONJG(((*cx)[(*ix)-1]))*(*cy)[(*iy)-1]
-			(*ix) = (*ix) + (*incx)
-			(*iy) = (*iy) + (*incy)
+		for i = 1; i <= *n; i++ {
+			ctemp += complex64(cmplx.Conj(complex128((*cx)[ix-1]))) * (*cy)[iy-1]
+			ix += *incx
+			iy += *incy
 		}
 	}
-	(*cdotc) = (*ctemp)
 	return
 }

@@ -1,6 +1,6 @@
 package goblas
 
-// \brief \b Zscal
+// Zscal ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,14 +10,14 @@ package goblas
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Zscal(N,ZA,ZX,incx)
+//       SUBROUTINE Zscal(n,za,zx,incx)
 //
 //       .. Scalar Arguments ..
-//       COMPLEX//16 ZA
-//       INTEGER incx,N
+//       COMPLEX*16 za
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 ZX(//)
+//       COMPLEX*16 zx(*)
 //       ..
 //
 //
@@ -32,27 +32,27 @@ package goblas
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] ZA
+// \param[in] za
 // \verbatim
-//          ZA is COMPLEX//16
-//           On entry, ZA specifies the scalar alpha.
+//          za is COMPLEX*16
+//           On entry, za specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in,out] ZX
+// \param[in,out] zx
 // \verbatim
-//          ZX is COMPLEX//16 array, dimension ( 1 + ( N - 1)//abs( incx))
+//          zx is COMPLEX*16 array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of ZX
+//         storage spacing between elements of zx
 // \endverbatim
 //
 //  Authors:
@@ -74,45 +74,35 @@ package goblas
 //
 //     jack dongarra, 3/11/78.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
 func Zscal(n *int, za *complex128, zx *[]complex128, incx *int) {
-	i := new(int)
-	nincx := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	if (*n) <= 0 || (*incx) <= 0 {
+	var i, nincx int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n <= 0 || *incx <= 0 {
 		return
 	}
-	if (*incx) == 1 {
-		//*
-		//*        code for increment equal to 1
-		//*
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*zx)[(*i)-1] = (*za) * (*zx)[(*i)-1]
+	if *incx == 1 {
+		//
+		//        code for increment equal to 1
+		//
+		for i = 1; i <= *n; i++ {
+			(*zx)[i-1] = (*za) * (*zx)[i-1]
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*nincx) = (*n) * (*incx)
-		for (*i) = 1; (*i) <= (*nincx); (*i) += (*incx) {
-			(*zx)[(*i)-1] = (*za) * (*zx)[(*i)-1]
+		//
+		//        code for increment not equal to 1
+		//
+		nincx = *n * (*incx)
+		for i = 1; i <= nincx; i += *incx {
+			(*zx)[i-1] = (*za) * (*zx)[i-1]
 		}
 	}
 	return

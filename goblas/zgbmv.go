@@ -1,8 +1,10 @@
 package goblas
 
-import 
+import (
+	"math/cmplx"
+)
 
-// \brief \b Zgbmv
+// Zgbmv ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,15 +14,15 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Zgbmv(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,incx,BETA,Y,incy)
+//       SUBROUTINE Zgbmv(trans,m,n,kl,ku,alpha,a,lda,x,incx,beta,y,incy)
 //
 //       .. Scalar Arguments ..
-//       COMPLEX//16 ALPHA,BETA
-//       INTEGER incx,incy,KL,KU,LDA,M,N
-//       CHARACTER TRANS
+//       COMPLEX*16 alpha,beta
+//       INTEGER incx,incy,kl,ku,lda,m,n
+//       CHARACTER trans
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 A(LDA,//),X(//),Y(//)
+//       COMPLEX*16 a(lda,*),x(*),y(*)
 //       ..
 //
 //
@@ -31,102 +33,102 @@ import
 //
 // Zgbmv  performs one of the matrix-vector operations
 //
-//    y := alpha//A//x + beta//y,   or   y := alpha//A////T//x + beta//y,   or
+//    y := alpha*a*x + beta*y,   or   y := alpha*a**T*x + beta*y,   or
 //
-//    y := alpha//A////H//x + beta//y,
+//    y := alpha*a**H*x + beta*y,
 //
-// where alpha and beta are scalars, x and y are vectors and A is an
+// where alpha and beta are scalars, x and y are vectors and a is an
 // m by n band matrix, with kl sub-diagonals and ku super-diagonals.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] TRANS
+// \param[in] trans
 // \verbatim
-//          TRANS is CHARACTER//1
-//           On entry, TRANS specifies the operation to be performed as
+//          trans is CHARACTER*1
+//           On entry, trans specifies the operation to be performed as
 //           follows:
 //
-//              TRANS = 'N' or 'n'   y := alpha//A//x + beta//y.
+//              trans = 'N' or 'N'   y := alpha*a*x + beta*y.
 //
-//              TRANS = 'T' or 't'   y := alpha//A////T//x + beta//y.
+//              trans = 'T' or 't'   y := alpha*a**T*x + beta*y.
 //
-//              TRANS = 'C' or 'c'   y := alpha//A////H//x + beta//y.
+//              trans = 'C' or 'C'   y := alpha*a**H*x + beta*y.
 // \endverbatim
 //
-// \param[in] M
+// \param[in] m
 // \verbatim
-//          M is INTEGER
-//           On entry, M specifies the number of rows of the matrix A.
-//           M must be at least zero.
+//          m is INTEGER
+//           On entry, m specifies the number of rows of the matrix a.
+//           m must be at least zero.
 // \endverbatim
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
-//           On entry, N specifies the number of columns of the matrix A.
-//           N must be at least zero.
+//          n is INTEGER
+//           On entry, n specifies the number of columns of the matrix a.
+//           n must be at least zero.
 // \endverbatim
 //
-// \param[in] KL
+// \param[in] kl
 // \verbatim
-//          KL is INTEGER
-//           On entry, KL specifies the number of sub-diagonals of the
-//           matrix A. KL must satisfy  0 .le. KL.
+//          kl is INTEGER
+//           On entry, kl specifies the number of sub-diagonals of the
+//           matrix a. kl must satisfy  0 .le. kl.
 // \endverbatim
 //
-// \param[in] KU
+// \param[in] ku
 // \verbatim
-//          KU is INTEGER
-//           On entry, KU specifies the number of super-diagonals of the
-//           matrix A. KU must satisfy  0 .le. KU.
+//          ku is INTEGER
+//           On entry, ku specifies the number of super-diagonals of the
+//           matrix a. ku must satisfy  0 .le. ku.
 // \endverbatim
 //
-// \param[in] ALPHA
+// \param[in] alpha
 // \verbatim
-//          ALPHA is COMPLEX//16
-//           On entry, ALPHA specifies the scalar alpha.
+//          alpha is COMPLEX*16
+//           On entry, alpha specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in] A
+// \param[in] a
 // \verbatim
-//          A is COMPLEX//16 array, dimension ( LDA, N)
-//           Before entry, the leading ( kl + ku + 1) by n part of the
-//           array A must contain the matrix of coefficients, supplied
+//          a is COMPLEX*16 array, dimension ( lda, n )
+//           Before entry, the leading ( kl + ku + 1 ) by n part of the
+//           array a must contain the matrix of coefficients, supplied
 //           column by column, with the leading diagonal of the matrix in
-//           row ( ku + 1) of the array, the first super-diagonal
+//           row ( ku + 1 ) of the array, the first super-diagonal
 //           starting at position 2 in row ku, the first sub-diagonal
-//           starting at position 1 in row ( ku + 2), and so on.
-//           Elements in the array A that do not correspond to elements
+//           starting at position 1 in row ( ku + 2 ), and so on.
+//           Elements in the array a that do not correspond to elements
 //           in the band matrix (such as the top left ku by ku triangle)
 //           are not referenced.
 //           The following program segment will transfer a band matrix
 //           from conventional full matrix storage to band storage:
 //
-//                 DO 20, J = 1, N
-//                    K = KU + 1 - J
-//                    DO 10, I = MAX( 1, J - KU), MIN( M, J + KL)
-//                       A( K + I, J) = matrix( I, J)
+//                 DO 20, j = 1, n
+//                    k = ku + 1 - j
+//                    DO 10, I = MAX( 1, j - ku ), MIN( m, j + kl )
+//                       a( k + I, j ) = matrix( I, j )
 //              10    CONTINUE
 //              20 CONTINUE
 // \endverbatim
 //
-// \param[in] LDA
+// \param[in] lda
 // \verbatim
-//          LDA is INTEGER
-//           On entry, LDA specifies the first dimension of A as declared
-//           in the calling (sub) program. LDA must be at least
-//           ( kl + ku + 1).
+//          lda is INTEGER
+//           On entry, lda specifies the first dimension of a as declared
+//           in the calling (sub) program. lda must be at least
+//           ( kl + ku + 1 ).
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is COMPLEX//16 array, dimension at least
-//           ( 1 + ( n - 1)//abs( incx)) when TRANS = 'N' or 'n'
+//          x is COMPLEX*16 array, dimension at least
+//           ( 1 + ( n - 1 )*abs( incx ) ) when trans = 'N' or 'N'
 //           and at least
-//           ( 1 + ( m - 1)//abs( incx)) otherwise.
-//           Before entry, the incremented array X must contain the
+//           ( 1 + ( m - 1 )*abs( incx ) ) otherwise.
+//           Before entry, the incremented array x must contain the
 //           vector x.
 // \endverbatim
 //
@@ -134,31 +136,31 @@ import
 // \verbatim
 //          incx is INTEGER
 //           On entry, incx specifies the increment for the elements of
-//           X. incx must not be zero.
+//           x. incx must not be zero.
 // \endverbatim
 //
-// \param[in] BETA
+// \param[in] beta
 // \verbatim
-//          BETA is COMPLEX//16
-//           On entry, BETA specifies the scalar beta. When BETA is
-//           supplied as zero then Y need not be set on input.
+//          beta is COMPLEX*16
+//           On entry, beta specifies the scalar beta. When beta is
+//           supplied as zero then y need not be set on input.
 // \endverbatim
 //
-// \param[in,out] Y
+// \param[in,out] y
 // \verbatim
-//          Y is COMPLEX//16 array, dimension at least
-//           ( 1 + ( m - 1)//abs( incy)) when TRANS = 'N' or 'n'
+//          y is COMPLEX*16 array, dimension at least
+//           ( 1 + ( m - 1 )*abs( incy ) ) when trans = 'N' or 'N'
 //           and at least
-//           ( 1 + ( n - 1)//abs( incy)) otherwise.
-//           Before entry, the incremented array Y must contain the
-//           vector y. On exit, Y is overwritten by the updated vector y.
+//           ( 1 + ( n - 1 )*abs( incy ) ) otherwise.
+//           Before entry, the incremented array y must contain the
+//           vector y. On exit, y is overwritten by the updated vector y.
 // \endverbatim
 //
 // \param[in] incy
 // \verbatim
 //          incy is INTEGER
 //           On entry, incy specifies the increment for the elements of
-//           Y. incy must not be zero.
+//           y. incy must not be zero.
 // \endverbatim
 //
 //  Authors:
@@ -179,7 +181,7 @@ import
 // \verbatim
 //
 //  Level 2 Blas routine.
-//  The vector and matrix arguments are not referenced when n = 0, or M = 0
+//  The vector and matrix arguments are not referenced when n = 0, or m = 0
 //
 //  -- Written on 22-October-1986.
 //     Jack Dongarra, Argonne National Lab.
@@ -189,230 +191,177 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Zgbmv(trans *byte, m *int, n *int, kl *int, ku *int, alpha *complex128, a *[][]complex128, lda *int, x *[]complex128, incx *int, beta *complex128, y *[]complex128, incy *int) {
-	one := new(complex128)
-	zero := new(complex128)
-	temp := new(complex128)
-	i := new(int)
-	info := new(int)
-	ix := new(int)
-	iy := new(int)
-	j := new(int)
-	jx := new(int)
-	jy := new(int)
-	k := new(int)
-	kup1 := new(int)
-	kx := new(int)
-	ky := new(int)
-	lenx := new(int)
-	leny := new(int)
-	noconj := new(bool)
-	//*
-	//*  -- Reference BLAS level2 routine (version 3.7.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     December 2016
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*one) = (1.0e+0 + (0.0e+0)*1i)
-	(*zero) = (0.0e+0 + (0.0e+0)*1i)
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. External Functions ..
-	//*     ..
-	//*     .. External Subroutines ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	//*
-	//*     Test the input parameters.
-	//*
-	(*info) = 0
-	if !Lsame((*trans), "n") && !Lsame((*trans), "t") && !Lsame((*trans), "c") {
-		(*info) = 1
-	} else if (*m) < 0 {
-		(*info) = 2
-	} else if (*n) < 0 {
-		(*info) = 3
-	} else if (*kl) < 0 {
-		(*info) = 4
-	} else if (*ku) < 0 {
-		(*info) = 5
-	} else if (*lda) < ((*kl) + (*ku) + 1) {
-		(*info) = 8
-	} else if (*incx) == 0 {
-		(*info) = 10
-	} else if (*incy) == 0 {
-		(*info) = 13
+func Zgbmv(major, trans *byte, m, n, kl, ku *int, alpha *complex128, a *[][]complex128, lda *int, x *[]complex128, incx *int, beta *complex128, y *[]complex128, incy *int) {
+	var temp complex128
+	var i, info, ix, iy, j, jx, jy, k, kup1, kx, ky, lenx, leny int
+	var noconj bool
+	//
+	//  -- Reference BLAS level2 routine (version 3.7.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     December 2016
+	//
+	//     Test the input parameters.
+	//
+	info = 0
+	if !Lsame(trans, func() *byte { y := byte('N'); return &y }()) && !Lsame(trans, func() *byte { y := byte('T'); return &y }()) && !Lsame(trans, func() *byte { y := byte('C'); return &y }()) {
+		info = 1
+	} else if *m < 0 {
+		info = 2
+	} else if *n < 0 {
+		info = 3
+	} else if *kl < 0 {
+		info = 4
+	} else if *ku < 0 {
+		info = 5
+	} else if *lda < (*kl)+(*ku)+1 {
+		info = 8
+	} else if *incx == 0 {
+		info = 10
+	} else if *incy == 0 {
+		info = 13
 	}
-	if (*info) != 0 {
-		Xerbla(func() *[]byte {y :=[]byte("zgbmv "); return &y}(), info)
+	if info != 0 {
+		Xerbla(func() *string { y := "Zgbmv"; return &y }(), &info)
 		return
 	}
-	//*
-	//*     Quick return if possible.
-	//*
-	if ((*m) == 0) || ((*n) == 0) || (((*alpha) == (*zero)) && ((*beta) == (*one))) {
+	//
+	//     Quick return if possible.
+	//
+	if *m == 0 || *n == 0 || (*alpha == 0.0 && *beta == 1.0) {
 		return
 	}
-	//*
-	(*noconj) = (*Lsame(trans, func() *byte {y := byte('t'); return &y}()))
-	//*
-	//*     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
-	//*     up the start points in  X  and  Y.
-	//*
-	if Lsame(trans, func() *byte {y := byte('n'); return &y}()) {
-		(*lenx) = (*n)
-		(*leny) = (*m)
+	//
+	noconj = Lsame(trans, func() *byte { y := byte('T'); return &y }())
+	//
+	//     Set  lenx  and  leny, the lengths of the vectors x and y, and set
+	//     up the start points in  x  and  y.
+	//
+	if Lsame(trans, func() *byte { y := byte('N'); return &y }()) {
+		lenx = *n
+		leny = *m
 	} else {
-		(*lenx) = (*m)
-		(*leny) = (*n)
+		lenx = *m
+		leny = *n
 	}
-	if (*incx) > 0 {
-		(*kx) = 1
+	if *incx > 0 {
+		kx = 1
 	} else {
-		(*kx) = 1 - ((*lenx)-1)*(*incx)
+		kx = 1 - (lenx-1)*(*incx)
 	}
-	if (*incy) > 0 {
-		(*ky) = 1
+	if *incy > 0 {
+		ky = 1
 	} else {
-		(*ky) = 1 - ((*leny)-1)*(*incy)
+		ky = 1 - (leny-1)*(*incy)
 	}
-	//*
-	//*     Start the operations. In this version the elements of A are
-	//*     accessed sequentially with one pass through the band part of A.
-	//*
-	//*     First form  y := beta*y.
-	//*
-	if (*beta) != (*one) {
-		if (*incy) == 1 {
-			if (*beta) == (*zero) {
-				for (*i) = 1; (*i) <= (*leny); (*i)++ {
-					(*y)[(*i)-1] = (*zero)
-					//Label10:
+	//
+	//     Start the operations. In this version the elements of a are
+	//     accessed sequentially with one pass through the band part of a.
+	//
+	//     First form  y := beta*y.
+	//
+	if *beta != 1.0 {
+		if *incy == 1 {
+			if *beta == 0.0 {
+				for i = 1; i <= leny; i++ {
+					(*y)[i-1] = 0.0
 				}
 			} else {
-				for (*i) = 1; (*i) <= (*leny); (*i)++ {
-					(*y)[(*i)-1] = (*beta) * (*y)[(*i)-1]
-					//Label20:
+				for i = 1; i <= leny; i++ {
+					(*y)[i-1] = (*beta) * (*y)[i-1]
 				}
 			}
 		} else {
-			(*iy) = (*ky)
-			if (*beta) == (*zero) {
-				for (*i) = 1; (*i) <= (*leny); (*i)++ {
-					(*y)[(*iy)-1] = (*zero)
-					(*iy) = (*iy) + (*incy)
-					//Label30:
+			iy = ky
+			if *beta == 0.0 {
+				for i = 1; i <= leny; i++ {
+					(*y)[iy-1] = 0.0
+					iy += *incy
 				}
 			} else {
-				for (*i) = 1; (*i) <= (*leny); (*i)++ {
-					(*y)[(*iy)-1] = (*beta) * (*y)[(*iy)-1]
-					(*iy) = (*iy) + (*incy)
-					//Label40:
+				for i = 1; i <= leny; i++ {
+					(*y)[iy-1] = (*beta) * (*y)[iy-1]
+					iy += *incy
 				}
 			}
 		}
 	}
-	if (*alpha) == (*zero) {
+	if *alpha == 0.0 {
 		return
 	}
-	(*kup1) = (*ku) + 1
-	if Lsame(trans, func() *byte {y := byte('n'); return &y}()) {
-		//*
-		//*        Form  y := alpha*A*x + y.
-		//*
-		(*jx) = (*kx)
-		if (*incy) == 1 {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp) = (*alpha) * (*x)[(*jx)-1]
-				(*k) = (*kup1) - (*j)
-				for (*i) = MAX(1, (*j)-(*ku)); (*i) <= (MIN((*m), (*j)+(*kl))); (*i)++ {
-					(*y)[(*i)-1] = (*y)[(*i)-1] + (*temp)*(*a)[(*k)+(*i)-1][(*j)-1]
-					//Label50:
+	kup1 = (*ku) + 1
+	if Lsame(trans, func() *byte { y := byte('N'); return &y }()) {
+		//
+		//        Form  y := alpha*a*x + y.
+		//
+		jx = kx
+		if *incy == 1 {
+			for j = 1; j <= *n; j++ {
+				temp = (*alpha) * (*x)[jx-1]
+				k = kup1 - j
+				for i = max(1, j-(*ku)); i <= min(*m, j+(*kl)); i++ {
+					(*y)[i-1] += temp * (*a)[k+i-1][j-1]
 				}
-				(*jx) = (*jx) + (*incx)
-				//Label60:
+				jx += *incx
 			}
 		} else {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp) = (*alpha) * (*x)[(*jx)-1]
-				(*iy) = (*ky)
-				(*k) = (*kup1) - (*j)
-				for (*i) = MAX(1, (*j)-(*ku)); (*i) <= (MIN((*m), (*j)+(*kl))); (*i)++ {
-					(*y)[(*iy)-1] = (*y)[(*iy)-1] + (*temp)*(*a)[(*k)+(*i)-1][(*j)-1]
-					(*iy) = (*iy) + (*incy)
-					//Label70:
+			for j = 1; j <= *n; j++ {
+				temp = (*alpha) * (*x)[jx-1]
+				iy = ky
+				k = kup1 - j
+				for i = max(1, j-(*ku)); i <= min(*m, j+(*kl)); i++ {
+					(*y)[iy-1] += temp * (*a)[k+i-1][j-1]
+					iy += *incy
 				}
-				(*jx) = (*jx) + (*incx)
-				if (*j) > (*ku) {
-					(*ky) = (*ky) + (*incy)
+				jx += *incx
+				if j > *ku {
+					ky += *incy
 				}
-				//Label80:
 			}
 		}
 	} else {
-		//*
-		//*        Form  y := alpha*A**T*x + y  or  y := alpha*A**H*x + y.
-		//*
-		(*jy) = (*ky)
-		if (*incx) == 1 {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp) = (*zero)
-				(*k) = (*kup1) - (*j)
-				if *noconj {
-					for (*i) = MAX(1, (*j)-(*ku)); (*i) <= (MIN((*m), (*j)+(*kl))); (*i)++ {
-						(*temp) = (*temp) + (*a)[(*k)+(*i)-1][(*j)-1]*(*x)[(*i)-1]
-						//Label90:
+		//
+		//        Form  y := alpha*a**T*x + y  or  y := alpha*a**H*x + y.
+		//
+		jy = ky
+		if *incx == 1 {
+			for j = 1; j <= *n; j++ {
+				temp = 0.0
+				k = kup1 - j
+				if noconj {
+					for i = max(1, j-(*ku)); i <= min(*m, j+(*kl)); i++ {
+						temp += (*a)[k+i-1][j-1] * (*x)[i-1]
 					}
 				} else {
-					for (*i) = MAX(1, (*j)-(*ku)); (*i) <= (MIN((*m), (*j)+(*kl))); (*i)++ {
-						(*temp) = (*temp) + DCONJG(((*a)[(*k)+(*i)-1][(*j)-1]))*(*x)[(*i)-1]
-						//Label100:
+					for i = max(1, j-(*ku)); i <= min(*m, j+(*kl)); i++ {
+						temp += cmplx.Conj((*a)[k+i-1][j-1]) * (*x)[i-1]
 					}
 				}
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*alpha)*(*temp)
-				(*jy) = (*jy) + (*incy)
-				//Label110:
+				(*y)[jy-1] += (*alpha) * temp
+				jy += *incy
 			}
 		} else {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp) = (*zero)
-				(*ix) = (*kx)
-				(*k) = (*kup1) - (*j)
-				if *noconj {
-					for (*i) = MAX(1, (*j)-(*ku)); (*i) <= (MIN((*m), (*j)+(*kl))); (*i)++ {
-						(*temp) = (*temp) + (*a)[(*k)+(*i)-1][(*j)-1]*(*x)[(*ix)-1]
-						(*ix) = (*ix) + (*incx)
-						//Label120:
+			for j = 1; j <= *n; j++ {
+				temp = 0.0
+				ix = kx
+				k = kup1 - j
+				if noconj {
+					for i = max(1, j-(*ku)); i <= min(*m, j+(*kl)); i++ {
+						temp += (*a)[k+i-1][j-1] * (*x)[ix-1]
+						ix += *incx
 					}
 				} else {
-					for (*i) = MAX(1, (*j)-(*ku)); (*i) <= (MIN((*m), (*j)+(*kl))); (*i)++ {
-						(*temp) = (*temp) + DCONJG(((*a)[(*k)+(*i)-1][(*j)-1]))*(*x)[(*ix)-1]
-						(*ix) = (*ix) + (*incx)
-						//Label130:
+					for i = max(1, j-(*ku)); i <= min(*m, j+(*kl)); i++ {
+						temp += cmplx.Conj((*a)[k+i-1][j-1]) * (*x)[ix-1]
+						ix += *incx
 					}
 				}
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*alpha)*(*temp)
-				(*jy) = (*jy) + (*incy)
-				if (*j) > (*ku) {
-					(*kx) = (*kx) + (*incx)
+				(*y)[jy-1] += (*alpha) * temp
+				jy += *incy
+				if j > *ku {
+					kx += *incx
 				}
-				//Label140:
 			}
 		}
 	}
-	//*
-	return
-	//*
-	//*     End of Zgbmv .
-	//*
 }

@@ -1,5 +1,0 @@
-package blas
-
-func main() {
-
-}

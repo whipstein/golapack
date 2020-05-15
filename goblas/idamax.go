@@ -1,8 +1,8 @@
 package goblas
 
-import 
+import "math"
 
-// \brief \b Idamax
+// Idamax ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,13 +12,13 @@ import
 //  Definition:
 //  ===========
 //
-//       INTEGER FUNCTION Idamax(N,DX,incx)
+//       INTEGER FUNCTION Idamax(n,dx,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       DOUBLE PRECISION DX(//)
+//       DOUBLE PRECISION dx(*)
 //       ..
 //
 //
@@ -33,21 +33,21 @@ import
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] DX
+// \param[in] dx
 // \verbatim
-//          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1)//abs( incx))
+//          dx is DOUBLE PRECISION array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of DX
+//         storage spacing between elements of dx
 // \endverbatim
 //
 //  Authors:
@@ -69,64 +69,51 @@ import
 //
 //     jack dongarra, linpack, 3/11/78.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Idamax(n *int, dx *[]float64, incx *int) (idamaxReturn *int) {
-	idamaxreturn := new(int)
-	dmax := new(float64)
-	i := new(int)
-	ix := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*idamax) = 0
-	if (*n) < 1 || (*incx) <= 0 {
+func Idamax(major *byte, n *int, dx *[]float64, incx *int) (idamaxReturn int) {
+	var dmax float64
+	var i, ix int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	idamaxReturn = 0
+	if *n < 1 || *incx <= 0 {
 		return
 	}
-	(*idamax) = 1
-	if (*n) == 1 {
+	idamaxReturn = 1
+	if *n == 1 {
 		return
 	}
-	if (*incx) == 1 {
-		//*
-		//*        code for increment equal to 1
-		//*
-		(*dmax) = (ABS(((*dx)[0])))
-		for (*i) = 2; (*i) <= (*n); (*i)++ {
-			if ABS(((*dx)[(*i)-1])) > (*dmax) {
-				(*idamax) = (*i)
-				(*dmax) = (ABS(((*dx)[(*i)-1])))
+	if *incx == 1 {
+		//
+		//        code for increment equal to 1
+		//
+		dmax = math.Abs((*dx)[1-1])
+		for i = 2; i <= *n; i++ {
+			if math.Abs((*dx)[i-1]) > dmax {
+				idamaxReturn = i
+				dmax = math.Abs((*dx)[i-1])
 			}
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*ix) = 1
-		(*dmax) = (ABS(((*dx)[0])))
-		(*ix) = (*ix) + (*incx)
-		for (*i) = 2; (*i) <= (*n); (*i)++ {
-			if ABS(((*dx)[(*ix)-1])) > (*dmax) {
-				(*idamax) = (*i)
-				(*dmax) = (ABS(((*dx)[(*ix)-1])))
+		//
+		//        code for increment not equal to 1
+		//
+		ix = 1
+		dmax = math.Abs((*dx)[1-1])
+		ix += *incx
+		for i = 2; i <= *n; i++ {
+			if math.Abs((*dx)[ix-1]) > dmax {
+				idamaxReturn = i
+				dmax = (math.Abs(((*dx)[ix-1])))
 			}
-			(*ix) = (*ix) + (*incx)
+			ix += *incx
 		}
 	}
 	return

@@ -1,6 +1,6 @@
 package goblas
 
-// \brief \b Drot
+// Drot ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,14 +10,14 @@ package goblas
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Drot(N,DX,incx,DY,incy,C,S)
+//       SUBROUTINE Drot(n,dx,incx,dy,incy,c,s)
 //
 //       .. Scalar Arguments ..
-//       DOUBLE PRECISION C,S
-//       INTEGER incx,incy,N
+//       DOUBLE PRECISION c,s
+//       INTEGER incx,incy,n
 //       ..
 //       .. Array Arguments ..
-//       DOUBLE PRECISION DX(//),DY(//)
+//       DOUBLE PRECISION dx(*),dy(*)
 //       ..
 //
 //
@@ -32,42 +32,42 @@ package goblas
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
-//         number of elements in input vector(s)
+//          n is INTEGER
+//         number of elements in input vectors
 // \endverbatim
 //
-// \param[in,out] DX
+// \param[in,out] dx
 // \verbatim
-//          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1)//abs( incx))
+//          dx is DOUBLE PRECISION array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of DX
+//         storage spacing between elements of dx
 // \endverbatim
 //
-// \param[in,out] DY
+// \param[in,out] dy
 // \verbatim
-//          DY is DOUBLE PRECISION array, dimension ( 1 + ( N - 1)//abs( incy))
+//          dy is DOUBLE PRECISION array, dimension ( 1 + ( n - 1 )*abs( incy ) )
 // \endverbatim
 //
 // \param[in] incy
 // \verbatim
 //          incy is INTEGER
-//         storage spacing between elements of DY
+//         storage spacing between elements of dy
 // \endverbatim
 //
-// \param[in] C
+// \param[in] c
 // \verbatim
-//          C is DOUBLE PRECISION
+//          c is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[in] S
+// \param[in] s
 // \verbatim
-//          S is DOUBLE PRECISION
+//          s is DOUBLE PRECISION
 // \endverbatim
 //
 //  Authors:
@@ -88,61 +88,45 @@ package goblas
 // \verbatim
 //
 //     jack dongarra, linpack, 3/11/78.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Drot(n *int, dx *[]float64, incx *int, dy *[]float64, incy *int, c *float64, s *float64) {
-	dtemp := new(float64)
-	i := new(int)
-	ix := new(int)
-	iy := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	if (*n) <= 0 {
+func Drot(major *byte, n *int, dx *[]float64, incx *int, dy *[]float64, incy *int, c *float64, s *float64) {
+	var i, ix, iy int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n <= 0 {
 		return
 	}
-	if (*incx) == 1 .(*and).(*incy) == 1 {
-		//*
-		//*       code for both increments equal to 1
-		//*
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*dtemp) = (*c)*(*dx)[(*i)-1] + (*s)*(*dy)[(*i)-1]
-			(*dy)[(*i)-1] = (*c)*(*dy)[(*i)-1] - (*s)*(*dx)[(*i)-1]
-			(*dx)[(*i)-1] = (*dtemp)
+	if *incx == 1 && *incy == 1 {
+		//
+		//       code for both increments equal to 1
+		//
+		for i = 1; i <= *n; i++ {
+			(*dx)[i-1], (*dy)[i-1] = (*c)*(*dx)[i-1]+(*s)*(*dy)[i-1], (*c)*(*dy)[i-1]-(*s)*(*dx)[i-1]
 		}
 	} else {
-		//*
-		//*       code for unequal increments or equal increments not equal
-		//*         to 1
-		//*
-		(*ix) = 1
-		(*iy) = 1
-		if (*incx) < 0 {
-			(*ix) = (-(*n)+1)*(*incx) + 1
+		//
+		//       code for unequal increments or equal increments not equal
+		//         to 1
+		//
+		ix = 1
+		iy = 1
+		if *incx < 0 {
+			ix = (-(*n)+1)*(*incx) + 1
 		}
-		if (*incy) < 0 {
-			(*iy) = (-(*n)+1)*(*incy) + 1
+		if *incy < 0 {
+			iy = (-(*n)+1)*(*incy) + 1
 		}
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*dtemp) = (*c)*(*dx)[(*ix)-1] + (*s)*(*dy)[(*iy)-1]
-			(*dy)[(*iy)-1] = (*c)*(*dy)[(*iy)-1] - (*s)*(*dx)[(*ix)-1]
-			(*dx)[(*ix)-1] = (*dtemp)
-			(*ix) = (*ix) + (*incx)
-			(*iy) = (*iy) + (*incy)
+		for i = 1; i <= *n; i++ {
+			(*dx)[ix-1], (*dy)[iy-1] = (*c)*(*dx)[ix-1]+(*s)*(*dy)[iy-1], (*c)*(*dy)[iy-1]-(*s)*(*dx)[ix-1]
+			ix += *incx
+			iy += *incy
 		}
 	}
 	return

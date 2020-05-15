@@ -1,9 +1,10 @@
 package goblas
 
-import "math"
-import 
+import (
+	"math"
+)
 
-// \brief \b Drotmg
+// Drotmg ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -13,13 +14,13 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Drotmg(DD1,DD2,DX1,DY1,DPARAM)
+//       SUBROUTINE Drotmg(dd1,dd2,dx1,dy1,dparam)
 //
 //       .. Scalar Arguments ..
-//       DOUBLE PRECISION DD1,DD2,DX1,DY1
+//       DOUBLE PRECISION dd1,dd2,dx1,dy1
 //       ..
 //       .. Array Arguments ..
-//       DOUBLE PRECISION DPARAM(5)
+//       DOUBLE PRECISION dparam(5)
 //       ..
 //
 //
@@ -29,55 +30,55 @@ import
 // \verbatim
 //
 //    CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-//    THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)//DX1,DSQRT(DD2)//    DY2)////T.
-//    WITH DPARAM1=DFLAG, H HAS ONE OF THE FOLLOWING FORMS..
+//    THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRTdd1*dx1,DSQRTdd2*>    DY2)**T.
+//    WITH dparam1=dflag, H HAS one OF THE FOLLOWING FORMS..
 //
-//    DFLAG=-1.D0     DFLAG=0.D0        DFLAG=1.D0     DFLAG=-2.D0
+//    dflag=-1.D0     dflag=0.D0        dflag=1.D0     dflag=-2.D0
 //
-//      (DH11  DH12)    (1.D0  DH12)    (DH11  1.D0)    (1.D0  0.D0)
-//    H=(        )    (        )    (        )    (        )
-//      (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
-//    LOCATIONS 2-4 OF DPARAM CONTAIN DH11, DH21, DH12, AND DH22
+//      (dh11  dh12)    (1.D0  dh12)    (dh11  1.D0)    (1.D0  0.D0)
+//    H=(          )    (          )    (          )    (          )
+//      (dh21  dh22),   (dh21  1.D0),   (-1.D0 dh22),   (0.D0  1.D0).
+//    LOCATIONS 2-4 OF dparam CONTAIN dh11, dh21, dh12, AND dh22
 //    RESPECTIVELY. (VALUES OF 1.D0, -1.D0, OR 0.D0 IMPLIED BY THE
-//    VALUE OF DPARAM1 ARE NOT STORED IN DPARAM.)
+//    VALUE OF dparam1 ARE NOT STORED IN dparam.)
 //
-//    THE VALUES OF GAMSQ AND RGAMSQ SET IN THE DATA STATEMENT MAY BE
-//    INEXACT.  THIS IS ok AS THEY ARE ONLY USED FOR TESTING THE SIZE
-//    OF DD1 AND DD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
+//    THE VALUES OF gamsq AND rgamsq SET IN THE DATA STATEMENT MAY BE
+//    INEXACT.  THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
+//    OF dd1 AND dd2.  ALL ACTUAL SCALING OF DATA IS DONE USING gam.
 //
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in,out] DD1
+// \param[in,out] dd1
 // \verbatim
-//          DD1 is DOUBLE PRECISION
+//          dd1 is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[in,out] DD2
+// \param[in,out] dd2
 // \verbatim
-//          DD2 is DOUBLE PRECISION
+//          dd2 is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[in,out] DX1
+// \param[in,out] dx1
 // \verbatim
-//          DX1 is DOUBLE PRECISION
+//          dx1 is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[in] DY1
+// \param[in] dy1
 // \verbatim
-//          DY1 is DOUBLE PRECISION
+//          dy1 is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[out] DPARAM
+// \param[out] dparam
 // \verbatim
-//          DPARAM is DOUBLE PRECISION array, dimension (5)
-//     DPARAM1=DFLAG
-//     DPARAM(2)=DH11
-//     DPARAM(3)=DH21
-//     DPARAM(4)=DH12
-//     DPARAM(5)=DH22
+//          dparam is DOUBLE PRECISION array, dimension (5)
+//     dparam1=dflag
+//     dparam(2)=dh11
+//     dparam(3)=dh21
+//     dparam(4)=dh12
+//     dparam(5)=dh22
 // \endverbatim
 //
 //  Authors:
@@ -93,165 +94,127 @@ import
 // \ingroup double_blas_level1
 //
 //  =====================================================================
-func Drotmg(dd1 *float64, dd2 *float64, dx1 *float64, dy1 *float64, dparam *[]float64) {
-	dflag := new(float64)
-	dh11 := new(float64)
-	dh12 := new(float64)
-	dh21 := new(float64)
-	dh22 := new(float64)
-	dp1 := new(float64)
-	dp2 := new(float64)
-	dq1 := new(float64)
-	dq2 := new(float64)
-	dtemp := new(float64)
-	du := new(float64)
-	gam := new(float64)
-	gamsq := new(float64)
-	one := new(float64)
-	rgamsq := new(float64)
-	two := new(float64)
-	zero := new(float64)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	//*     .. Data statements ..
-	//*
-	(*zero), (*one), (*two) = 0., 1., 2.
-	(*gam), (*gamsq), (*rgamsq) = 4096., 16777216., 5.9604645e-8
-	//*     ..
-	if (*dd1) < (*zero) {
-		//*        GO ZERO-H-D-AND-DX1..
-		(*dflag) = -(*one)
-		(*dh11) = (*zero)
-		(*dh12) = (*zero)
-		(*dh21) = (*zero)
-		(*dh22) = (*zero)
-		//*
-		(*dd1) = (*zero)
-		(*dd2) = (*zero)
-		(*dx1) = (*zero)
+func Drotmg(major *byte, dd1 *float64, dd2 *float64, dx1 *float64, dy1 *float64, dparam *[]float64) {
+	var dflag, dh11, dh12, dh21, dh22, dp1, dp2, dq1, dq2, dtemp, du, gam, gamsq, rgamsq float64
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	gam, gamsq, rgamsq = 4096, 16777216, 5.9604645e-8
+	//     ..
+	if *dd1 < 0.0 {
+		//        GO zero-H-D-AND-dx1..
+		dflag = -1.0
+
+		*dd1 = 0.0
+		*dd2 = 0.0
+		*dx1 = 0.0
 	} else {
-		//*        CASE-DD1-NONNEGATIVE
-		(*dp2) = (*dd2) * (*dy1)
-		if (*dp2) == (*zero) {
-			(*dflag) = -(*two)
-			(*dparam)[0] = (*dflag)
+		//        CASE-dd1-NONNEGATIVE
+		dp2 = (*dd2) * (*dy1)
+		if dp2 == 0.0 {
+			dflag = -2.0
+			(*dparam)[0] = dflag
 			return
 		}
-		//*        REGULAR-CASE..
-		(*dp1) = (*dd1) * (*dx1)
-		(*dq2) = (*dp2) * (*dy1)
-		(*dq1) = (*dp1) * (*dx1)
-		//*
-		if ABS((*dq1)) > dabs(dq2) {
-			(*dh21) = -(*dy1) / (*dx1)
-			(*dh12) = (*dp2) / (*dp1)
-			//*
-			(*du) = (*one) - (*dh12)*(*dh21)
-			//*
-			if (*du) > (*zero) {
-				(*dflag) = (*zero)
-				(*dd1) = (*dd1) / (*du)
-				(*dd2) = (*dd2) / (*du)
-				(*dx1) = (*dx1) * (*du)
+		//        REGULAR-CASE..
+		dp1 = (*dd1) * (*dx1)
+		dq2 = dp2 * (*dy1)
+		dq1 = dp1 * (*dx1)
+		//
+		if math.Abs(dq1) > math.Abs(dq2) {
+			dh21 = -(*dy1) / (*dx1)
+			dh12 = dp2 / dp1
+			//
+			du = 1.0 - dh12*dh21
+			//
+			if du > 0.0 {
+				dflag = 0.0
+				*dd1 = (*dd1) / du
+				*dd2 = (*dd2) / du
+				*dx1 = (*dx1) * du
 			}
 		} else {
-			if (*dq2) < (*zero) {
-				//*              GO ZERO-H-D-AND-DX1..
-				(*dflag) = -(*one)
-				(*dh11) = (*zero)
-				(*dh12) = (*zero)
-				(*dh21) = (*zero)
-				(*dh22) = (*zero)
-				//*
-				(*dd1) = (*zero)
-				(*dd2) = (*zero)
-				(*dx1) = (*zero)
+			if dq2 < 0.0 {
+				//              GO zero-H-D-AND-dx1..
+				dflag = -1.0
+
+				*dd1 = 0.0
+				*dd2 = 0.0
+				*dx1 = 0.0
 			} else {
-				(*dflag) = (*one)
-				(*dh11) = (*dp1) / (*dp2)
-				(*dh22) = (*dx1) / (*dy1)
-				(*du) = (*one) + (*dh11)*(*dh22)
-				(*dtemp) = (*dd2) / (*du)
-				(*dd2) = (*dd1) / (*du)
-				(*dd1) = (*dtemp)
-				(*dx1) = (*dy1) * (*du)
+				dflag = 1.0
+				dh11 = dp1 / dp2
+				dh22 = (*dx1) / (*dy1)
+				du = 1.0 + dh11*dh22
+				dtemp = (*dd2) / du
+				*dd2 = (*dd1) / du
+				*dd1 = dtemp
+				*dx1 = (*dy1) * du
 			}
 		}
-		//*     PROCEDURE..SCALE-CHECK
-		if (*dd1) != (*zero) {
-			for ((*dd1) <= (*rgamsq)) || ((*dd1) >= (*gamsq)) {
-				if (*dflag) == (*zero) {
-					(*dh11) = (*one)
-					(*dh22) = (*one)
-					(*dflag) = -(*one)
+		//     PROCEDURE..scale-CHECK
+		if *dd1 != 0.0 {
+			for (*dd1 <= rgamsq) || (*dd1 >= gamsq) {
+				if dflag == 0.0 {
+					dh11 = 1.0
+					dh22 = 1.0
+					dflag = -1.0
 				} else {
-					(*dh21) = -(*one)
-					(*dh12) = (*one)
-					(*dflag) = -(*one)
+					dh21 = -1.0
+					dh12 = 1.0
+					dflag = -1.0
 				}
-				if (*dd1) <= (*rgamsq) {
-					(*dd1) = (*dd1) * math.pow((*gam), 2)
-					(*dx1) = (*dx1) / (*gam)
-					(*dh11) = (*dh11) / (*gam)
-					(*dh12) = (*dh12) / (*gam)
+				if *dd1 <= rgamsq {
+					*dd1 *= math.Pow(gam, 2)
+					*dx1 /= gam
+					dh11 /= gam
+					dh12 /= gam
 				} else {
-					(*dd1) = (*dd1) / math.pow((*gam), 2)
-					(*dx1) = (*dx1) * (*gam)
-					(*dh11) = (*dh11) * (*gam)
-					(*dh12) = (*dh12) * (*gam)
+					*dd1 = (*dd1) / math.Pow(gam, 2)
+					*dx1 = (*dx1) * gam
+					dh11 *= gam
+					dh12 *= gam
 				}
 			}
 		}
-		if (*dd2) != (*zero) {
-			for (dabs((*dd2)) <= (*rgamsq)) || (dabs((*dd2)) >= (*gamsq)) {
-				if (*dflag) == (*zero) {
-					(*dh11) = (*one)
-					(*dh22) = (*one)
-					(*dflag) = -(*one)
+		if *dd2 != 0.0 {
+			for (math.Abs(*dd2) <= rgamsq) || (math.Abs(*dd2) >= gamsq) {
+				if dflag == 0.0 {
+					dh11 = 1.0
+					dh22 = 1.0
+					dflag = -1.0
 				} else {
-					(*dh21) = -(*one)
-					(*dh12) = (*one)
-					(*dflag) = -(*one)
+					dh21 = -1.0
+					dh12 = 1.0
+					dflag = -1.0
 				}
-				if ABS((*dd2)) <= (*rgamsq) {
-					(*dd2) = (*dd2) * math.pow((*gam), 2)
-					(*dh21) = (*dh21) / (*gam)
-					(*dh22) = (*dh22) / (*gam)
+				if math.Abs(*dd2) <= rgamsq {
+					*dd2 *= math.Pow(gam, 2)
+					dh21 = dh21 / gam
+					dh22 = dh22 / gam
 				} else {
-					(*dd2) = (*dd2) / math.pow((*gam), 2)
-					(*dh21) = (*dh21) * (*gam)
-					(*dh22) = (*dh22) * (*gam)
+					*dd2 = (*dd2) / math.Pow(gam, 2)
+					dh21 = dh21 * gam
+					dh22 = dh22 * gam
 				}
 			}
 		}
 	}
-	if (*dflag) < (*zero) {
-		(*dparam)[1] = (*dh11)
-		(*dparam)[2] = (*dh21)
-		(*dparam)[3] = (*dh12)
-		(*dparam)[4] = (*dh22)
-	} else if (*dflag) == (*zero) {
-		(*dparam)[2] = (*dh21)
-		(*dparam)[3] = (*dh12)
+	if dflag < 0.0 {
+		(*dparam)[1] = dh11
+		(*dparam)[2] = dh21
+		(*dparam)[3] = dh12
+		(*dparam)[4] = dh22
+	} else if dflag == 0.0 {
+		(*dparam)[2] = dh21
+		(*dparam)[3] = dh12
 	} else {
-		(*dparam)[1] = (*dh11)
-		(*dparam)[4] = (*dh22)
+		(*dparam)[1] = dh11
+		(*dparam)[4] = dh22
 	}
-	(*dparam)[0] = (*dflag)
+	(*dparam)[0] = dflag
 	return
 }

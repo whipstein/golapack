@@ -1,9 +1,10 @@
 package goblas
 
-import 
-import "math"
+import (
+	"math"
+)
 
-// \brief \b Scnrm2
+// Scnrm2 ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -13,13 +14,13 @@ import "math"
 //  Definition:
 //  ===========
 //
-//       REAL FUNCTION Scnrm2(N,X,incx)
+//       REAL FUNCTION Scnrm2(n,x,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX X(//)
+//       COMPLEX x(*)
 //       ..
 //
 //
@@ -31,28 +32,28 @@ import "math"
 // Scnrm2 returns the euclidean norm of a vector via the function
 // name, so that
 //
-//    Scnrm2 := sqrt( x////H//x)
+//    Scnrm2 := sqrt( x**H*x )
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is COMPLEX array, dimension (N)
-//         complex vector with N elements
+//          x is COMPLEX array, dimension n
+//         complex vector with n elements
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of X
+//         storage spacing between elements of x
 // \endverbatim
 //
 //  Authors:
@@ -78,72 +79,46 @@ import "math"
 // \endverbatim
 //
 //  =====================================================================
-func Scnrm2(n *int, x *[]complex128, incx *int) (scnrm2Return *float64) {
-	scnrm2return := new(float64)
-	one := new(float64)
-	zero := new(float64)
-	norm := new(float64)
-	scale := new(float64)
-	ssq := new(float64)
-	temp := new(float64)
-	ix := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*one) = 1.0e+0
-	(*zero) = 0.0e+0
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	if (*n) < 1 || (*incx) < 1 {
-		(*norm) = (*zero)
+func Scnrm2(n *int, x *[]complex64, incx *int) (norm float32) {
+	var scale, ssq, temp float32
+	var ix int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n < 1 || *incx < 1 {
+		norm = 0.0
 	} else {
-		(*scale) = (*zero)
-		(*ssq) = (*one)
-		//*        The following loop is equivalent to this call to the LAPACK
-		//*        auxiliary routine:
-		//*        CALL CLASSQ( N, X, incx, SCALE, SSQ)
-		//*
-		for (*ix) = 1; (*ix) <= 1+((*n)-1)*(*incx); (*ix) += (*incx) {
-			if real(((*x)[(*ix)-1])) != (*zero) {
-				(*temp) = (ABS(real(((*x)[(*ix)-1]))))
-				if (*scale) < (*temp) {
-					(*ssq) = (*one) + (*ssq)*math.pow(((*scale)/(*temp)), 2)
-					(*scale) = (*temp)
+		scale = 0.0
+		ssq = 1.0
+		//        The following loop is equivalent to this call to the LAPACK
+		//        auxiliary routine:
+		//        CALL CLASSQ( n, x, incx, scale, ssq )
+		//
+		for ix = 1; ix <= 1+((*n)-1)*(*incx); ix += *incx {
+			if real((*x)[ix-1]) != 0.0 {
+				temp = float32(math.Abs(float64(real((*x)[ix-1]))))
+				if scale < temp {
+					ssq = 1.0 + ssq*float32(math.Pow(float64(scale/temp), 2))
+					scale = temp
 				} else {
-					(*ssq) = (*ssq) + math.pow(((*temp)/(*scale)), 2)
+					ssq += float32(math.Pow(float64(temp/scale), 2))
 				}
 			}
-			if imag(((*x)[(*ix)-1])) != (*zero) {
-				(*temp) = (ABS(imag(((*x)[(*ix)-1]))))
-				if (*scale) < (*temp) {
-					(*ssq) = (*one) + (*ssq)*math.pow(((*scale)/(*temp)), 2)
-					(*scale) = (*temp)
+			if imag((*x)[ix-1]) != 0.0 {
+				temp = float32(math.Abs(float64(imag((*x)[ix-1]))))
+				if scale < temp {
+					ssq = 1.0 + ssq*float32(math.Pow(float64(scale/temp), 2))
+					scale = temp
 				} else {
-					(*ssq) = (*ssq) + math.pow(((*temp)/(*scale)), 2)
+					ssq += float32(math.Pow(float64(temp/scale), 2))
 				}
 			}
-			//Label10:
 		}
-		(*norm) = (*scale) * SQRT((*ssq))
+		norm = scale * float32(math.Sqrt(float64(ssq)))
 	}
-	//*
-	(*scnrm2) = (*norm)
+
 	return
-	//*
-	//*     End of Scnrm2.
-	//*
 }

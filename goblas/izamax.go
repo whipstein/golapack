@@ -1,6 +1,6 @@
 package goblas
 
-// \brief \b Izamax
+// Izamax ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,13 +10,13 @@ package goblas
 //  Definition:
 //  ===========
 //
-//       INTEGER FUNCTION Izamax(N,ZX,incx)
+//       INTEGER FUNCTION Izamax(n,zx,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 ZX(//)
+//       COMPLEX*16 zx(*)
 //       ..
 //
 //
@@ -31,21 +31,21 @@ package goblas
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] ZX
+// \param[in] zx
 // \verbatim
-//          ZX is COMPLEX//16 array, dimension ( 1 + ( N - 1)//abs( incx))
+//          zx is COMPLEX*16 array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of ZX
+//         storage spacing between elements of zx
 // \endverbatim
 //
 //  Authors:
@@ -67,64 +67,50 @@ package goblas
 //
 //     jack dongarra, 1/15/85.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Izamax(n *int, zx *[]complex128, incx *int) (izamaxReturn *int) {
-	izamaxreturn := new(int)
-	dmax := new(float64)
-	i := new(int)
-	ix := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. External Functions ..
-	//*     ..
-	(*izamax) = 0
-	if (*n) < 1 || (*incx) <= 0 {
+func Izamax(n *int, zx *[]complex128, incx *int) (izamaxReturn int) {
+	var dmax float64
+	var i, ix int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n < 1 || *incx <= 0 {
 		return
 	}
-	(*izamax) = 1
-	if (*n) == 1 {
+	izamaxReturn = 1
+	if *n == 1 {
 		return
 	}
-	if (*incx) == 1 {
-		//*
-		//*        code for increment equal to 1
-		//*
-		(*dmax) = (*Dcabs1(&((*zx)[0])))
-		for (*i) = 2; (*i) <= (*n); (*i)++ {
-			if Dcabs1(&((*zx)[(*i)-1])) > (*dmax) {
-				(*izamax) = (*i)
-				(*dmax) = (*Dcabs1(&((*zx)[(*i)-1])))
+	if *incx == 1 {
+		//
+		//        code for increment equal to 1
+		//
+		dmax = dcabs1(&(*zx)[0])
+		for i = 2; i <= *n; i++ {
+			if dcabs1(&(*zx)[i-1]) > dmax {
+				izamaxReturn = i
+				dmax = dcabs1(&(*zx)[i-1])
 			}
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*ix) = 1
-		(*dmax) = (*Dcabs1(&((*zx)[0])))
-		(*ix) = (*ix) + (*incx)
-		for (*i) = 2; (*i) <= (*n); (*i)++ {
-			if Dcabs1(&((*zx)[(*ix)-1])) > (*dmax) {
-				(*izamax) = (*i)
-				(*dmax) = (*Dcabs1(&((*zx)[(*ix)-1])))
+		//
+		//        code for increment not equal to 1
+		//
+		ix = 1
+		dmax = dcabs1(&(*zx)[0])
+		ix += *incx
+		for i = 2; i <= *n; i++ {
+			if dcabs1(&(*zx)[ix-1]) > dmax {
+				izamaxReturn = i
+				dmax = dcabs1(&(*zx)[ix-1])
 			}
-			(*ix) = (*ix) + (*incx)
+			ix += *incx
 		}
 	}
 	return

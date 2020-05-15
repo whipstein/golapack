@@ -1,8 +1,10 @@
 package goblas
 
-import 
+import (
+	"math/cmplx"
+)
 
-// \brief \b Zhpmv
+// Zhpmv ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,15 +14,15 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Zhpmv(UPLO,N,ALPHA,AP,X,incx,BETA,Y,incy)
+//       SUBROUTINE Zhpmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
 //
 //       .. Scalar Arguments ..
-//       COMPLEX//16 ALPHA,BETA
-//       INTEGER incx,incy,N
-//       CHARACTER UPLO
+//       COMPLEX*16 alpha,beta
+//       INTEGER incx,incy,n
+//       CHARACTER uplo
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 AP(//),X(//),Y(//)
+//       COMPLEX*16 ap(*),x(*),y(*)
 //       ..
 //
 //
@@ -31,65 +33,65 @@ import
 //
 // Zhpmv  performs the matrix-vector operation
 //
-//    y := alpha//A//x + beta//y,
+//    y := alpha*a*x + beta*y,
 //
 // where alpha and beta are scalars, x and y are n element vectors and
-// A is an n by n hermitian matrix, supplied in packed form.
+// a is an n by n hermitian matrix, supplied in packed form.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] UPLO
+// \param[in] uplo
 // \verbatim
-//          UPLO is CHARACTER//1
-//           On entry, UPLO specifies whether the upper or lower
-//           triangular part of the matrix A is supplied in the packed
-//           array AP as follows:
+//          uplo is CHARACTER*1
+//           On entry, uplo specifies whether the upper or lower
+//           triangular part of the matrix a is supplied in the packed
+//           array ap as follows:
 //
-//              UPLO = 'U' or 'u'   The upper triangular part of A is
-//                                  supplied in AP.
+//              uplo = 'U' or 'u'   The upper triangular part of a is
+//                                  supplied in ap.
 //
-//              UPLO = 'L' or 'l'   The lower triangular part of A is
-//                                  supplied in AP.
+//              uplo = 'L' or 'L'   The lower triangular part of a is
+//                                  supplied in ap.
 // \endverbatim
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
-//           On entry, N specifies the order of the matrix A.
-//           N must be at least zero.
+//          n is INTEGER
+//           On entry, n specifies the order of the matrix a.
+//           n must be at least zero.
 // \endverbatim
 //
-// \param[in] ALPHA
+// \param[in] alpha
 // \verbatim
-//          ALPHA is COMPLEX//16
-//           On entry, ALPHA specifies the scalar alpha.
+//          alpha is COMPLEX*16
+//           On entry, alpha specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in] AP
+// \param[in] ap
 // \verbatim
-//          AP is COMPLEX//16 array, dimension at least
-//           ( ( n//( n + 1))/2).
-//           Before entry with UPLO = 'U' or 'u', the array AP must
+//          ap is COMPLEX*16 array, dimension at least
+//           ( ( n*( n + 1 ) )/2 ).
+//           Before entry with uplo = 'U' or 'u', the array ap must
 //           contain the upper triangular part of the hermitian matrix
-//           packed sequentially, column by column, so that AP1
-//           contains a( 1, 1), AP( 2) and AP( 3) contain a( 1, 2)
-//           and a( 2, 2) respectively, and so on.
-//           Before entry with UPLO = 'L' or 'l', the array AP must
+//           packed sequentially, column by column, so that ap( 1 )
+//           contains a( 1, 1 ), ap( 2 ) and ap( 3 ) contain a( 1, 2 )
+//           and a( 2, 2 ) respectively, and so on.
+//           Before entry with uplo = 'L' or 'L', the array ap must
 //           contain the lower triangular part of the hermitian matrix
-//           packed sequentially, column by column, so that AP1
-//           contains a( 1, 1), AP( 2) and AP( 3) contain a( 2, 1)
-//           and a( 3, 1) respectively, and so on.
+//           packed sequentially, column by column, so that ap( 1 )
+//           contains a( 1, 1 ), ap( 2 ) and ap( 3 ) contain a( 2, 1 )
+//           and a( 3, 1 ) respectively, and so on.
 //           Note that the imaginary parts of the diagonal elements need
 //           not be set and are assumed to be zero.
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is COMPLEX//16 array, dimension at least
-//           ( 1 + ( n - 1)//abs( incx)).
-//           Before entry, the incremented array X must contain the n
+//          x is COMPLEX*16 array, dimension at least
+//           ( 1 + ( n - 1 )*abs( incx ) ).
+//           Before entry, the incremented array x must contain the n
 //           element vector x.
 // \endverbatim
 //
@@ -97,22 +99,22 @@ import
 // \verbatim
 //          incx is INTEGER
 //           On entry, incx specifies the increment for the elements of
-//           X. incx must not be zero.
+//           x. incx must not be zero.
 // \endverbatim
 //
-// \param[in] BETA
+// \param[in] beta
 // \verbatim
-//          BETA is COMPLEX//16
-//           On entry, BETA specifies the scalar beta. When BETA is
-//           supplied as zero then Y need not be set on input.
+//          beta is COMPLEX*16
+//           On entry, beta specifies the scalar beta. When beta is
+//           supplied as zero then y need not be set on input.
 // \endverbatim
 //
-// \param[in,out] Y
+// \param[in,out] y
 // \verbatim
-//          Y is COMPLEX//16 array, dimension at least
-//           ( 1 + ( n - 1)//abs( incy)).
-//           Before entry, the incremented array Y must contain the n
-//           element vector y. On exit, Y is overwritten by the updated
+//          y is COMPLEX*16 array, dimension at least
+//           ( 1 + ( n - 1 )*abs( incy ) ).
+//           Before entry, the incremented array y must contain the n
+//           element vector y. On exit, y is overwritten by the updated
 //           vector y.
 // \endverbatim
 //
@@ -120,7 +122,7 @@ import
 // \verbatim
 //          incy is INTEGER
 //           On entry, incy specifies the increment for the elements of
-//           Y. incy must not be zero.
+//           y. incy must not be zero.
 // \endverbatim
 //
 //  Authors:
@@ -141,7 +143,7 @@ import
 // \verbatim
 //
 //  Level 2 Blas routine.
-//  The vector and matrix arguments are not referenced when n = 0, or M = 0
+//  The vector and matrix arguments are not referenced when n = 0, or m = 0
 //
 //  -- Written on 22-October-1986.
 //     Jack Dongarra, Argonne National Lab.
@@ -151,211 +153,162 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Zhpmv(uplo *byte, n *int, alpha *complex128, ap *[]complex128, x *[]complex128, incx *int, beta *complex128, y *[]complex128, incy *int) {
-	one := new(complex128)
-	zero := new(complex128)
-	temp1 := new(complex128)
-	temp2 := new(complex128)
-	i := new(int)
-	info := new(int)
-	ix := new(int)
-	iy := new(int)
-	j := new(int)
-	jx := new(int)
-	jy := new(int)
-	k := new(int)
-	kk := new(int)
-	kx := new(int)
-	ky := new(int)
-	//*
-	//*  -- Reference BLAS level2 routine (version 3.7.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     December 2016
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*one) = (1.0e+0 + (0.0e+0)*1i)
-	(*zero) = (0.0e+0 + (0.0e+0)*1i)
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. External Functions ..
-	//*     ..
-	//*     .. External Subroutines ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	//*
-	//*     Test the input parameters.
-	//*
-	(*info) = 0
-	if !Lsame((*uplo), "u") && !Lsame((*uplo), "l") {
-		(*info) = 1
-	} else if (*n) < 0 {
-		(*info) = 2
-	} else if (*incx) == 0 {
-		(*info) = 6
-	} else if (*incy) == 0 {
-		(*info) = 9
+func Zhpmv(major, uplo *byte, n *int, alpha *complex128, ap *[]complex128, x *[]complex128, incx *int, beta *complex128, y *[]complex128, incy *int) {
+	var temp1, temp2 complex128
+	var i, info, ix, iy, j, jx, jy, k, kk, kx, ky int
+	//
+	//  -- Reference BLAS level2 routine (version 3.7.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     December 2016
+	//
+	//     Test the input parameters.
+	//
+	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
+		info = 1
+	} else if !Lsame(uplo, func() *byte { y := byte('U'); return &y }()) && !Lsame(uplo, func() *byte { y := byte('L'); return &y }()) {
+		info = 2
+	} else if *n < 0 {
+		info = 3
+	} else if *incx == 0 {
+		info = 7
+	} else if *incy == 0 {
+		info = 10
 	}
-	if (*info) != 0 {
-		Xerbla(func() *[]byte {y :=[]byte("zhpmv "); return &y}(), info)
+	if info != 0 {
+		Xerbla(func() *string { y := "Zhpmv"; return &y }(), &info)
 		return
 	}
-	//*
-	//*     Quick return if possible.
-	//*
-	if ((*n) == 0) || (((*alpha) == (*zero)) && ((*beta) == (*one))) {
+	//
+	//     Quick return if possible.
+	//
+	if *n == 0 || (*alpha == 0.0 && *beta == 1.0) {
 		return
 	}
-	//*
-	//*     Set up the start points in  X  and  Y.
-	//*
-	if (*incx) > 0 {
-		(*kx) = 1
+	//
+	//     Set up the start points in  x  and  y.
+	//
+	if *incx > 0 {
+		kx = 1
 	} else {
-		(*kx) = 1 - ((*n)-1)*(*incx)
+		kx = 1 - ((*n)-1)*(*incx)
 	}
-	if (*incy) > 0 {
-		(*ky) = 1
+	if *incy > 0 {
+		ky = 1
 	} else {
-		(*ky) = 1 - ((*n)-1)*(*incy)
+		ky = 1 - ((*n)-1)*(*incy)
 	}
-	//*
-	//*     Start the operations. In this version the elements of the array AP
-	//*     are accessed sequentially with one pass through AP.
-	//*
-	//*     First form  y := beta*y.
-	//*
-	if (*beta) != (*one) {
-		if (*incy) == 1 {
-			if (*beta) == (*zero) {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*i)-1] = (*zero)
-					//Label10:
+	//
+	//     Start the operations. In this version the elements of the array ap
+	//     are accessed sequentially with one pass through ap.
+	//
+	//     First form  y := beta*y.
+	//
+	if *beta != 1.0 {
+		if *incy == 1 {
+			if *beta == 0.0 {
+				for i = 1; i <= *n; i++ {
+					(*y)[i-1] = 0.0
 				}
 			} else {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*i)-1] = (*beta) * (*y)[(*i)-1]
-					//Label20:
+				for i = 1; i <= *n; i++ {
+					(*y)[i-1] = (*beta) * (*y)[i-1]
 				}
 			}
 		} else {
-			(*iy) = (*ky)
-			if (*beta) == (*zero) {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*iy)-1] = (*zero)
-					(*iy) = (*iy) + (*incy)
-					//Label30:
+			iy = ky
+			if *beta == 0.0 {
+				for i = 1; i <= *n; i++ {
+					(*y)[iy-1] = 0.0
+					iy += *incy
 				}
 			} else {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*iy)-1] = (*beta) * (*y)[(*iy)-1]
-					(*iy) = (*iy) + (*incy)
-					//Label40:
+				for i = 1; i <= *n; i++ {
+					(*y)[iy-1] = (*beta) * (*y)[iy-1]
+					iy += *incy
 				}
 			}
 		}
 	}
-	if (*alpha) == (*zero) {
+	if *alpha == 0.0 {
 		return
 	}
-	(*kk) = 1
-	if Lsame(uplo, func() *byte {y := byte('u'); return &y}()) {
-		//*
-		//*        Form  y  when AP contains the upper triangle.
-		//*
-		if ((*incx) == 1) && ((*incy) == 1) {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*j)-1]
-				(*temp2) = (*zero)
-				(*k) = (*kk)
-				for (*i) = 1; (*i) <= (*j)-1; (*i)++ {
-					(*y)[(*i)-1] = (*y)[(*i)-1] + (*temp1)*(*ap)[(*k)-1]
-					(*temp2) = (*temp2) + DCONJG(((*ap)[(*k)-1]))*(*x)[(*i)-1]
-					(*k) = (*k) + 1
-					//Label50:
+	kk = 1
+	if Lsame(uplo, func() *byte { y := byte('U'); return &y }()) {
+		//
+		//        Form  y  when ap contains the upper triangle.
+		//
+		if *incx == 1 && *incy == 1 {
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[j-1]
+				temp2 = 0.0
+				k = kk
+				for i = 1; i <= j-1; i++ {
+					(*y)[i-1] += temp1 * (*ap)[k-1]
+					temp2 += cmplx.Conj((*ap)[k-1]) * (*x)[i-1]
+					k++
 				}
-				(*y)[(*j)-1] = (*y)[(*j)-1] + (*temp1)*DBLE(((*ap)[(*kk)+(*j)-0])) + (*alpha)*(*temp2)
-				(*kk) = (*kk) + (*j)
-				//Label60:
+				(*y)[j-1] += temp1*complex(real((*ap)[kk+j-2]), 0.0) + (*alpha)*temp2
+				kk += j
 			}
 		} else {
-			(*jx) = (*kx)
-			(*jy) = (*ky)
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*jx)-1]
-				(*temp2) = (*zero)
-				(*ix) = (*kx)
-				(*iy) = (*ky)
-				for (*k) = (*kk); (*k) <= (*kk)+(*j)-2; (*k)++ {
-					(*y)[(*iy)-1] = (*y)[(*iy)-1] + (*temp1)*(*ap)[(*k)-1]
-					(*temp2) = (*temp2) + DCONJG(((*ap)[(*k)-1]))*(*x)[(*ix)-1]
-					(*ix) = (*ix) + (*incx)
-					(*iy) = (*iy) + (*incy)
-					//Label70:
+			jx = kx
+			jy = ky
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[jx-1]
+				temp2 = 0.0
+				ix = kx
+				iy = ky
+				for k = kk; k <= kk+j-2; k++ {
+					(*y)[iy-1] += temp1 * (*ap)[k-1]
+					temp2 += cmplx.Conj((*ap)[k-1]) * (*x)[ix-1]
+					ix += *incx
+					iy += *incy
 				}
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*temp1)*DBLE(((*ap)[(*kk)+(*j)-0])) + (*alpha)*(*temp2)
-				(*jx) = (*jx) + (*incx)
-				(*jy) = (*jy) + (*incy)
-				(*kk) = (*kk) + (*j)
-				//Label80:
+				(*y)[jy-1] += temp1*complex(real((*ap)[kk+j-2]), 0.0) + (*alpha)*temp2
+				jx += *incx
+				jy += *incy
+				kk += j
 			}
 		}
 	} else {
-		//*
-		//*        Form  y  when AP contains the lower triangle.
-		//*
-		if ((*incx) == 1) && ((*incy) == 1) {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*j)-1]
-				(*temp2) = (*zero)
-				(*y)[(*j)-1] = (*y)[(*j)-1] + (*temp1)*DBLE(((*ap)[(*kk)-1]))
-				(*k) = (*kk) + 1
-				for (*i) = (*j) + 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*i)-1] = (*y)[(*i)-1] + (*temp1)*(*ap)[(*k)-1]
-					(*temp2) = (*temp2) + DCONJG(((*ap)[(*k)-1]))*(*x)[(*i)-1]
-					(*k) = (*k) + 1
-					//Label90:
+		//
+		//        Form  y  when ap contains the lower triangle.
+		//
+		if *incx == 1 && *incy == 1 {
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[j-1]
+				temp2 = 0.0
+				(*y)[j-1] += temp1 * complex(real((*ap)[kk-1]), 0.0)
+				k = kk + 1
+				for i = j + 1; i <= *n; i++ {
+					(*y)[i-1] += temp1 * (*ap)[k-1]
+					temp2 += cmplx.Conj((*ap)[k-1]) * (*x)[i-1]
+					k++
 				}
-				(*y)[(*j)-1] = (*y)[(*j)-1] + (*alpha)*(*temp2)
-				(*kk) = (*kk) + ((*n) - (*j) + 1)
-				//Label100:
+				(*y)[j-1] += (*alpha) * temp2
+				kk += ((*n) - j + 1)
 			}
 		} else {
-			(*jx) = (*kx)
-			(*jy) = (*ky)
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*jx)-1]
-				(*temp2) = (*zero)
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*temp1)*DBLE(((*ap)[(*kk)-1]))
-				(*ix) = (*jx)
-				(*iy) = (*jy)
-				for (*k) = (*kk) + 1; (*k) <= (*kk)+(*n)-(*j); (*k)++ {
-					(*ix) = (*ix) + (*incx)
-					(*iy) = (*iy) + (*incy)
-					(*y)[(*iy)-1] = (*y)[(*iy)-1] + (*temp1)*(*ap)[(*k)-1]
-					(*temp2) = (*temp2) + DCONJG(((*ap)[(*k)-1]))*(*x)[(*ix)-1]
-					//Label110:
+			jx = kx
+			jy = ky
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[jx-1]
+				temp2 = 0.0
+				(*y)[jy-1] += temp1 * complex(real((*ap)[kk-1]), 0.0)
+				ix = jx
+				iy = jy
+				for k = kk + 1; k <= kk+(*n)-j; k++ {
+					ix += *incx
+					iy += *incy
+					(*y)[iy-1] += temp1 * (*ap)[k-1]
+					temp2 += cmplx.Conj((*ap)[k-1]) * (*x)[ix-1]
 				}
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*alpha)*(*temp2)
-				(*jx) = (*jx) + (*incx)
-				(*jy) = (*jy) + (*incy)
-				(*kk) = (*kk) + ((*n) - (*j) + 1)
-				//Label120:
+				(*y)[jy-1] += (*alpha) * temp2
+				jx += *incx
+				jy += *incy
+				kk += ((*n) - j + 1)
 			}
 		}
 	}
-	//*
-	return
-	//*
-	//*     End of Zhpmv .
-	//*
 }

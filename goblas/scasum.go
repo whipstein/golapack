@@ -1,8 +1,8 @@
 package goblas
 
-import 
+import "math"
 
-// \brief \b Scasum
+// Scasum ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,13 +12,13 @@ import
 //  Definition:
 //  ===========
 //
-//       REAL FUNCTION Scasum(N,CX,incx)
+//       REAL FUNCTION Scasum(N,CX,INCX)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER INCX,N
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX CX(//)
+//       COMPLEX CX(*)
 //       ..
 //
 //
@@ -42,12 +42,12 @@ import
 //
 // \param[in,out] CX
 // \verbatim
-//          CX is COMPLEX array, dimension ( 1 + ( N - 1)//abs( incx))
+//          CX is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 // \endverbatim
 //
-// \param[in] incx
+// \param[in] INCX
 // \verbatim
-//          incx is INTEGER
+//          INCX is INTEGER
 //         storage spacing between elements of SX
 // \endverbatim
 //
@@ -70,53 +70,36 @@ import
 //
 //     jack dongarra, linpack, 3/11/78.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Scasum(n *int, cx *[]complex128, incx *int) (scasumReturn *float64) {
-	scasumreturn := new(float64)
-	stemp := new(float64)
-	i := new(int)
-	nincx := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*scasum) = 0.0
-	(*stemp) = 0.0
-	if (*n) <= 0 || (*incx) <= 0 {
+func Scasum(n *int, cx *[]complex64, incx *int) (scasumReturn float32) {
+	var i, nincx int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n <= 0 || *incx <= 0 {
 		return
 	}
-	if (*incx) == 1 {
-		//*
-		//*        code for increment equal to 1
-		//*
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*stemp) = (*stemp) + ABS(real(((*cx)[(*i)-1]))) + ABS(imag(((*cx)[(*i)-1])))
+	if *incx == 1 {
+		//
+		//        code for increment equal to 1
+		//
+		for i = 1; i <= *n; i++ {
+			scasumReturn += float32(math.Abs(float64(real((*cx)[i-1]))) + math.Abs(float64(imag((*cx)[i-1]))))
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*nincx) = (*n) * (*incx)
-		for (*i) = 1; (*i) <= (*nincx); (*i) += (*incx) {
-			(*stemp) = (*stemp) + ABS(real(((*cx)[(*i)-1]))) + ABS(imag(((*cx)[(*i)-1])))
+		//
+		//        code for increment not equal to 1
+		//
+		nincx = (*n) * (*incx)
+		for i = 1; i <= nincx; i += *incx {
+			scasumReturn += float32(math.Abs(float64(real((*cx)[i-1]))) + math.Abs(float64(imag((*cx)[i-1]))))
 		}
 	}
-	(*scasum) = (*stemp)
 	return
 }

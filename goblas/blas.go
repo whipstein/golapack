@@ -1,0 +1,4 @@
+package goblas
+
+func main() {
+}

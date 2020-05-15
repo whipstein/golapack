@@ -1,8 +1,6 @@
 package goblas
 
-import 
-
-// \brief \b Sasum
+// Sasum ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,13 +10,13 @@ import
 //  Definition:
 //  ===========
 //
-//       REAL FUNCTION Sasum(N,SX,incx)
+//       REAL FUNCTION SASUM(n,sx,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       REAL SX(//)
+//       REAL sx(*)
 //       ..
 //
 //
@@ -27,28 +25,28 @@ import
 //
 // \verbatim
 //
-//    Sasum takes the sum of the absolute values.
+//    SASUM takes the sum of the absolute values.
 //    uses unrolled loops for increment equal to one.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] SX
+// \param[in] sx
 // \verbatim
-//          SX is REAL array, dimension ( 1 + ( N - 1)//abs( incx))
+//          sx is REAL array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of SX
+//         storage spacing between elements of sx
 // \endverbatim
 //
 //  Authors:
@@ -70,68 +68,50 @@ import
 //
 //     jack dongarra, linpack, 3/11/78.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Sasum(n *int, sx *[]float64, incx *int) (sasumReturn *float64) {
-	sasumreturn := new(float64)
-	stemp := new(float64)
-	i := new(int)
-	m := new(int)
-	mp1 := new(int)
-	nincx := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*sasum) = 0.0
-	(*stemp) = 0.0
-	if (*n) <= 0 || (*incx) <= 0 {
-		return
+func Sasum(major *byte, n *int, sx *[]float32, incx *int) float32 {
+	var stemp float32
+	var i, m, mp1, nincx int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	stemp = 0.0
+	if *n <= 0 || *incx <= 0 {
+		return stemp
 	}
-	if (*incx) == 1 {
-		//*        code for increment equal to 1
-		//*
-		//*
-		//*        clean-up loop
-		//*
-		(*m) = (MOD((*n), int(6)))
-		if (*m) != 0 {
-			for (*i) = 1; (*i) <= (*m); (*i)++ {
-				(*stemp) = (*stemp) + ABS(((*sx)[(*i)-1]))
+	if *incx == 1 {
+		//        code for increment equal to 1
+		//
+		//
+		//        clean-up loop
+		//
+		m = (*n) % 6
+		if m != 0 {
+			for i = 1; i <= m; i++ {
+				stemp += absf32((*sx)[i-1])
 			}
-			if (*n) < 6 {
-				(*sasum) = (*stemp)
-				return
+			if *n < 6 {
+				return stemp
 			}
 		}
-		(*mp1) = (*m) + 1
-		for (*i) = (*mp1); (*i) <= (*n); (*i) += 6 {
-			(*stemp) = (*stemp) + ABS(((*sx)[(*i)-1])) + ABS(((*sx)[(*i)+0])) + ABS(((*sx)[(*i)+1])) + ABS(((*sx)[(*i)+2])) + ABS(((*sx)[(*i)+3])) + ABS(((*sx)[(*i)+4]))
+		mp1 = m + 1
+		for i = mp1; i <= *n; i += 6 {
+			stemp += absf32((*sx)[i-1]) + absf32((*sx)[i]) + absf32((*sx)[i+1]) + absf32((*sx)[i+2]) + absf32((*sx)[i+3]) + absf32((*sx)[i+4])
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*nincx) = (*n) * (*incx)
-		for (*i) = 1; (*i) <= (*nincx); (*i) += (*incx) {
-			(*stemp) = (*stemp) + ABS(((*sx)[(*i)-1]))
+		//
+		//        code for increment not equal to 1
+		//
+		nincx = (*n) * (*incx)
+		for i = 1; i <= nincx; i += *incx {
+			stemp += absf32((*sx)[i-1])
 		}
 	}
-	(*sasum) = (*stemp)
-	return
+	return stemp
 }

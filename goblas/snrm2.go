@@ -1,9 +1,6 @@
 package goblas
 
-import "math"
-import 
-
-// \brief \b Snrm2
+// Snrm2 ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -13,13 +10,13 @@ import
 //  Definition:
 //  ===========
 //
-//       REAL FUNCTION Snrm2(N,X,incx)
+//       REAL FUNCTION SNRM2(n,x,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       REAL X(//)
+//       REAL x(*)
 //       ..
 //
 //
@@ -28,24 +25,24 @@ import
 //
 // \verbatim
 //
-// Snrm2 returns the euclidean norm of a vector via the function
+// SNRM2 returns the euclidean norm of a vector via the function
 // name, so that
 //
-//    Snrm2 := sqrt( x'//x).
+//    SNRM2 := sqrt( x'*x ).
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is REAL array, dimension ( 1 + ( N - 1)//abs( incx))
+//          x is REAL array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
@@ -77,65 +74,42 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Snrm2(n *int, x *[]float64, incx *int) (snrm2Return *float64) {
-	snrm2return := new(float64)
-	one := new(float64)
-	zero := new(float64)
-	absxi := new(float64)
-	norm := new(float64)
-	scale := new(float64)
-	ssq := new(float64)
-	ix := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*one) = 1.0e+0
-	(*zero) = 0.0e+0
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	if (*n) < 1 || (*incx) < 1 {
-		(*norm) = (*zero)
-	} else if (*n) == 1 {
-		(*norm) = (ABS(((*x)[0])))
+func Snrm2(major *byte, n *int, x *[]float32, incx *int) float32 {
+	var absxi, norm, scale, ssq float32
+	var ix int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n < 1 || *incx < 1 {
+		norm = 0.0
+	} else if *n == 1 {
+		norm = absf32((*x)[0])
 	} else {
-		(*scale) = (*zero)
-		(*ssq) = (*one)
-		//*        The following loop is equivalent to this call to the LAPACK
-		//*        auxiliary routine:
-		//*        CALL SLASSQ( N, X, incx, SCALE, SSQ)
-		//*
-		for (*ix) = 1; (*ix) <= 1+((*n)-1)*(*incx); (*ix) += (*incx) {
-			if (*x)[(*ix)-1] != (*zero) {
-				(*absxi) = (ABS(((*x)[(*ix)-1])))
-				if (*scale) < (*absxi) {
-					(*ssq) = (*one) + (*ssq)*math.pow(((*scale)/(*absxi)), 2)
-					(*scale) = (*absxi)
+		scale = 0.0
+		ssq = 1.0
+		//        The following loop is equivalent to this call to the LAPACK
+		//        auxiliary routine:
+		//        CALL SLASSQ( n, x, incx, scale, ssq )
+		//
+		for ix = 1; ix <= 1+((*n)-1)*(*incx); ix += *incx {
+			if (*x)[ix-1] != 0.0 {
+				absxi = absf32((*x)[ix-1])
+				if scale < absxi {
+					ssq = 1.0 + ssq*powf32((scale/absxi), 2)
+					scale = absxi
 				} else {
-					(*ssq) = (*ssq) + math.pow(((*absxi)/(*scale)), 2)
+					ssq = ssq + powf32((absxi/scale), 2)
 				}
 			}
-			//Label10:
 		}
-		(*norm) = (*scale) * SQRT((*ssq))
+		norm = scale * sqrtf32(ssq)
 	}
-	//*
-	(*snrm2) = (*norm)
-	return
-	//*
-	//*     End of Snrm2.
-	//*
+
+	return norm
+	//
+	//     End of SNRM2.
+	//
 }

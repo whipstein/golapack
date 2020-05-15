@@ -1,7 +1,10 @@
 package goblas
 
-import 
-// \brief \b Zgemm
+import (
+	"math/cmplx"
+)
+
+// Zgemm ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -11,15 +14,15 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Zgemm(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+//       SUBROUTINE Zgemm(transa,transb,m,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
 //
 //       .. Scalar Arguments ..
-//       COMPLEX//16 ALPHA,BETA
-//       INTEGER K,LDA,LDB,LDC,M,N
-//       CHARACTER TRANSA,TRANSB
+//       COMPLEX*16 alpha,beta
+//       INTEGER k,lda,ldb,ldc,m,n
+//       CHARACTER transa,transb
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 A(LDA,//),B(LDB,//),C(LDC,//)
+//       COMPLEX*16 a(lda,*),b(ldb,*),c(ldc,*)
 //       ..
 //
 //
@@ -30,135 +33,135 @@ import
 //
 // Zgemm  performs one of the matrix-matrix operations
 //
-//    C := alpha//op( A)//op( B) + beta//C,
+//    c := alpha*op( a )*op( b ) + beta*c,
 //
-// where  op( X) is one of
+// where  op( x ) is one of
 //
-//    op( X) = X   or   op( X) = X////T   or   op( X) = X////H,
+//    op( x ) = x   or   op( x ) = x**T   or   op( x ) = x**H,
 //
-// alpha and beta are scalars, and A, B and C are matrices, with op( A)
-// an m by k matrix,  op( B)  a  k by n matrix and  C an m by n matrix.
+// alpha and beta are scalars, and a, b and c are matrices, with op( a )
+// an m by k matrix,  op( b )  a  k by n matrix and  c an m by n matrix.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] TRANSA
+// \param[in] transa
 // \verbatim
-//          TRANSA is CHARACTER//1
-//           On entry, TRANSA specifies the form of op( A) to be used in
+//          transa is CHARACTER*1
+//           On entry, transa specifies the form of op( a ) to be used in
 //           the matrix multiplication as follows:
 //
-//              TRANSA = 'N' or 'n',  op( A) = A.
+//              transa = 'N' or 'N',  op( a ) = a.
 //
-//              TRANSA = 'T' or 't',  op( A) = A////T.
+//              transa = 'T' or 't',  op( a ) = a**T.
 //
-//              TRANSA = 'C' or 'c',  op( A) = A////H.
+//              transa = 'C' or 'C',  op( a ) = a**H.
 // \endverbatim
 //
-// \param[in] TRANSB
+// \param[in] transb
 // \verbatim
-//          TRANSB is CHARACTER//1
-//           On entry, TRANSB specifies the form of op( B) to be used in
+//          transb is CHARACTER*1
+//           On entry, transb specifies the form of op( b ) to be used in
 //           the matrix multiplication as follows:
 //
-//              TRANSB = 'N' or 'n',  op( B) = B.
+//              transb = 'N' or 'N',  op( b ) = b.
 //
-//              TRANSB = 'T' or 't',  op( B) = B////T.
+//              transb = 'T' or 't',  op( b ) = b**T.
 //
-//              TRANSB = 'C' or 'c',  op( B) = B////H.
+//              transb = 'C' or 'C',  op( b ) = b**H.
 // \endverbatim
 //
-// \param[in] M
+// \param[in] m
 // \verbatim
-//          M is INTEGER
-//           On entry,  M  specifies  the number  of rows  of the  matrix
-//           op( A)  and of the  matrix  C.  M  must  be at least  zero.
+//          m is INTEGER
+//           On entry,  m  specifies  the number  of rows  of the  matrix
+//           op( a )  and of the  matrix  c.  m  must  be at least  zero.
 // \endverbatim
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
-//           On entry,  N  specifies the number  of columns of the matrix
-//           op( B) and the number of columns of the matrix C. N must be
+//          n is INTEGER
+//           On entry,  n  specifies the number  of columns of the matrix
+//           op( b ) and the number of columns of the matrix c. n must be
 //           at least zero.
 // \endverbatim
 //
-// \param[in] K
+// \param[in] k
 // \verbatim
-//          K is INTEGER
-//           On entry,  K  specifies  the number of columns of the matrix
-//           op( A) and the number of rows of the matrix op( B). K must
+//          k is INTEGER
+//           On entry,  k  specifies  the number of columns of the matrix
+//           op( a ) and the number of rows of the matrix op( b ). k must
 //           be at least  zero.
 // \endverbatim
 //
-// \param[in] ALPHA
+// \param[in] alpha
 // \verbatim
-//          ALPHA is COMPLEX//16
-//           On entry, ALPHA specifies the scalar alpha.
+//          alpha is COMPLEX*16
+//           On entry, alpha specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in] A
+// \param[in] a
 // \verbatim
-//          A is COMPLEX//16 array, dimension ( LDA, ka), where ka is
-//           k  when  TRANSA = 'N' or 'n',  and is  m  otherwise.
-//           Before entry with  TRANSA = 'N' or 'n',  the leading  m by k
-//           part of the array  A  must contain the matrix  A,  otherwise
-//           the leading  k by m  part of the array  A  must contain  the
-//           matrix A.
+//          a is COMPLEX*16 array, dimension ( lda, ka ), where ka is
+//           k  when  transa = 'N' or 'N',  and is  m  otherwise.
+//           Before entry with  transa = 'N' or 'N',  the leading  m by k
+//           part of the array  a  must contain the matrix  a,  otherwise
+//           the leading  k by m  part of the array  a  must contain  the
+//           matrix a.
 // \endverbatim
 //
-// \param[in] LDA
+// \param[in] lda
 // \verbatim
-//          LDA is INTEGER
-//           On entry, LDA specifies the first dimension of A as declared
-//           in the calling (sub) program. When  TRANSA = 'N' or 'n' then
-//           LDA must be at least  max( 1, m), otherwise  LDA must be at
-//           least  max( 1, k).
+//          lda is INTEGER
+//           On entry, lda specifies the first dimension of a as declared
+//           in the calling (sub) program. When  transa = 'N' or 'N' then
+//           lda must be at least  max( 1, m ), otherwise  lda must be at
+//           least  max( 1, k ).
 // \endverbatim
 //
-// \param[in] B
+// \param[in] b
 // \verbatim
-//          B is COMPLEX//16 array, dimension ( LDB, kb), where kb is
-//           n  when  TRANSB = 'N' or 'n',  and is  k  otherwise.
-//           Before entry with  TRANSB = 'N' or 'n',  the leading  k by n
-//           part of the array  B  must contain the matrix  B,  otherwise
-//           the leading  n by k  part of the array  B  must contain  the
-//           matrix B.
+//          b is COMPLEX*16 array, dimension ( ldb, kb ), where kb is
+//           n  when  transb = 'N' or 'N',  and is  k  otherwise.
+//           Before entry with  transb = 'N' or 'N',  the leading  k by n
+//           part of the array  b  must contain the matrix  b,  otherwise
+//           the leading  n by k  part of the array  b  must contain  the
+//           matrix b.
 // \endverbatim
 //
-// \param[in] LDB
+// \param[in] ldb
 // \verbatim
-//          LDB is INTEGER
-//           On entry, LDB specifies the first dimension of B as declared
-//           in the calling (sub) program. When  TRANSB = 'N' or 'n' then
-//           LDB must be at least  max( 1, k), otherwise  LDB must be at
-//           least  max( 1, n).
+//          ldb is INTEGER
+//           On entry, ldb specifies the first dimension of b as declared
+//           in the calling (sub) program. When  transb = 'N' or 'N' then
+//           ldb must be at least  max( 1, k ), otherwise  ldb must be at
+//           least  max( 1, n ).
 // \endverbatim
 //
-// \param[in] BETA
+// \param[in] beta
 // \verbatim
-//          BETA is COMPLEX//16
-//           On entry,  BETA  specifies the scalar  beta.  When  BETA  is
-//           supplied as zero then C need not be set on input.
+//          beta is COMPLEX*16
+//           On entry,  beta  specifies the scalar  beta.  When  beta  is
+//           supplied as zero then c need not be set on input.
 // \endverbatim
 //
-// \param[in,out] C
+// \param[in,out] c
 // \verbatim
-//          C is COMPLEX//16 array, dimension ( LDC, N)
-//           Before entry, the leading  m by n  part of the array  C must
-//           contain the matrix  C,  except when  beta  is zero, in which
-//           case C need not be set on entry.
-//           On exit, the array  C  is overwritten by the  m by n  matrix
-//           ( alpha//op( A)//op( B) + beta//C).
+//          c is COMPLEX*16 array, dimension ( ldc, n )
+//           Before entry, the leading  m by n  part of the array  c must
+//           contain the matrix  c,  except when  beta  is zero, in which
+//           case c need not be set on entry.
+//           On exit, the array  c  is overwritten by the  m by n  matrix
+//           ( alpha*op( a )*op( b ) + beta*c ).
 // \endverbatim
 //
-// \param[in] LDC
+// \param[in] ldc
 // \verbatim
-//          LDC is INTEGER
-//           On entry, LDC specifies the first dimension of C as declared
-//           in  the  calling  (sub)  program.   LDC  must  be  at  least
-//           max( 1, m).
+//          ldc is INTEGER
+//           On entry, ldc specifies the first dimension of c as declared
+//           in  the  calling  (sub)  program.   ldc  must  be  at  least
+//           max( 1, m ).
 // \endverbatim
 //
 //  Authors:
@@ -188,336 +191,262 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Zgemm(transa *byte, transb *byte, m *int, n *int, k *int, alpha *complex128, a *[][]complex128, lda *int, b *[][]complex128, ldb *int, beta *complex128, c *[][]complex128, ldc *int) {
-	temp := new(complex128)
-	i := new(int)
-	info := new(int)
-	j := new(int)
-	l := new(int)
-	ncola := new(int)
-	nrowa := new(int)
-	nrowb := new(int)
-	conja := new(bool)
-	conjb := new(bool)
-	nota := new(bool)
-	notb := new(bool)
-	one := new(complex128)
-	zero := new(complex128)
-	//*
-	//*  -- Reference BLAS level3 routine (version 3.7.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     December 2016
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. External Functions ..
-	//*     ..
-	//*     .. External Subroutines ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Parameters ..
-	(*one) = (1.0e+0 + (0.0e+0)*1i)
-	(*zero) = (0.0e+0 + (0.0e+0)*1i)
-	//*     ..
-	//*
-	//*     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not
-	//*     conjugated or transposed, set  CONJA and CONJB  as true if  A  and
-	//*     B  respectively are to be  transposed but  not conjugated  and set
-	//*     NROWA, NCOLA and  NROWB  as the number of rows and  columns  of  A
-	//*     and the number of rows of  B  respectively.
-	//*
-	(*nota) = (*Lsame(transa, func() *byte{y := byte('n'); return &y}()))
-	(*notb) = (*Lsame(transb, func() *byte{y := byte('n'); return &y}()))
-	(*conja) = (*Lsame(transa, func() *byte{y := byte('c'); return &y}()))
-	(*conjb) = (*Lsame(transb, func() *byte{y := byte('c'); return &y}()))
-	if *nota {
-		(*nrowa) = (*m)
-		(*ncola) = (*k)
+func Zgemm(major, transa, transb *byte, m, n, k *int, alpha *complex128, a *[][]complex128, lda *int, b *[][]complex128, ldb *int, beta *complex128, c *[][]complex128, ldc *int) {
+	var temp complex128
+	var i, info, j, l, nrowa, nrowb int
+	var conja, conjb, nota, notb bool
+	//
+	//  -- Reference BLAS level3 routine (version 3.7.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     December 2016
+	//
+	//     Set  nota  and  notb  as  true if  a  and  b  respectively are not
+	//     conjugated or transposed, set  conja and conjb  as true if  a  and
+	//     b  respectively are to be  transposed but  not conjugated  and set
+	//     nrowa, ncola and  nrowb  as the number of rows and  columns  of  a
+	//     and the number of rows of  b  respectively.
+	//
+	nota = Lsame(transa, func() *byte { y := byte('N'); return &y }())
+	notb = Lsame(transb, func() *byte { y := byte('N'); return &y }())
+	conja = Lsame(transa, func() *byte { y := byte('C'); return &y }())
+	conjb = Lsame(transb, func() *byte { y := byte('C'); return &y }())
+	if nota {
+		nrowa = *m
 	} else {
-		(*nrowa) = (*k)
-		(*ncola) = (*m)
+		nrowa = *k
 	}
-	if *notb {
-		(*nrowb) = (*k)
+	if notb {
+		nrowb = *k
 	} else {
-		(*nrowb) = (*n)
+		nrowb = *n
 	}
-	//*
-	//*     Test the input parameters.
-	//*
-	(*info) = 0
-	if ( . !(*nota)) && ( . !(*conja)) && ( . !Lsame((*transa), "t")) {
-		(*info) = 1
-	} else if ( . !(*notb)) && ( . !(*conjb)) && ( . !Lsame((*transb), "t")) {
-		(*info) = 2
-	} else if (*m) < 0 {
-		(*info) = 3
-	} else if (*n) < 0 {
-		(*info) = 4
-	} else if (*k) < 0 {
-		(*info) = 5
-	} else if (*lda) < max(func() *int{y := 1; return &y}(), nrowa) {
-		(*info) = 8
-	} else if (*ldb) < max(func() *int{y := 1; return &y}(), nrowb) {
-		(*info) = 10
-	} else if (*ldc) < max(func() *int{y := 1; return &y}(), m) {
-		(*info) = 13
+	//
+	//     Test the input parameters.
+	//
+	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
+		info = 1
+	} else if !nota && !conja && !Lsame(transa, func() *byte { y := byte('T'); return &y }()) {
+		info = 2
+	} else if !notb && !conjb && !Lsame(transb, func() *byte { y := byte('T'); return &y }()) {
+		info = 3
+	} else if *m < 0 {
+		info = 4
+	} else if *n < 0 {
+		info = 5
+	} else if *k < 0 {
+		info = 6
+	} else if *lda < max(1, nrowa) {
+		info = 9
+	} else if *ldb < max(1, nrowb) {
+		info = 11
+	} else if *ldc < max(1, *m) {
+		info = 14
 	}
-	if (*info) != 0 {
-		Xerbla(func() *[]byte{y := []byte("zgemm "); return &y}(), info)
+	if info != 0 {
+		Xerbla(func() *string { y := "Zgemm"; return &y }(), &info)
 		return
 	}
-	//*
-	//*     Quick return if possible.
-	//*
-	if ((*m) == 0) || ((*n) == 0) || ( ( ((*alpha) == (*zero)) || ((*k) == 0)) && ((*beta) == (*one))) {
+	//
+	//     Quick return if possible.
+	//
+	if *m == 0 || *n == 0 || ((*alpha == 0.0 || *k == 0) && *beta == 1.0) {
 		return
 	}
-	//*
-	//*     And when  alpha.eq.zero.
-	//*
-	if (*alpha) == (*zero) {
-		if (*beta) == (*zero) {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*c)[(*i)-1][(*j)-1] = (*zero)
-				//Label10:
+	//
+	//     And when  alpha.eq.zero.
+	//
+	if *alpha == 0.0 {
+		if *beta == 0.0 {
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					(*c)[i-1][j-1] = 0.0
 				}
-			//Label20:
 			}
 		} else {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*c)[(*i)-1][(*j)-1] = (*beta) * (*c)[(*i)-1][(*j)-1]
-				//Label30:
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					(*c)[i-1][j-1] = (*beta) * (*c)[i-1][j-1]
 				}
-			//Label40:
 			}
 		}
 		return
 	}
-	//*
-	//*     Start the operations.
-	//*
-	if *notb {
-		if *nota {
-			//*
-			//*           Form  C := alpha*A*B + beta*C.
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				if (*beta) == (*zero) {
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*zero)
-					//Label50:
+	//
+	//     Start the operations.
+	//
+	if notb {
+		if nota {
+			//
+			//           Form  c := alpha*a*b + beta*c.
+			//
+			for j = 1; j <= *n; j++ {
+				if *beta == 0.0 {
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] = 0.0
 					}
-				} else if (*beta) != (*one) {
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*beta) * (*c)[(*i)-1][(*j)-1]
-					//Label60:
+				} else if *beta != 1.0 {
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] = (*beta) * (*c)[i-1][j-1]
 					}
 				}
-				for (*l) = 1; (*l) <= (*k); (*l)++ {
-					(*temp) = (*alpha) * (*b)[(*l)-1][(*j)-1]
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*c)[(*i)-1][(*j)-1] + (*temp)*(*a)[(*i)-1][(*l)-1]
-					//Label70:
+				for l = 1; l <= *k; l++ {
+					temp = (*alpha) * (*b)[l-1][j-1]
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] += temp * (*a)[i-1][l-1]
 					}
-				//Label80:
 				}
-			//Label90:
 			}
-		} else if *conja {
-			//*
-			//*           Form  C := alpha*A**H*B + beta*C.
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*temp) = (*zero)
-					for (*l) = 1; (*l) <= (*k); (*l)++ {
-						(*temp) = (*temp) + DCONJG(((*a)[(*l)-1][(*i)-1]))*(*b)[(*l)-1][(*j)-1]
-					//Label100:
+		} else if conja {
+			//
+			//           Form  c := alpha*a**H*b + beta*c.
+			//
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					temp = 0.0
+					for l = 1; l <= *k; l++ {
+						temp += cmplx.Conj((*a)[l-1][i-1]) * (*b)[l-1][j-1]
 					}
-					if (*beta) == (*zero) {
-						(*c)[(*i)-1][(*j)-1] = (*alpha) * (*temp)
+					if *beta == 0.0 {
+						(*c)[i-1][j-1] = (*alpha) * temp
 					} else {
-						(*c)[(*i)-1][(*j)-1] = (*alpha)*(*temp) + (*beta)*(*c)[(*i)-1][(*j)-1]
+						(*c)[i-1][j-1] = (*alpha)*temp + (*beta)*(*c)[i-1][j-1]
 					}
-				//Label110:
 				}
-			//Label120:
 			}
 		} else {
-			//*
-			//*           Form  C := alpha*A**T*B + beta*C
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*temp) = (*zero)
-					for (*l) = 1; (*l) <= (*k); (*l)++ {
-						(*temp) = (*temp) + (*a)[(*l)-1][(*i)-1]*(*b)[(*l)-1][(*j)-1]
-					//Label130:
+			//
+			//           Form  c := alpha*a**T*b + beta*c
+			//
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					temp = 0.0
+					for l = 1; l <= *k; l++ {
+						temp += (*a)[l-1][i-1] * (*b)[l-1][j-1]
 					}
-					if (*beta) == (*zero) {
-						(*c)[(*i)-1][(*j)-1] = (*alpha) * (*temp)
+					if *beta == 0.0 {
+						(*c)[i-1][j-1] = (*alpha) * temp
 					} else {
-						(*c)[(*i)-1][(*j)-1] = (*alpha)*(*temp) + (*beta)*(*c)[(*i)-1][(*j)-1]
+						(*c)[i-1][j-1] = (*alpha)*temp + (*beta)*(*c)[i-1][j-1]
 					}
-				//Label140:
 				}
-			//Label150:
 			}
 		}
-	} else if *nota {
-		if *conjb {
-			//*
-			//*           Form  C := alpha*A*B**H + beta*C.
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				if (*beta) == (*zero) {
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*zero)
-					//Label160:
+	} else if nota {
+		if conjb {
+			//
+			//           Form  c := alpha*a*b**H + beta*c.
+			//
+			for j = 1; j <= *n; j++ {
+				if *beta == 0.0 {
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] = 0.0
 					}
-				} else if (*beta) != (*one) {
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*beta) * (*c)[(*i)-1][(*j)-1]
-					//Label170:
+				} else if *beta != 1.0 {
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] = (*beta) * (*c)[i-1][j-1]
 					}
 				}
-				for (*l) = 1; (*l) <= (*k); (*l)++ {
-					(*temp) = (*alpha) * DCONJG(((*b)[(*j)-1][(*l)-1]))
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*c)[(*i)-1][(*j)-1] + (*temp)*(*a)[(*i)-1][(*l)-1]
-					//Label180:
+				for l = 1; l <= *k; l++ {
+					temp = (*alpha) * cmplx.Conj((*b)[j-1][l-1])
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] += temp * (*a)[i-1][l-1]
 					}
-				//Label190:
 				}
-			//Label200:
 			}
 		} else {
-			//*
-			//*           Form  C := alpha*A*B**T + beta*C
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				if (*beta) == (*zero) {
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*zero)
-					//Label210:
+			//
+			//           Form  c := alpha*a*b**T + beta*c
+			//
+			for j = 1; j <= *n; j++ {
+				if *beta == 0.0 {
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] = 0.0
 					}
-				} else if (*beta) != (*one) {
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*beta) * (*c)[(*i)-1][(*j)-1]
-					//Label220:
+				} else if *beta != 1.0 {
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] = (*beta) * (*c)[i-1][j-1]
 					}
 				}
-				for (*l) = 1; (*l) <= (*k); (*l)++ {
-					(*temp) = (*alpha) * (*b)[(*j)-1][(*l)-1]
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*c)[(*i)-1][(*j)-1] = (*c)[(*i)-1][(*j)-1] + (*temp)*(*a)[(*i)-1][(*l)-1]
-					//Label230:
+				for l = 1; l <= *k; l++ {
+					temp = (*alpha) * (*b)[j-1][l-1]
+					for i = 1; i <= *m; i++ {
+						(*c)[i-1][j-1] += temp * (*a)[i-1][l-1]
 					}
-				//Label240:
 				}
-			//Label250:
 			}
 		}
-	} else if *conja {
-		if *conjb {
-			//*
-			//*           Form  C := alpha*A**H*B**H + beta*C.
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*temp) = (*zero)
-					for (*l) = 1; (*l) <= (*k); (*l)++ {
-						(*temp) = (*temp) + DCONJG(((*a)[(*l)-1][(*i)-1]))*DCONJG(((*b)[(*j)-1][(*l)-1]))
-					//Label260:
+	} else if conja {
+		if conjb {
+			//
+			//           Form  c := alpha*a**H*b**H + beta*c.
+			//
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					temp = 0.0
+					for l = 1; l <= *k; l++ {
+						temp += cmplx.Conj((*a)[l-1][i-1]) * cmplx.Conj((*b)[j-1][l-1])
 					}
-					if (*beta) == (*zero) {
-						(*c)[(*i)-1][(*j)-1] = (*alpha) * (*temp)
+					if *beta == 0.0 {
+						(*c)[i-1][j-1] = (*alpha) * temp
 					} else {
-						(*c)[(*i)-1][(*j)-1] = (*alpha)*(*temp) + (*beta)*(*c)[(*i)-1][(*j)-1]
+						(*c)[i-1][j-1] = (*alpha)*temp + (*beta)*(*c)[i-1][j-1]
 					}
-				//Label270:
 				}
-			//Label280:
 			}
 		} else {
-			//*
-			//*           Form  C := alpha*A**H*B**T + beta*C
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*temp) = (*zero)
-					for (*l) = 1; (*l) <= (*k); (*l)++ {
-						(*temp) = (*temp) + DCONJG(((*a)[(*l)-1][(*i)-1]))*(*b)[(*j)-1][(*l)-1]
-					//Label290:
+			//
+			//           Form  c := alpha*a**H*b**T + beta*c
+			//
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					temp = 0.0
+					for l = 1; l <= *k; l++ {
+						temp += cmplx.Conj((*a)[l-1][i-1]) * (*b)[j-1][l-1]
 					}
-					if (*beta) == (*zero) {
-						(*c)[(*i)-1][(*j)-1] = (*alpha) * (*temp)
+					if *beta == 0.0 {
+						(*c)[i-1][j-1] = (*alpha) * temp
 					} else {
-						(*c)[(*i)-1][(*j)-1] = (*alpha)*(*temp) + (*beta)*(*c)[(*i)-1][(*j)-1]
+						(*c)[i-1][j-1] = (*alpha)*temp + (*beta)*(*c)[i-1][j-1]
 					}
-				//Label300:
 				}
-			//Label310:
 			}
 		}
 	} else {
-		if *conjb {
-			//*
-			//*           Form  C := alpha*A**T*B**H + beta*C
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*temp) = (*zero)
-					for (*l) = 1; (*l) <= (*k); (*l)++ {
-						(*temp) = (*temp) + (*a)[(*l)-1][(*i)-1]*DCONJG(((*b)[(*j)-1][(*l)-1]))
-					//Label320:
+		if conjb {
+			//
+			//           Form  c := alpha*a**T*b**H + beta*c
+			//
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					temp = 0.0
+					for l = 1; l <= *k; l++ {
+						temp += (*a)[l-1][i-1] * cmplx.Conj((*b)[j-1][l-1])
 					}
-					if (*beta) == (*zero) {
-						(*c)[(*i)-1][(*j)-1] = (*alpha) * (*temp)
+					if *beta == 0.0 {
+						(*c)[i-1][j-1] = (*alpha) * temp
 					} else {
-						(*c)[(*i)-1][(*j)-1] = (*alpha)*(*temp) + (*beta)*(*c)[(*i)-1][(*j)-1]
+						(*c)[i-1][j-1] = (*alpha)*temp + (*beta)*(*c)[i-1][j-1]
 					}
-				//Label330:
 				}
-			//Label340:
 			}
 		} else {
-			//*
-			//*           Form  C := alpha*A**T*B**T + beta*C
-			//*
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				for (*i) = 1; (*i) <= (*m); (*i)++ {
-					(*temp) = (*zero)
-					for (*l) = 1; (*l) <= (*k); (*l)++ {
-						(*temp) = (*temp) + (*a)[(*l)-1][(*i)-1]*(*b)[(*j)-1][(*l)-1]
-					//Label350:
+			//
+			//           Form  c := alpha*a**T*b**T + beta*c
+			//
+			for j = 1; j <= *n; j++ {
+				for i = 1; i <= *m; i++ {
+					temp = 0.0
+					for l = 1; l <= *k; l++ {
+						temp += (*a)[l-1][i-1] * (*b)[j-1][l-1]
 					}
-					if (*beta) == (*zero) {
-						(*c)[(*i)-1][(*j)-1] = (*alpha) * (*temp)
+					if *beta == 0.0 {
+						(*c)[i-1][j-1] = (*alpha) * temp
 					} else {
-						(*c)[(*i)-1][(*j)-1] = (*alpha)*(*temp) + (*beta)*(*c)[(*i)-1][(*j)-1]
+						(*c)[i-1][j-1] = (*alpha)*temp + (*beta)*(*c)[i-1][j-1]
 					}
-				//Label360:
 				}
-			//Label370:
 			}
 		}
 	}
-	//*
-	return
-	//*
-	//*     End of Zgemm .
-	//*
 }

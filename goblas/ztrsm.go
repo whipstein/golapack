@@ -1,7 +1,10 @@
 package goblas
 
-import 
-// \brief \b Ztrsm
+import (
+	"math/cmplx"
+)
+
+// Ztrsm ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -11,15 +14,15 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Ztrsm(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
+//       SUBROUTINE Ztrsm(side,uplo,transa,diag,m,n,alpha,a,lda,b,ldb)
 //
 //       .. Scalar Arguments ..
-//       COMPLEX//16 ALPHA
-//       INTEGER LDA,LDB,M,N
-//       CHARACTER DIAG,SIDE,TRANSA,UPLO
+//       COMPLEX*16 alpha
+//       INTEGER lda,ldb,m,n
+//       CHARACTER diag,side,transa,uplo
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX//16 A(LDA,//),B(LDB,//)
+//       COMPLEX*16 a(lda,*),b(ldb,*)
 //       ..
 //
 //
@@ -30,128 +33,128 @@ import
 //
 // Ztrsm  solves one of the matrix equations
 //
-//    op( A)//X = alpha//B,   or   X//op( A) = alpha//B,
+//    op( a )*x = alpha*b,   or   x*op( a ) = alpha*b,
 //
-// where alpha is a scalar, X and B are m by n matrices, A is a unit, or
-// non-unit,  upper or lower triangular matrix  and  op( A)  is one  of
+// where alpha is a scalar, x and b are m by n matrices, a is a unit, or
+// non-unit,  upper or lower triangular matrix  and  op( a )  is one  of
 //
-//    op( A) = A   or   op( A) = A////T   or   op( A) = A////H.
+//    op( a ) = a   or   op( a ) = a**T   or   op( a ) = a**H.
 //
-// The matrix X is overwritten on B.
+// The matrix x is overwritten on b.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] SIDE
+// \param[in] side
 // \verbatim
-//          SIDE is CHARACTER//1
-//           On entry, SIDE specifies whether op( A) appears on the left
-//           or right of X as follows:
+//          side is CHARACTER*1
+//           On entry, side specifies whether op( a ) appears on the left
+//           or right of x as follows:
 //
-//              SIDE = 'L' or 'l'   op( A)//X = alpha//B.
+//              side = 'L' or 'L'   op( a )*x = alpha*b.
 //
-//              SIDE = 'R' or 'r'   X//op( A) = alpha//B.
+//              side = 'R' or 'r'   x*op( a ) = alpha*b.
 // \endverbatim
 //
-// \param[in] UPLO
+// \param[in] uplo
 // \verbatim
-//          UPLO is CHARACTER//1
-//           On entry, UPLO specifies whether the matrix A is an upper or
+//          uplo is CHARACTER*1
+//           On entry, uplo specifies whether the matrix a is an upper or
 //           lower triangular matrix as follows:
 //
-//              UPLO = 'U' or 'u'   A is an upper triangular matrix.
+//              uplo = 'U' or 'u'   a is an upper triangular matrix.
 //
-//              UPLO = 'L' or 'l'   A is a lower triangular matrix.
+//              uplo = 'L' or 'L'   a is a lower triangular matrix.
 // \endverbatim
 //
-// \param[in] TRANSA
+// \param[in] transa
 // \verbatim
-//          TRANSA is CHARACTER//1
-//           On entry, TRANSA specifies the form of op( A) to be used in
+//          transa is CHARACTER*1
+//           On entry, transa specifies the form of op( a ) to be used in
 //           the matrix multiplication as follows:
 //
-//              TRANSA = 'N' or 'n'   op( A) = A.
+//              transa = 'N' or 'N'   op( a ) = a.
 //
-//              TRANSA = 'T' or 't'   op( A) = A////T.
+//              transa = 'T' or 't'   op( a ) = a**T.
 //
-//              TRANSA = 'C' or 'c'   op( A) = A////H.
+//              transa = 'C' or 'C'   op( a ) = a**H.
 // \endverbatim
 //
-// \param[in] DIAG
+// \param[in] diag
 // \verbatim
-//          DIAG is CHARACTER//1
-//           On entry, DIAG specifies whether or not A is unit triangular
+//          diag is CHARACTER*1
+//           On entry, diag specifies whether or not a is unit triangular
 //           as follows:
 //
-//              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
+//              diag = 'U' or 'u'   a is assumed to be unit triangular.
 //
-//              DIAG = 'N' or 'n'   A is not assumed to be unit
+//              diag = 'N' or 'N'   a is not assumed to be unit
 //                                  triangular.
 // \endverbatim
 //
-// \param[in] M
+// \param[in] m
 // \verbatim
-//          M is INTEGER
-//           On entry, M specifies the number of rows of B. M must be at
+//          m is INTEGER
+//           On entry, m specifies the number of rows of b. m must be at
 //           least zero.
 // \endverbatim
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
-//           On entry, N specifies the number of columns of B.  N must be
+//          n is INTEGER
+//           On entry, n specifies the number of columns of b.  n must be
 //           at least zero.
 // \endverbatim
 //
-// \param[in] ALPHA
+// \param[in] alpha
 // \verbatim
-//          ALPHA is COMPLEX//16
-//           On entry,  ALPHA specifies the scalar  alpha. When  alpha is
-//           zero then  A is not referenced and  B need not be set before
+//          alpha is COMPLEX*16
+//           On entry,  alpha specifies the scalar  alpha. When  alpha is
+//           zero then  a is not referenced and  b need not be set before
 //           entry.
 // \endverbatim
 //
-// \param[in] A
+// \param[in] a
 // \verbatim
-//          A is COMPLEX//16 array, dimension ( LDA, k),
-//           where k is m when SIDE = 'L' or 'l'
-//             and k is n when SIDE = 'R' or 'r'.
-//           Before entry  with  UPLO = 'U' or 'u',  the  leading  k by k
-//           upper triangular part of the array  A must contain the upper
+//          a is COMPLEX*16 array, dimension ( lda, k ),
+//           where k is m when side = 'L' or 'L'
+//             and k is n when side = 'R' or 'r'.
+//           Before entry  with  uplo = 'U' or 'u',  the  leading  k by k
+//           upper triangular part of the array  a must contain the upper
 //           triangular matrix  and the strictly lower triangular part of
-//           A is not referenced.
-//           Before entry  with  UPLO = 'L' or 'l',  the  leading  k by k
-//           lower triangular part of the array  A must contain the lower
+//           a is not referenced.
+//           Before entry  with  uplo = 'L' or 'L',  the  leading  k by k
+//           lower triangular part of the array  a must contain the lower
 //           triangular matrix  and the strictly upper triangular part of
-//           A is not referenced.
-//           Note that when  DIAG = 'U' or 'u',  the diagonal elements of
-//           A  are not referenced either,  but are assumed to be  unity.
+//           a is not referenced.
+//           Note that when  diag = 'U' or 'u',  the diagonal elements of
+//           a  are not referenced either,  but are assumed to be  unity.
 // \endverbatim
 //
-// \param[in] LDA
+// \param[in] lda
 // \verbatim
-//          LDA is INTEGER
-//           On entry, LDA specifies the first dimension of A as declared
-//           in the calling (sub) program.  When  SIDE = 'L' or 'l'  then
-//           LDA  must be at least  max( 1, m),  when  SIDE = 'R' or 'r'
-//           then LDA must be at least max( 1, n).
+//          lda is INTEGER
+//           On entry, lda specifies the first dimension of a as declared
+//           in the calling (sub) program.  When  side = 'L' or 'L'  then
+//           lda  must be at least  max( 1, m ),  when  side = 'R' or 'r'
+//           then lda must be at least max( 1, n ).
 // \endverbatim
 //
-// \param[in,out] B
+// \param[in,out] b
 // \verbatim
-//          B is COMPLEX//16 array, dimension ( LDB, N)
-//           Before entry,  the leading  m by n part of the array  B must
-//           contain  the  right-hand  side  matrix  B,  and  on exit  is
-//           overwritten by the solution matrix  X.
+//          b is COMPLEX*16 array, dimension ( ldb, n )
+//           Before entry,  the leading  m by n part of the array  b must
+//           contain  the  right-hand  side  matrix  b,  and  on exit  is
+//           overwritten by the solution matrix  x.
 // \endverbatim
 //
-// \param[in] LDB
+// \param[in] ldb
 // \verbatim
-//          LDB is INTEGER
-//           On entry, LDB specifies the first dimension of B as declared
-//           in  the  calling  (sub)  program.   LDB  must  be  at  least
-//           max( 1, m).
+//          ldb is INTEGER
+//           On entry, ldb specifies the first dimension of b as declared
+//           in  the  calling  (sub)  program.   ldb  must  be  at  least
+//           max( 1, m ).
 // \endverbatim
 //
 //  Authors:
@@ -181,349 +184,278 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Ztrsm(side *byte, uplo *byte, transa *byte, diag *byte, m *int, n *int, alpha *complex128, a *[][]complex128, lda *int, b *[][]complex128, ldb *int) {
-	temp := new(complex128)
-	i := new(int)
-	info := new(int)
-	j := new(int)
-	k := new(int)
-	nrowa := new(int)
-	lside := new(bool)
-	noconj := new(bool)
-	nounit := new(bool)
-	upper := new(bool)
-	one := new(complex128)
-	zero := new(complex128)
-	//*
-	//*  -- Reference BLAS level3 routine (version 3.7.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     December 2016
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. External Functions ..
-	//*     ..
-	//*     .. External Subroutines ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Parameters ..
-	(*one) = (1.0e+0 + (0.0e+0)*1i)
-	(*zero) = (0.0e+0 + (0.0e+0)*1i)
-	//*     ..
-	//*
-	//*     Test the input parameters.
-	//*
-	(*lside) = (*Lsame(side, func() *byte{y := byte('l'); return &y }()))
-	if *lside {
-		(*nrowa) = (*m)
+func Ztrsm(major, side, uplo, transa, diag *byte, m, n *int, alpha *complex128, a *[][]complex128, lda *int, b *[][]complex128, ldb *int) {
+	var temp complex128
+	var i, info, j, k, nrowa int
+	var lside, noconj, nounit, upper bool
+	//
+	//  -- Reference BLAS level3 routine (version 3.7.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     December 2016
+	//
+	//     Test the input parameters.
+	//
+	lside = Lsame(side, func() *byte { y := byte('L'); return &y }())
+	if lside {
+		nrowa = *m
 	} else {
-		(*nrowa) = (*n)
+		nrowa = *n
 	}
-	(*noconj) = (*Lsame(transa, func() *byte{y := byte('t'); return &y }()))
-	(*nounit) = (*Lsame(diag, func() *byte{y := byte('n'); return &y }()))
-	(*upper) = (*Lsame(uplo, func() *byte{y := byte('u'); return &y }()))
-	//*
-	(*info) = 0
-	if ( . !(*lside)) && ( . !Lsame((*side), "r")) {
-		(*info) = 1
-	} else if ( . !(*upper)) && ( . !Lsame((*uplo), "l")) {
-		(*info) = 2
-	} else if ( . !Lsame((*transa), "n")) && ( . !Lsame((*transa), "t")) && ( . !Lsame((*transa), "c")) {
-		(*info) = 3
-	} else if ( . !Lsame((*diag), "u")) && ( . !Lsame((*diag), "n")) {
-		(*info) = 4
-	} else if (*m) < 0 {
-		(*info) = 5
-	} else if (*n) < 0 {
-		(*info) = 6
-	} else if (*lda) < max(func() *int{y := 1; return &y }(), nrowa) {
-		(*info) = 9
-	} else if (*ldb) < max(func() *int{y := 1; return &y }(), m) {
-		(*info) = 11
+	noconj = Lsame(transa, func() *byte { y := byte('T'); return &y }())
+	nounit = Lsame(diag, func() *byte { y := byte('N'); return &y }())
+	upper = Lsame(uplo, func() *byte { y := byte('U'); return &y }())
+
+	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
+		info = 1
+	} else if !lside && !Lsame(side, func() *byte { y := byte('R'); return &y }()) {
+		info = 2
+	} else if !upper && !Lsame(uplo, func() *byte { y := byte('L'); return &y }()) {
+		info = 3
+	} else if !Lsame(transa, func() *byte { y := byte('N'); return &y }()) && !Lsame(transa, func() *byte { y := byte('T'); return &y }()) && !Lsame(transa, func() *byte { y := byte('C'); return &y }()) {
+		info = 4
+	} else if !Lsame(diag, func() *byte { y := byte('U'); return &y }()) && !Lsame(diag, func() *byte { y := byte('N'); return &y }()) {
+		info = 5
+	} else if *m < 0 {
+		info = 6
+	} else if *n < 0 {
+		info = 7
+	} else if *lda < max(1, nrowa) {
+		info = 10
+	} else if *ldb < max(1, *m) {
+		info = 12
 	}
-	if (*info) != 0 {
-		Xerbla(func() *[]byte{y := []byte("ztrsm "); return &y }(), info)
+	if info != 0 {
+		Xerbla(func() *string { y := "Ztrsm"; return &y }(), &info)
 		return
 	}
-	//*
-	//*     Quick return if possible.
-	//*
-	if (*m) == 0 || (*n) == 0 {
+	//
+	//     Quick return if possible.
+	//
+	if *m == 0 || *n == 0 {
 		return
 	}
-	//*
-	//*     And when  alpha.eq.zero.
-	//*
-	if (*alpha) == (*zero) {
-		for (*j) = 1; (*j) <= (*n); (*j)++ {
-			for (*i) = 1; (*i) <= (*m); (*i)++ {
-				(*b)[(*i)-1][(*j)-1] = (*zero)
-			//Label10:
+	//
+	//     And when  alpha.eq.zero.
+	//
+	if *alpha == 0.0 {
+		for j = 1; j <= *n; j++ {
+			for i = 1; i <= *m; i++ {
+				(*b)[i-1][j-1] = 0.0
 			}
-		//Label20:
 		}
 		return
 	}
-	//*
-	//*     Start the operations.
-	//*
-	if *lside {
-		if Lsame(transa, func() *byte{y := byte('n'); return &y }()) {
-			//*
-			//*           Form  B := alpha*inv( A)*B.
-			//*
-			if *upper {
-				for (*j) = 1; (*j) <= (*n); (*j)++ {
-					if (*alpha) != (*one) {
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*j)-1] = (*alpha) * (*b)[(*i)-1][(*j)-1]
-						//Label30:
+	//
+	//     Start the operations.
+	//
+	if lside {
+		if Lsame(transa, func() *byte { y := byte('N'); return &y }()) {
+			//
+			//           Form  b := alpha*inv( a )*b.
+			//
+			if upper {
+				for j = 1; j <= *n; j++ {
+					if *alpha != 1.0 {
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][j-1] = (*alpha) * (*b)[i-1][j-1]
 						}
 					}
-					for (*k) = (*m); (*k) <= 1; (*k) += -1 {
-						if (*b)[(*k)-1][(*j)-1] != (*zero) {
-							if *nounit {
-								(*b)[(*k)-1][(*j)-1] = (*b)[(*k)-1][(*j)-1] / (*a)[(*k)-1][(*k)-1]
+					for k = *m; k >= 1; k-- {
+						if (*b)[k-1][j-1] != 0.0 {
+							if nounit {
+								(*b)[k-1][j-1] = (*b)[k-1][j-1] / (*a)[k-1][k-1]
 							}
-							for (*i) = 1; (*i) <= (*k)-1; (*i)++ {
-								(*b)[(*i)-1][(*j)-1] = (*b)[(*i)-1][(*j)-1] - (*b)[(*k)-1][(*j)-1]*(*a)[(*i)-1][(*k)-1]
-							//Label40:
+							for i = 1; i <= k-1; i++ {
+								(*b)[i-1][j-1] -= (*b)[k-1][j-1] * (*a)[i-1][k-1]
 							}
 						}
-					//Label50:
 					}
-				//Label60:
 				}
 			} else {
-				for (*j) = 1; (*j) <= (*n); (*j)++ {
-					if (*alpha) != (*one) {
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*j)-1] = (*alpha) * (*b)[(*i)-1][(*j)-1]
-						//Label70:
+				for j = 1; j <= *n; j++ {
+					if *alpha != 1.0 {
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][j-1] = (*alpha) * (*b)[i-1][j-1]
 						}
 					}
-					for (*k) = 1; (*k) <= (*m); (*k)++ {
-						if (*b)[(*k)-1][(*j)-1] != (*zero) {
-							if *nounit {
-								(*b)[(*k)-1][(*j)-1] = (*b)[(*k)-1][(*j)-1] / (*a)[(*k)-1][(*k)-1]
+					for k = 1; k <= *m; k++ {
+						if (*b)[k-1][j-1] != 0.0 {
+							if nounit {
+								(*b)[k-1][j-1] = (*b)[k-1][j-1] / (*a)[k-1][k-1]
 							}
-							for (*i) = (*k) + 1; (*i) <= (*m); (*i)++ {
-								(*b)[(*i)-1][(*j)-1] = (*b)[(*i)-1][(*j)-1] - (*b)[(*k)-1][(*j)-1]*(*a)[(*i)-1][(*k)-1]
-							//Label80:
+							for i = k + 1; i <= *m; i++ {
+								(*b)[i-1][j-1] -= (*b)[k-1][j-1] * (*a)[i-1][k-1]
 							}
 						}
-					//Label90:
 					}
-				//Label100:
 				}
 			}
 		} else {
-			//*
-			//*           Form  B := alpha*inv( A**T)*B
-			//*           or    B := alpha*inv( A**H)*B.
-			//*
-			if *upper {
-				for (*j) = 1; (*j) <= (*n); (*j)++ {
-					for (*i) = 1; (*i) <= (*m); (*i)++ {
-						(*temp) = (*alpha) * (*b)[(*i)-1][(*j)-1]
-						if *noconj {
-							for (*k) = 1; (*k) <= (*i)-1; (*k)++ {
-								(*temp) = (*temp) - (*a)[(*k)-1][(*i)-1]*(*b)[(*k)-1][(*j)-1]
-							//Label110:
+			//
+			//           Form  b := alpha*inv( a**T )*b
+			//           or    b := alpha*inv( a**H )*b.
+			//
+			if upper {
+				for j = 1; j <= *n; j++ {
+					for i = 1; i <= *m; i++ {
+						temp = (*alpha) * (*b)[i-1][j-1]
+						if noconj {
+							for k = 1; k <= i-1; k++ {
+								temp -= (*a)[k-1][i-1] * (*b)[k-1][j-1]
 							}
-							if *nounit {
-								(*temp) = (*temp) / (*a)[(*i)-1][(*i)-1]
+							if nounit {
+								temp = temp / (*a)[i-1][i-1]
 							}
 						} else {
-							for (*k) = 1; (*k) <= (*i)-1; (*k)++ {
-								(*temp) = (*temp) - DCONJG(((*a)[(*k)-1][(*i)-1]))*(*b)[(*k)-1][(*j)-1]
-							//Label120:
+							for k = 1; k <= i-1; k++ {
+								temp -= cmplx.Conj((*a)[k-1][i-1]) * (*b)[k-1][j-1]
 							}
-							if *nounit {
-								(*temp) = (*temp) / DCONJG(((*a)[(*i)-1][(*i)-1]))
+							if nounit {
+								temp = temp / cmplx.Conj((*a)[i-1][i-1])
 							}
 						}
-						(*b)[(*i)-1][(*j)-1] = (*temp)
-					//Label130:
+						(*b)[i-1][j-1] = temp
 					}
-				//Label140:
 				}
 			} else {
-				for (*j) = 1; (*j) <= (*n); (*j)++ {
-					for (*i) = (*m); (*i) <= 1; (*i) += -1 {
-						(*temp) = (*alpha) * (*b)[(*i)-1][(*j)-1]
-						if *noconj {
-							for (*k) = (*i) + 1; (*k) <= (*m); (*k)++ {
-								(*temp) = (*temp) - (*a)[(*k)-1][(*i)-1]*(*b)[(*k)-1][(*j)-1]
-							//Label150:
+				for j = 1; j <= *n; j++ {
+					for i = *m; i >= 1; i-- {
+						temp = (*alpha) * (*b)[i-1][j-1]
+						if noconj {
+							for k = i + 1; k <= *m; k++ {
+								temp -= (*a)[k-1][i-1] * (*b)[k-1][j-1]
 							}
-							if *nounit {
-								(*temp) = (*temp) / (*a)[(*i)-1][(*i)-1]
+							if nounit {
+								temp = temp / (*a)[i-1][i-1]
 							}
 						} else {
-							for (*k) = (*i) + 1; (*k) <= (*m); (*k)++ {
-								(*temp) = (*temp) - DCONJG(((*a)[(*k)-1][(*i)-1]))*(*b)[(*k)-1][(*j)-1]
-							//Label160:
+							for k = i + 1; k <= *m; k++ {
+								temp -= cmplx.Conj((*a)[k-1][i-1]) * (*b)[k-1][j-1]
 							}
-							if *nounit {
-								(*temp) = (*temp) / DCONJG(((*a)[(*i)-1][(*i)-1]))
+							if nounit {
+								temp = temp / cmplx.Conj((*a)[i-1][i-1])
 							}
 						}
-						(*b)[(*i)-1][(*j)-1] = (*temp)
-					//Label170:
+						(*b)[i-1][j-1] = temp
 					}
-				//Label180:
 				}
 			}
 		}
 	} else {
-		if Lsame(transa, func() *byte{y := byte('n'); return &y }()) {
-			//*
-			//*           Form  B := alpha*B*inv( A).
-			//*
-			if *upper {
-				for (*j) = 1; (*j) <= (*n); (*j)++ {
-					if (*alpha) != (*one) {
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*j)-1] = (*alpha) * (*b)[(*i)-1][(*j)-1]
-						//Label190:
+		if Lsame(transa, func() *byte { y := byte('N'); return &y }()) {
+			//
+			//           Form  b := alpha*b*inv( a ).
+			//
+			if upper {
+				for j = 1; j <= *n; j++ {
+					if *alpha != 1.0 {
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][j-1] = (*alpha) * (*b)[i-1][j-1]
 						}
 					}
-					for (*k) = 1; (*k) <= (*j)-1; (*k)++ {
-						if (*a)[(*k)-1][(*j)-1] != (*zero) {
-							for (*i) = 1; (*i) <= (*m); (*i)++ {
-								(*b)[(*i)-1][(*j)-1] = (*b)[(*i)-1][(*j)-1] - (*a)[(*k)-1][(*j)-1]*(*b)[(*i)-1][(*k)-1]
-							//Label200:
+					for k = 1; k <= j-1; k++ {
+						if (*a)[k-1][j-1] != 0.0 {
+							for i = 1; i <= *m; i++ {
+								(*b)[i-1][j-1] -= (*a)[k-1][j-1] * (*b)[i-1][k-1]
 							}
 						}
-					//Label210:
 					}
-					if *nounit {
-						(*temp) = (*one) / (*a)[(*j)-1][(*j)-1]
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*j)-1] = (*temp) * (*b)[(*i)-1][(*j)-1]
-						//Label220:
+					if nounit {
+						temp = 1.0 / (*a)[j-1][j-1]
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][j-1] = temp * (*b)[i-1][j-1]
 						}
 					}
-				//Label230:
 				}
 			} else {
-				for (*j) = (*n); (*j) <= 1; (*j) += -1 {
-					if (*alpha) != (*one) {
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*j)-1] = (*alpha) * (*b)[(*i)-1][(*j)-1]
-						//Label240:
+				for j = *n; j >= 1; j-- {
+					if *alpha != 1.0 {
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][j-1] = (*alpha) * (*b)[i-1][j-1]
 						}
 					}
-					for (*k) = (*j) + 1; (*k) <= (*n); (*k)++ {
-						if (*a)[(*k)-1][(*j)-1] != (*zero) {
-							for (*i) = 1; (*i) <= (*m); (*i)++ {
-								(*b)[(*i)-1][(*j)-1] = (*b)[(*i)-1][(*j)-1] - (*a)[(*k)-1][(*j)-1]*(*b)[(*i)-1][(*k)-1]
-							//Label250:
+					for k = j + 1; k <= *n; k++ {
+						if (*a)[k-1][j-1] != 0.0 {
+							for i = 1; i <= *m; i++ {
+								(*b)[i-1][j-1] -= (*a)[k-1][j-1] * (*b)[i-1][k-1]
 							}
 						}
-					//Label260:
 					}
-					if *nounit {
-						(*temp) = (*one) / (*a)[(*j)-1][(*j)-1]
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*j)-1] = (*temp) * (*b)[(*i)-1][(*j)-1]
-						//Label270:
+					if nounit {
+						temp = 1.0 / (*a)[j-1][j-1]
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][j-1] = temp * (*b)[i-1][j-1]
 						}
 					}
-				//Label280:
 				}
 			}
 		} else {
-			//*
-			//*           Form  B := alpha*B*inv( A**T)
-			//*           or    B := alpha*B*inv( A**H).
-			//*
-			if *upper {
-				for (*k) = (*n); (*k) <= 1; (*k) += -1 {
-					if *nounit {
-						if *noconj {
-							(*temp) = (*one) / (*a)[(*k)-1][(*k)-1]
+			//
+			//           Form  b := alpha*b*inv( a**T )
+			//           or    b := alpha*b*inv( a**H ).
+			//
+			if upper {
+				for k = *n; k >= 1; k-- {
+					if nounit {
+						if noconj {
+							temp = 1.0 / (*a)[k-1][k-1]
 						} else {
-							(*temp) = (*one) / DCONJG(((*a)[(*k)-1][(*k)-1]))
+							temp = 1.0 / cmplx.Conj((*a)[k-1][k-1])
 						}
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*k)-1] = (*temp) * (*b)[(*i)-1][(*k)-1]
-						//Label290:
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][k-1] = temp * (*b)[i-1][k-1]
 						}
 					}
-					for (*j) = 1; (*j) <= (*k)-1; (*j)++ {
-						if (*a)[(*j)-1][(*k)-1] != (*zero) {
-							if *noconj {
-								(*temp) = (*a)[(*j)-1][(*k)-1]
+					for j = 1; j <= k-1; j++ {
+						if (*a)[j-1][k-1] != 0.0 {
+							if noconj {
+								temp = (*a)[j-1][k-1]
 							} else {
-								(*temp) = (DCONJG(((*a)[(*j)-1][(*k)-1])))
+								temp = cmplx.Conj((*a)[j-1][k-1])
 							}
-							for (*i) = 1; (*i) <= (*m); (*i)++ {
-								(*b)[(*i)-1][(*j)-1] = (*b)[(*i)-1][(*j)-1] - (*temp)*(*b)[(*i)-1][(*k)-1]
-							//Label300:
+							for i = 1; i <= *m; i++ {
+								(*b)[i-1][j-1] -= temp * (*b)[i-1][k-1]
 							}
 						}
-					//Label310:
 					}
-					if (*alpha) != (*one) {
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*k)-1] = (*alpha) * (*b)[(*i)-1][(*k)-1]
-						//Label320:
+					if *alpha != 1.0 {
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][k-1] = (*alpha) * (*b)[i-1][k-1]
 						}
 					}
-				//Label330:
 				}
 			} else {
-				for (*k) = 1; (*k) <= (*n); (*k)++ {
-					if *nounit {
-						if *noconj {
-							(*temp) = (*one) / (*a)[(*k)-1][(*k)-1]
+				for k = 1; k <= *n; k++ {
+					if nounit {
+						if noconj {
+							temp = 1.0 / (*a)[k-1][k-1]
 						} else {
-							(*temp) = (*one) / DCONJG(((*a)[(*k)-1][(*k)-1]))
+							temp = 1.0 / cmplx.Conj((*a)[k-1][k-1])
 						}
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*k)-1] = (*temp) * (*b)[(*i)-1][(*k)-1]
-						//Label340:
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][k-1] = temp * (*b)[i-1][k-1]
 						}
 					}
-					for (*j) = (*k) + 1; (*j) <= (*n); (*j)++ {
-						if (*a)[(*j)-1][(*k)-1] != (*zero) {
-							if *noconj {
-								(*temp) = (*a)[(*j)-1][(*k)-1]
+					for j = k + 1; j <= *n; j++ {
+						if (*a)[j-1][k-1] != 0.0 {
+							if noconj {
+								temp = (*a)[j-1][k-1]
 							} else {
-								(*temp) = (DCONJG(((*a)[(*j)-1][(*k)-1])))
+								temp = cmplx.Conj((*a)[j-1][k-1])
 							}
-							for (*i) = 1; (*i) <= (*m); (*i)++ {
-								(*b)[(*i)-1][(*j)-1] = (*b)[(*i)-1][(*j)-1] - (*temp)*(*b)[(*i)-1][(*k)-1]
-							//Label350:
+							for i = 1; i <= *m; i++ {
+								(*b)[i-1][j-1] -= temp * (*b)[i-1][k-1]
 							}
 						}
-					//Label360:
 					}
-					if (*alpha) != (*one) {
-						for (*i) = 1; (*i) <= (*m); (*i)++ {
-							(*b)[(*i)-1][(*k)-1] = (*alpha) * (*b)[(*i)-1][(*k)-1]
-						//Label370:
+					if *alpha != 1.0 {
+						for i = 1; i <= *m; i++ {
+							(*b)[i-1][k-1] = (*alpha) * (*b)[i-1][k-1]
 						}
 					}
-				//Label380:
 				}
 			}
 		}
 	}
-	//*
-	return
-	//*
-	//*     End of Ztrsm .
-	//*
 }

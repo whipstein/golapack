@@ -1,8 +1,6 @@
 package goblas
 
-import 
-
-// \brief \b Dscal
+// Dscal ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,14 +10,14 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Dscal(N,DA,DX,incx)
+//       SUBROUTINE Dscal(n,da,dx,incx)
 //
 //       .. Scalar Arguments ..
-//       DOUBLE PRECISION DA
-//       INTEGER incx,N
+//       DOUBLE PRECISION da
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       DOUBLE PRECISION DX(//)
+//       DOUBLE PRECISION dx(*)
 //       ..
 //
 //
@@ -35,27 +33,27 @@ import
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] DA
+// \param[in] da
 // \verbatim
-//          DA is DOUBLE PRECISION
-//           On entry, DA specifies the scalar alpha.
+//          da is DOUBLE PRECISION
+//           On entry, da specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in,out] DX
+// \param[in,out] dx
 // \verbatim
-//          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1)//abs( incx))
+//          dx is DOUBLE PRECISION array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of DX
+//         storage spacing between elements of dx
 // \endverbatim
 //
 //  Authors:
@@ -77,66 +75,52 @@ import
 //
 //     jack dongarra, linpack, 3/11/78.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Dscal(n *int, da *float64, dx *[]float64, incx *int) {
-	i := new(int)
-	m := new(int)
-	mp1 := new(int)
-	nincx := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	if (*n) <= 0 || (*incx) <= 0 {
+func Dscal(major *byte, n *int, da *float64, dx *[]float64, incx *int) {
+	var i, m, mp1, nincx int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n <= 0 || *incx <= 0 {
 		return
 	}
-	if (*incx) == 1 {
-		//*
-		//*        code for increment equal to 1
-		//*
-		//*
-		//*        clean-up loop
-		//*
-		(*m) = (MOD((*n), int(5)))
-		if (*m) != 0 {
-			for (*i) = 1; (*i) <= (*m); (*i)++ {
-				(*dx)[(*i)-1] = (*da) * (*dx)[(*i)-1]
+	if *incx == 1 {
+		//
+		//        code for increment equal to 1
+		//
+		//
+		//        clean-up loop
+		//
+		m = (*n) % 5
+		if m != 0 {
+			for i = 1; i <= m; i++ {
+				(*dx)[i-1] *= *da
 			}
-			if (*n) < 5 {
+			if *n < 5 {
 				return
 			}
 		}
-		(*mp1) = (*m) + 1
-		for (*i) = (*mp1); (*i) <= (*n); (*i) += 5 {
-			(*dx)[(*i)-1] = (*da) * (*dx)[(*i)-1]
-			(*dx)[(*i)+0] = (*da) * (*dx)[(*i)+0]
-			(*dx)[(*i)+1] = (*da) * (*dx)[(*i)+1]
-			(*dx)[(*i)+2] = (*da) * (*dx)[(*i)+2]
-			(*dx)[(*i)+3] = (*da) * (*dx)[(*i)+3]
+		mp1 = m + 1
+		for i = mp1; i <= *n; i += 5 {
+			(*dx)[i-1] *= *da
+			(*dx)[i] *= *da
+			(*dx)[i+1] *= *da
+			(*dx)[i+2] *= *da
+			(*dx)[i+3] *= *da
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*nincx) = (*n) * (*incx)
-		for (*i) = 1; (*i) <= (*nincx); (*i) += (*incx) {
-			(*dx)[(*i)-1] = (*da) * (*dx)[(*i)-1]
+		//
+		//        code for increment not equal to 1
+		//
+		nincx = (*n) * (*incx)
+		for i = 1; i <= nincx; i += *incx {
+			(*dx)[i-1] *= *da
 		}
 	}
 	return

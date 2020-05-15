@@ -1,9 +1,10 @@
 package goblas
 
-import "math"
-import 
+import (
+	"math"
+)
 
-// \brief \b Drotg
+// Drotg ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -13,10 +14,10 @@ import
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Drotg(DA,DB,C,S)
+//       SUBROUTINE Drotg(da,db,c,s)
 //
 //       .. Scalar Arguments ..
-//       DOUBLE PRECISION C,DA,DB,S
+//       DOUBLE PRECISION c,da,db,s
 //       ..
 //
 //
@@ -31,24 +32,24 @@ import
 //  Arguments:
 //  ==========
 //
-// \param[in] DA
+// \param[in] da
 // \verbatim
-//          DA is DOUBLE PRECISION
+//          da is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[in] DB
+// \param[in] db
 // \verbatim
-//          DB is DOUBLE PRECISION
+//          db is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[out] C
+// \param[out] c
 // \verbatim
-//          C is DOUBLE PRECISION
+//          c is DOUBLE PRECISION
 // \endverbatim
 //
-// \param[out] S
+// \param[out] s
 // \verbatim
-//          S is DOUBLE PRECISION
+//          s is DOUBLE PRECISION
 // \endverbatim
 //
 //  Authors:
@@ -72,50 +73,37 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Drotg(da *float64, db *float64, c *float64, s *float64) {
-	r := new(float64)
-	roe := new(float64)
-	scale := new(float64)
-	z := new(float64)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*roe) = (*db)
-	if ABS((*da)) > dabs(db) {
-		(*roe) = (*da)
+func Drotg(major *byte, da *float64, db *float64, c *float64, s *float64) {
+	var r, roe, scale, z float64
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	roe = *db
+	if math.Abs(*da) > math.Abs(*db) {
+		roe = *da
 	}
-	(*scale) = ABS((*da)) + ABS((*db))
-	if (*scale) == 0.0 {
-		(*c) = 1.0
-		(*s) = 0.0
-		(*r) = 0.0
-		(*z) = 0.0
+	scale = math.Abs(*da) + math.Abs(*db)
+	if scale == 0.0 {
+		*c = 1.0
+		*s = 0.0
 	} else {
-		(*r) = (*scale) * DSQRT(math.pow(((*da)/(*scale)), 2)+math.pow(((*db)/(*scale)), 2))
-		(*r) = dsign(func() *float64 {y := 1.0; return &y}(), roe) * (*r)
-		(*c) = (*da) / (*r)
-		(*s) = (*db) / (*r)
-		(*z) = 1.0
-		if ABS((*da)) > dabs(db) {
-			(*z) = (*s)
+		r = scale * math.Sqrt(math.Pow((*da)/scale, 2)+math.Pow((*db)/scale, 2))
+		if roe < 0.0 {
+			r = -r
 		}
-		if dabs((*db)) >= dabs((*da)) && (*c) != 0.0 {
-			(*z) = 1.0 / (*c)
+		*c = (*da) / r
+		*s = (*db) / r
+		z = 1.0
+		if math.Abs(*da) > math.Abs(*db) {
+			z = *s
+		}
+		if math.Abs(*db) >= math.Abs(*da) && *c != 0.0 {
+			z = 1.0 / (*c)
 		}
 	}
-	(*da) = (*r)
-	(*db) = (*z)
-	return
+	*da = r
+	*db = z
 }

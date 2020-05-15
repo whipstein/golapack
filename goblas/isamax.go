@@ -1,8 +1,6 @@
 package goblas
 
-import 
-
-// \brief \b Isamax
+// Isamax ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -12,13 +10,13 @@ import
 //  Definition:
 //  ===========
 //
-//       INTEGER FUNCTION Isamax(N,SX,incx)
+//       INTEGER FUNCTION ISAMAX(n,sx,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       REAL SX(//)
+//       REAL sx(*)
 //       ..
 //
 //
@@ -27,27 +25,27 @@ import
 //
 // \verbatim
 //
-//    Isamax finds the index of the first element having maximum absolute value.
+//    ISAMAX finds the index of the first element having maximum absolute value.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] SX
+// \param[in] sx
 // \verbatim
-//          SX is REAL array, dimension ( 1 + ( N - 1)//abs( incx))
+//          sx is REAL array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of SX
+//         storage spacing between elements of sx
 // \endverbatim
 //
 //  Authors:
@@ -69,65 +67,50 @@ import
 //
 //     jack dongarra, linpack, 3/11/78.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Isamax(n *int, sx *[]float64, incx *int) (isamaxReturn *int) {
-	isamaxreturn := new(int)
-	smax := new(float64)
-	i := new(int)
-	ix := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	(*isamax) = 0
-	if (*n) < 1 || (*incx) <= 0 {
-		return
+func Isamax(major *byte, n *int, sx *[]float32, incx *int) int {
+	var smax float32
+	var isamaxReturn, i, ix int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n < 1 || *incx <= 0 {
+		return 0
 	}
-	(*isamax) = 1
-	if (*n) == 1 {
-		return
+	if *n == 1 {
+		return 1
 	}
-	if (*incx) == 1 {
-		//*
-		//*        code for increment equal to 1
-		//*
-		(*smax) = (ABS(((*sx)[0])))
-		for (*i) = 2; (*i) <= (*n); (*i)++ {
-			if ABS(((*sx)[(*i)-1])) > (*smax) {
-				(*isamax) = (*i)
-				(*smax) = (ABS(((*sx)[(*i)-1])))
+	if *incx == 1 {
+		//
+		//        code for increment equal to 1
+		//
+		smax = absf32((*sx)[0])
+		for i = 2; i <= *n; i++ {
+			if absf32((*sx)[i-1]) > smax {
+				isamaxReturn = i
+				smax = absf32((*sx)[i-1])
 			}
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*ix) = 1
-		(*smax) = (ABS(((*sx)[0])))
-		(*ix) = (*ix) + (*incx)
-		for (*i) = 2; (*i) <= (*n); (*i)++ {
-			if ABS(((*sx)[(*ix)-1])) > (*smax) {
-				(*isamax) = (*i)
-				(*smax) = (ABS(((*sx)[(*ix)-1])))
+		//
+		//        code for increment not equal to 1
+		//
+		ix = 1
+		smax = absf32((*sx)[0])
+		ix += *incx
+		for i = 2; i <= *n; i++ {
+			if absf32((*sx)[ix-1]) > smax {
+				isamaxReturn = i
+				smax = absf32((*sx)[ix-1])
 			}
-			(*ix) = (*ix) + (*incx)
+			ix += *incx
 		}
 	}
-	return
+	return isamaxReturn
 }

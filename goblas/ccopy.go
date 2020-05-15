@@ -1,6 +1,6 @@
 package goblas
 
-// \brief \b Ccopy
+// Ccopy ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,13 +10,13 @@ package goblas
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Ccopy(N,CX,incx,CY,incy)
+//       SUBROUTINE Ccopy(N,CX,INCX,CY,INCY)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,incy,N
+//       INTEGER INCX,INCY,N
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX CX(//),CY(//)
+//       COMPLEX CX(*),CY(*)
 //       ..
 //
 //
@@ -39,23 +39,23 @@ package goblas
 //
 // \param[in] CX
 // \verbatim
-//          CX is COMPLEX array, dimension ( 1 + ( N - 1)//abs( incx))
+//          CX is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 // \endverbatim
 //
-// \param[in] incx
+// \param[in] INCX
 // \verbatim
-//          incx is INTEGER
+//          INCX is INTEGER
 //         storage spacing between elements of CX
 // \endverbatim
 //
 // \param[out] CY
 // \verbatim
-//          CY is COMPLEX array, dimension ( 1 + ( N - 1)//abs( incy))
+//          CY is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
 // \endverbatim
 //
-// \param[in] incy
+// \param[in] INCY
 // \verbatim
-//          incy is INTEGER
+//          INCY is INTEGER
 //         storage spacing between elements of CY
 // \endverbatim
 //
@@ -77,56 +77,45 @@ package goblas
 // \verbatim
 //
 //     jack dongarra, linpack, 3/11/78.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Ccopy(n *int, cx *[]complex128, incx *int, cy *[]complex128, incy *int) {
-	i := new(int)
-	ix := new(int)
-	iy := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	if (*n) <= 0 {
+func Ccopy(n *int, cx *[]complex64, incx *int, cy *[]complex64, incy *int) {
+	var i, ix, iy int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n <= 0 {
 		return
 	}
-	if (*incx) == 1 && (*incy) == 1 {
-		//*
-		//*        code for both increments equal to 1
-		//*
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*cy)[(*i)-1] = (*cx)[(*i)-1]
+	if *incx == 1 && *incy == 1 {
+		//
+		//        code for both increments equal to 1
+		//
+		for i = 1; i <= *n; i++ {
+			(*cy)[i-1] = (*cx)[i-1]
 		}
 	} else {
-		//*
-		//*        code for unequal increments or equal increments
-		//*          not equal to 1
-		//*
-		(*ix) = 1
-		(*iy) = 1
-		if (*incx) < 0 {
-			(*ix) = (-(*n)+1)*(*incx) + 1
+		//
+		//        code for unequal increments or equal increments
+		//          not equal to 1
+		//
+		ix = 1
+		iy = 1
+		if *incx < 0 {
+			ix = (-(*n)+1)*(*incx) + 1
 		}
-		if (*incy) < 0 {
-			(*iy) = (-(*n)+1)*(*incy) + 1
+		if *incy < 0 {
+			iy = (-(*n)+1)*(*incy) + 1
 		}
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*cy)[(*iy)-1] = (*cx)[(*ix)-1]
-			(*ix) = (*ix) + (*incx)
-			(*iy) = (*iy) + (*incy)
+		for i = 1; i <= *n; i++ {
+			(*cy)[iy-1] = (*cx)[ix-1]
+			ix += *incx
+			iy += *incy
 		}
 	}
 	return

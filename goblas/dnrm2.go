@@ -1,9 +1,10 @@
 package goblas
 
-import "math"
-import 
+import (
+	"math"
+)
 
-// \brief \b Dnrm2
+// Dnrm2 ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -13,13 +14,13 @@ import
 //  Definition:
 //  ===========
 //
-//       DOUBLE PRECISION FUNCTION Dnrm2(N,X,incx)
+//       DOUBLE PRECISION FUNCTION Dnrm2(n,x,incx)
 //
 //       .. Scalar Arguments ..
-//       INTEGER incx,N
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       DOUBLE PRECISION X(//)
+//       DOUBLE PRECISION x(*)
 //       ..
 //
 //
@@ -28,30 +29,30 @@ import
 //
 // \verbatim
 //
-// Dnrm2 returns the euclidean norm of a vector via the function
+// Dnrm2 returns the euclidean dnrm2Return of a vector via the function
 // name, so that
 //
-//    Dnrm2 := sqrt( x'//x)
+//    Dnrm2 := sqrt( x'*x )
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is DOUBLE PRECISION array, dimension ( 1 + ( N - 1)//abs( incx))
+//          x is DOUBLE PRECISION array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of DX
+//         storage spacing between elements of dx
 // \endverbatim
 //
 //  Authors:
@@ -77,65 +78,39 @@ import
 // \endverbatim
 //
 //  =====================================================================
-func Dnrm2(n *int, x *[]float64, incx *int) (dnrm2Return *float64) {
-	dnrm2return := new(float64)
-	one := new(float64)
-	zero := new(float64)
-	absxi := new(float64)
-	norm := new(float64)
-	scale := new(float64)
-	ssq := new(float64)
-	ix := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*one) = 1.0e+0
-	(*zero) = 0.0e+0
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	if (*n) < 1 || (*incx) < 1 {
-		(*norm) = (*zero)
-	} else if (*n) == 1 {
-		(*norm) = (ABS(((*x)[0])))
+func Dnrm2(major *byte, n *int, x *[]float64, incx *int) (dnrm2Return float64) {
+	var absxi, scale, ssq float64
+	var ix int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     November 2017
+	//
+	if *n < 1 || *incx < 1 {
+		dnrm2Return = 0.0
+	} else if *n == 1 {
+		dnrm2Return = math.Abs((*x)[0])
 	} else {
-		(*scale) = (*zero)
-		(*ssq) = (*one)
-		//*        The following loop is equivalent to this call to the LAPACK
-		//*        auxiliary routine:
-		//*        CALL DLASSQ( N, X, incx, SCALE, SSQ)
-		//*
-		for (*ix) = 1; (*ix) <= 1+((*n)-1)*(*incx); (*ix) += (*incx) {
-			if (*x)[(*ix)-1] != (*zero) {
-				(*absxi) = (ABS(((*x)[(*ix)-1])))
-				if (*scale) < (*absxi) {
-					(*ssq) = (*one) + (*ssq)*math.pow(((*scale)/(*absxi)), 2)
-					(*scale) = (*absxi)
+		scale = 0.0
+		ssq = 1.0
+		//        The following loop is equivalent to this call to the LAPACK
+		//        auxiliary routine:
+		//        CALL DLASSQ( n, x, incx, scale, ssq )
+		//
+		for ix = 1; ix <= 1+((*n)-1)*(*incx); ix += *incx {
+			if (*x)[ix-1] != 0.0 {
+				absxi = math.Abs((*x)[ix-1])
+				if scale < absxi {
+					ssq = 1.0 + ssq*math.Pow(scale/absxi, 2)
+					scale = absxi
 				} else {
-					(*ssq) = (*ssq) + math.pow(((*absxi)/(*scale)), 2)
+					ssq += math.Pow(absxi/scale, 2)
 				}
 			}
-			//Label10:
 		}
-		(*norm) = (*scale) * SQRT((*ssq))
+		dnrm2Return = scale * math.Sqrt(ssq)
 	}
-	//*
-	(*dnrm2) = (*norm)
+
 	return
-	//*
-	//*     End of Dnrm2.
-	//*
 }

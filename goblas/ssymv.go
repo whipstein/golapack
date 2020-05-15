@@ -1,6 +1,6 @@
 package goblas
 
-// \brief \b Ssymv
+// Ssymv ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,15 +10,15 @@ package goblas
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Ssymv(UPLO,N,ALPHA,A,LDA,X,incx,BETA,Y,incy)
+//       SUBROUTINE SSYMV(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
 //
 //       .. Scalar Arguments ..
-//       REAL ALPHA,BETA
-//       INTEGER incx,incy,LDA,N
-//       CHARACTER UPLO
+//       REAL alpha,beta
+//       INTEGER incx,incy,lda,n
+//       CHARACTER uplo
 //       ..
 //       .. Array Arguments ..
-//       REAL A(LDA,//),X(//),Y(//)
+//       REAL a(lda,*),x(*),y(*)
 //       ..
 //
 //
@@ -27,70 +27,70 @@ package goblas
 //
 // \verbatim
 //
-// Ssymv  performs the matrix-vector  operation
+// SSYMV  performs the matrix-vector  operation
 //
-//    y := alpha//A//x + beta//y,
+//    y := alpha*a*x + beta*y,
 //
 // where alpha and beta are scalars, x and y are n element vectors and
-// A is an n by n symmetric matrix.
+// a is an n by n symmetric matrix.
 // \endverbatim
 //
 //  Arguments:
 //  ==========
 //
-// \param[in] UPLO
+// \param[in] uplo
 // \verbatim
-//          UPLO is CHARACTER//1
-//           On entry, UPLO specifies whether the upper or lower
-//           triangular part of the array A is to be referenced as
+//          uplo is CHARACTER*1
+//           On entry, uplo specifies whether the upper or lower
+//           triangular part of the array a is to be referenced as
 //           follows:
 //
-//              UPLO = 'U' or 'u'   Only the upper triangular part of A
+//              uplo = 'U' or 'u'   Only the upper triangular part of a
 //                                  is to be referenced.
 //
-//              UPLO = 'L' or 'l'   Only the lower triangular part of A
+//              uplo = 'L' or 'l'   Only the lower triangular part of a
 //                                  is to be referenced.
 // \endverbatim
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
-//           On entry, N specifies the order of the matrix A.
-//           N must be at least zero.
+//          n is INTEGER
+//           On entry, n specifies the order of the matrix a.
+//           n must be at least 0.0.
 // \endverbatim
 //
-// \param[in] ALPHA
+// \param[in] alpha
 // \verbatim
-//          ALPHA is REAL
-//           On entry, ALPHA specifies the scalar alpha.
+//          alpha is REAL
+//           On entry, alpha specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in] A
+// \param[in] a
 // \verbatim
-//          A is REAL array, dimension ( LDA, N)
-//           Before entry with  UPLO = 'U' or 'u', the leading n by n
-//           upper triangular part of the array A must contain the upper
+//          a is REAL array, dimension ( lda, n )
+//           Before entry with  uplo = 'U' or 'u', the leading n by n
+//           upper triangular part of the array a must contain the upper
 //           triangular part of the symmetric matrix and the strictly
-//           lower triangular part of A is not referenced.
-//           Before entry with UPLO = 'L' or 'l', the leading n by n
-//           lower triangular part of the array A must contain the lower
+//           lower triangular part of a is not referenced.
+//           Before entry with uplo = 'L' or 'l', the leading n by n
+//           lower triangular part of the array a must contain the lower
 //           triangular part of the symmetric matrix and the strictly
-//           upper triangular part of A is not referenced.
+//           upper triangular part of a is not referenced.
 // \endverbatim
 //
-// \param[in] LDA
+// \param[in] lda
 // \verbatim
-//          LDA is INTEGER
-//           On entry, LDA specifies the first dimension of A as declared
-//           in the calling (sub) program. LDA must be at least
-//           max( 1, n).
+//          lda is INTEGER
+//           On entry, lda specifies the first dimension of a as declared
+//           in the calling (sub) program. lda must be at least
+//           max( 1, n ).
 // \endverbatim
 //
-// \param[in] X
+// \param[in] x
 // \verbatim
-//          X is REAL array, dimension at least
-//           ( 1 + ( n - 1)//abs( incx)).
-//           Before entry, the incremented array X must contain the n
+//          x is REAL array, dimension at least
+//           ( 1 + ( n - 1 )*abs( incx ) ).
+//           Before entry, the incremented array x must contain the n
 //           element vector x.
 // \endverbatim
 //
@@ -98,22 +98,22 @@ package goblas
 // \verbatim
 //          incx is INTEGER
 //           On entry, incx specifies the increment for the elements of
-//           X. incx must not be zero.
+//           x. incx must not be 0.0.
 // \endverbatim
 //
-// \param[in] BETA
+// \param[in] beta
 // \verbatim
-//          BETA is REAL
-//           On entry, BETA specifies the scalar beta. When BETA is
-//           supplied as zero then Y need not be set on input.
+//          beta is REAL
+//           On entry, beta specifies the scalar beta. When beta is
+//           supplied as 0.0 then y need not be set on input.
 // \endverbatim
 //
-// \param[in,out] Y
+// \param[in,out] y
 // \verbatim
-//          Y is REAL array, dimension at least
-//           ( 1 + ( n - 1)//abs( incy)).
-//           Before entry, the incremented array Y must contain the n
-//           element vector y. On exit, Y is overwritten by the updated
+//          y is REAL array, dimension at least
+//           ( 1 + ( n - 1 )*abs( incy ) ).
+//           Before entry, the incremented array y must contain the n
+//           element vector y. On exit, y is overwritten by the updated
 //           vector y.
 // \endverbatim
 //
@@ -121,7 +121,7 @@ package goblas
 // \verbatim
 //          incy is INTEGER
 //           On entry, incy specifies the increment for the elements of
-//           Y. incy must not be zero.
+//           y. incy must not be 0.0.
 // \endverbatim
 //
 //  Authors:
@@ -152,203 +152,163 @@ package goblas
 // \endverbatim
 //
 //  =====================================================================
-func Ssymv(uplo *byte, n *int, alpha *float64, a *[][]float64, lda *int, x *[]float64, incx *int, beta *float64, y *[]float64, incy *int) {
-	one := new(float64)
-	zero := new(float64)
-	temp1 := new(float64)
-	temp2 := new(float64)
-	i := new(int)
-	info := new(int)
-	ix := new(int)
-	iy := new(int)
-	j := new(int)
-	jx := new(int)
-	jy := new(int)
-	kx := new(int)
-	ky := new(int)
-	//*
-	//*  -- Reference BLAS level2 routine (version 3.7.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     December 2016
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Parameters ..
-	(*one) = 1.0e+0
-	(*zero) = 0.0e+0
-	//*     ..
-	//*     .. Local Scalars ..
-	//*     ..
-	//*     .. External Functions ..
-	//*     ..
-	//*     .. External Subroutines ..
-	//*     ..
-	//*     .. Intrinsic Functions ..
-	//*     ..
-	//*
-	//*     Test the input parameters.
-	//*
-	(*info) = 0
-	if !Lsame((*uplo), "u") && !Lsame((*uplo), "l") {
-		(*info) = 1
-	} else if (*n) < 0 {
-		(*info) = 2
-	} else if (*lda) < max(func() *int { y := 1; return &y }(), n) {
-		(*info) = 5
-	} else if (*incx) == 0 {
-		(*info) = 7
-	} else if (*incy) == 0 {
-		(*info) = 10
+func Ssymv(major, uplo *byte, n *int, alpha *float32, a *[][]float32, lda *int, x *[]float32, incx *int, beta *float32, y *[]float32, incy *int) {
+	var temp1, temp2 float32
+	var i, info, ix, iy, j, jx, jy, kx, ky int
+	//
+	//  -- Reference BLAS level2 routine (version 3.7.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+	//     December 2016
+	//
+	//     Test the input parameters.
+	//
+	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
+		info = 1
+	} else if !Lsame(uplo, func() *byte { y := byte('U'); return &y }()) && !Lsame(uplo, func() *byte { y := byte('L'); return &y }()) {
+		info = 2
+	} else if *n < 0 {
+		info = 3
+	} else if *lda < max(1, *n) {
+		info = 6
+	} else if *incx == 0 {
+		info = 8
+	} else if *incy == 0 {
+		info = 11
 	}
-	if (*info) != 0 {
-		Xerbla(func() *[]byte { y := []byte("ssymv "); return &y }(), info)
+	if info != 0 {
+		name := "Ssymv"
+		if common.infoc.test {
+			xerblaTest(name, info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
-	//*
-	//*     Quick return if possible.
-	//*
-	if ((*n) == 0) || (((*alpha) == (*zero)) && ((*beta) == (*one))) {
+	//
+	//     Quick return if possible.
+	//
+	if (*n == 0) || ((*alpha == 0.0) && (*beta == 1.0)) {
 		return
 	}
-	//*
-	//*     Set up the start points in  X  and  Y.
-	//*
-	if (*incx) > 0 {
-		(*kx) = 1
+	//
+	//     Set up the start points in  x  and  y.
+	//
+	if *incx > 0 {
+		kx = 1
 	} else {
-		(*kx) = 1 - ((*n)-1)*(*incx)
+		kx = 1 - ((*n)-1)*(*incx)
 	}
-	if (*incy) > 0 {
-		(*ky) = 1
+	if *incy > 0 {
+		ky = 1
 	} else {
-		(*ky) = 1 - ((*n)-1)*(*incy)
+		ky = 1 - ((*n)-1)*(*incy)
 	}
-	//*
-	//*     Start the operations. In this version the elements of A are
-	//*     accessed sequentially with one pass through the triangular part
-	//*     of A.
-	//*
-	//*     First form  y := beta*y.
-	//*
-	if (*beta) != (*one) {
-		if (*incy) == 1 {
-			if (*beta) == (*zero) {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*i)-1] = (*zero)
-					//Label10:
+	//
+	//     Start the operations. In this version the elements of a are
+	//     accessed sequentially with 1.0 pass through the triangular part
+	//     of a.
+	//
+	//     First form  y := beta*y.
+	//
+	if *beta != 1.0 {
+		if *incy == 1 {
+			if *beta == 0.0 {
+				for i = 1; i <= *n; i++ {
+					(*y)[i-1] = 0.0
 				}
 			} else {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*i)-1] = (*beta) * (*y)[(*i)-1]
-					//Label20:
+				for i = 1; i <= *n; i++ {
+					(*y)[i-1] *= *beta
 				}
 			}
 		} else {
-			(*iy) = (*ky)
-			if (*beta) == (*zero) {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*iy)-1] = (*zero)
-					(*iy) = (*iy) + (*incy)
-					//Label30:
+			iy = ky
+			if *beta == 0.0 {
+				for i = 1; i <= *n; i++ {
+					(*y)[iy-1] = 0.0
+					iy += *incy
 				}
 			} else {
-				for (*i) = 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*iy)-1] = (*beta) * (*y)[(*iy)-1]
-					(*iy) = (*iy) + (*incy)
-					//Label40:
+				for i = 1; i <= *n; i++ {
+					(*y)[iy-1] *= *beta
+					iy += *incy
 				}
 			}
 		}
 	}
-	if (*alpha) == (*zero) {
+	if *alpha == 0.0 {
 		return
 	}
-	if Lsame(uplo, func() *byte { y := byte('u'); return &y }()) {
-		//*
-		//*        Form  y  when A is stored in upper triangle.
-		//*
-		if ((*incx) == 1) && ((*incy) == 1) {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*j)-1]
-				(*temp2) = (*zero)
-				for (*i) = 1; (*i) <= (*j)-1; (*i)++ {
-					(*y)[(*i)-1] = (*y)[(*i)-1] + (*temp1)*(*a)[(*i)-1][(*j)-1]
-					(*temp2) = (*temp2) + (*a)[(*i)-1][(*j)-1]*(*x)[(*i)-1]
-					//Label50:
+	if Lsame(uplo, func() *byte { y := byte('U'); return &y }()) {
+		//
+		//        Form  y  when a is stored in upper triangle.
+		//
+		if (*incx == 1) && (*incy == 1) {
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[j-1]
+				temp2 = 0.0
+				for i = 1; i <= j-1; i++ {
+					(*y)[i-1] += temp1 * (*a)[i-1][j-1]
+					temp2 += (*a)[i-1][j-1] * (*x)[i-1]
 				}
-				(*y)[(*j)-1] = (*y)[(*j)-1] + (*temp1)*(*a)[(*j)-1][(*j)-1] + (*alpha)*(*temp2)
-				//Label60:
+				(*y)[j-1] += temp1*(*a)[j-1][j-1] + (*alpha)*temp2
 			}
 		} else {
-			(*jx) = (*kx)
-			(*jy) = (*ky)
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*jx)-1]
-				(*temp2) = (*zero)
-				(*ix) = (*kx)
-				(*iy) = (*ky)
-				for (*i) = 1; (*i) <= (*j)-1; (*i)++ {
-					(*y)[(*iy)-1] = (*y)[(*iy)-1] + (*temp1)*(*a)[(*i)-1][(*j)-1]
-					(*temp2) = (*temp2) + (*a)[(*i)-1][(*j)-1]*(*x)[(*ix)-1]
-					(*ix) = (*ix) + (*incx)
-					(*iy) = (*iy) + (*incy)
-					//Label70:
+			jx = kx
+			jy = ky
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[jx-1]
+				temp2 = 0.0
+				ix = kx
+				iy = ky
+				for i = 1; i <= j-1; i++ {
+					(*y)[iy-1] += temp1 * (*a)[i-1][j-1]
+					temp2 += (*a)[i-1][j-1] * (*x)[ix-1]
+					ix += *incx
+					iy += *incy
 				}
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*temp1)*(*a)[(*j)-1][(*j)-1] + (*alpha)*(*temp2)
-				(*jx) = (*jx) + (*incx)
-				(*jy) = (*jy) + (*incy)
-				//Label80:
+				(*y)[jy-1] += temp1*(*a)[j-1][j-1] + (*alpha)*temp2
+				jx += *incx
+				jy += *incy
 			}
 		}
 	} else {
-		//*
-		//*        Form  y  when A is stored in lower triangle.
-		//*
-		if ((*incx) == 1) && ((*incy) == 1) {
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*j)-1]
-				(*temp2) = (*zero)
-				(*y)[(*j)-1] = (*y)[(*j)-1] + (*temp1)*(*a)[(*j)-1][(*j)-1]
-				for (*i) = (*j) + 1; (*i) <= (*n); (*i)++ {
-					(*y)[(*i)-1] = (*y)[(*i)-1] + (*temp1)*(*a)[(*i)-1][(*j)-1]
-					(*temp2) = (*temp2) + (*a)[(*i)-1][(*j)-1]*(*x)[(*i)-1]
-					//Label90:
+		//
+		//        Form  y  when a is stored in lower triangle.
+		//
+		if (*incx == 1) && (*incy == 1) {
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[j-1]
+				temp2 = 0.0
+				(*y)[j-1] += temp1 * (*a)[j-1][j-1]
+				for i = j + 1; i <= *n; i++ {
+					(*y)[i-1] += temp1 * (*a)[i-1][j-1]
+					temp2 += (*a)[i-1][j-1] * (*x)[i-1]
 				}
-				(*y)[(*j)-1] = (*y)[(*j)-1] + (*alpha)*(*temp2)
-				//Label100:
+				(*y)[j-1] += (*alpha) * temp2
 			}
 		} else {
-			(*jx) = (*kx)
-			(*jy) = (*ky)
-			for (*j) = 1; (*j) <= (*n); (*j)++ {
-				(*temp1) = (*alpha) * (*x)[(*jx)-1]
-				(*temp2) = (*zero)
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*temp1)*(*a)[(*j)-1][(*j)-1]
-				(*ix) = (*jx)
-				(*iy) = (*jy)
-				for (*i) = (*j) + 1; (*i) <= (*n); (*i)++ {
-					(*ix) = (*ix) + (*incx)
-					(*iy) = (*iy) + (*incy)
-					(*y)[(*iy)-1] = (*y)[(*iy)-1] + (*temp1)*(*a)[(*i)-1][(*j)-1]
-					(*temp2) = (*temp2) + (*a)[(*i)-1][(*j)-1]*(*x)[(*ix)-1]
-					//Label110:
+			jx = kx
+			jy = ky
+			for j = 1; j <= *n; j++ {
+				temp1 = (*alpha) * (*x)[jx-1]
+				temp2 = 0.0
+				(*y)[jy-1] += temp1 * (*a)[j-1][j-1]
+				ix = jx
+				iy = jy
+				for i = j + 1; i <= *n; i++ {
+					ix += *incx
+					iy += *incy
+					(*y)[iy-1] += temp1 * (*a)[i-1][j-1]
+					temp2 += (*a)[i-1][j-1] * (*x)[ix-1]
 				}
-				(*y)[(*jy)-1] = (*y)[(*jy)-1] + (*alpha)*(*temp2)
-				(*jx) = (*jx) + (*incx)
-				(*jy) = (*jy) + (*incy)
-				//Label120:
+				(*y)[jy-1] += (*alpha) * temp2
+				jx += *incx
+				jy += *incy
 			}
 		}
 	}
-	//*
+
 	return
-	//*
-	//*     End of Ssymv .
-	//*
 }

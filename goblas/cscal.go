@@ -1,6 +1,6 @@
 package goblas
 
-// \brief \b Cscal
+// Cscal ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,14 +10,14 @@ package goblas
 //  Definition:
 //  ===========
 //
-//       SUBROUTINE Cscal(N,CA,CX,incx)
+//       SUBROUTINE Cscal(n,ca,cx,incx)
 //
 //       .. Scalar Arguments ..
-//       COMPLEX CA
-//       INTEGER incx,N
+//       COMPLEX ca
+//       INTEGER incx,n
 //       ..
 //       .. Array Arguments ..
-//       COMPLEX CX(//)
+//       COMPLEX cx(*)
 //       ..
 //
 //
@@ -32,27 +32,27 @@ package goblas
 //  Arguments:
 //  ==========
 //
-// \param[in] N
+// \param[in] n
 // \verbatim
-//          N is INTEGER
+//          n is INTEGER
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] CA
+// \param[in] ca
 // \verbatim
-//          CA is COMPLEX
-//           On entry, CA specifies the scalar alpha.
+//          ca is COMPLEX
+//           On entry, ca specifies the scalar alpha.
 // \endverbatim
 //
-// \param[in,out] CX
+// \param[in,out] cx
 // \verbatim
-//          CX is COMPLEX array, dimension ( 1 + ( N - 1)//abs( incx))
+//          cx is COMPLEX array, dimension ( 1 + ( n - 1 )*abs( incx ) )
 // \endverbatim
 //
 // \param[in] incx
 // \verbatim
 //          incx is INTEGER
-//         storage spacing between elements of CX
+//         storage spacing between elements of cx
 // \endverbatim
 //
 //  Authors:
@@ -74,45 +74,35 @@ package goblas
 //
 //     jack dongarra, linpack,  3/11/78.
 //     modified 3/93 to return if incx .le. 0.
-//     modified 12/3/93, array1 declarations changed to array(//)
+//     modified 12/3/93, array1 declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Cscal(n *int, ca *complex128, cx *[]complex128, incx *int) {
-	i := new(int)
-	nincx := new(int)
-	//*
-	//*  -- Reference BLAS level1 routine (version 3.8.0) --
-	//*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
-	//*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-	//*     November 2017
-	//*
-	//*     .. Scalar Arguments ..
-	//*     ..
-	//*     .. Array Arguments ..
-	//*     ..
-	//*
-	//*  =====================================================================
-	//*
-	//*     .. Local Scalars ..
-	//*     ..
-	if (*n) <= 0 || (*incx) <= 0 {
+func Cscal(n *int, ca *complex64, cx *[]complex64, incx *int) {
+	var i, nincx int
+	//
+	//  -- Reference BLAS level1 routine (version 3.8.0) --
+	//  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+	//  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG ld..--
+	//     November 2017
+	//
+	if *n <= 0 || *incx <= 0 {
 		return
 	}
-	if (*incx) == 1 {
-		//*
-		//*        code for increment equal to 1
-		//*
-		for (*i) = 1; (*i) <= (*n); (*i)++ {
-			(*cx)[(*i)-1] = (*ca) * (*cx)[(*i)-1]
+	if *incx == 1 {
+		//
+		//        code for increment equal to 1
+		//
+		for i = 1; i <= *n; i++ {
+			(*cx)[i-1] = (*ca) * (*cx)[i-1]
 		}
 	} else {
-		//*
-		//*        code for increment not equal to 1
-		//*
-		(*nincx) = (*n) * (*incx)
-		for (*i) = 1; (*i) <= (*nincx); (*i) += (*incx) {
-			(*cx)[(*i)-1] = (*ca) * (*cx)[(*i)-1]
+		//
+		//        code for increment not equal to 1
+		//
+		nincx = (*n) * (*incx)
+		for i = 1; i <= nincx; i += *incx {
+			(*cx)[i-1] = (*ca) * (*cx)[i-1]
 		}
 	}
 	return
