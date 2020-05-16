@@ -170,7 +170,12 @@ func Dspmv(major, uplo *byte, n *int, alpha *float64, ap *[]float64, x *[]float6
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dspmv"; return &y }(), &info)
+		name := "Dspmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

@@ -211,7 +211,12 @@ func Cherk(major, uplo, trans *byte, n, k *int, alpha *float32, a *[][]complex64
 		info = 11
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Cherk"; return &y }(), &info)
+		name := "Cherk"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

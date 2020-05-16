@@ -172,7 +172,12 @@ func Zhpr2(major, uplo *byte, n *int, alpha *complex128, x *[]complex128, incx *
 		info = 8
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zhpr2"; return &y }(), &info)
+		name := "Zhpr2"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

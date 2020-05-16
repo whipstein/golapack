@@ -209,14 +209,19 @@ func Dgbmv(major, trans *byte, m, n, kl, ku *int, alpha *float64, a *[][]float64
 	} else if *ku < 0 {
 		info = 6
 	} else if *lda < ((*kl) + (*ku) + 1) {
-		info = 7
+		info = 9
 	} else if *incx == 0 {
 		info = 11
 	} else if *incy == 0 {
 		info = 14
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dgbmv"; return &y }(), &info)
+		name := "Dgbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

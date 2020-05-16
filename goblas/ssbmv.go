@@ -213,7 +213,7 @@ func Ssbmv(major, uplo *byte, n, k *int, alpha *float32, a *[][]float32, lda *in
 	if info != 0 {
 		name := "Ssbmv"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

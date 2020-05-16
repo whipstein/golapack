@@ -211,7 +211,12 @@ func Dsbmv(major, uplo *byte, n, k *int, alpha *float64, a *[][]float64, lda *in
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dsbmv"; return &y }(), &info)
+		name := "Dsbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

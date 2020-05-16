@@ -203,26 +203,32 @@ func Zgbmv(major, trans *byte, m, n, kl, ku *int, alpha *complex128, a *[][]comp
 	//
 	//     Test the input parameters.
 	//
-	info = 0
-	if !Lsame(trans, func() *byte { y := byte('N'); return &y }()) && !Lsame(trans, func() *byte { y := byte('T'); return &y }()) && !Lsame(trans, func() *byte { y := byte('C'); return &y }()) {
+	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
 		info = 1
-	} else if *m < 0 {
+	} else if !Lsame(trans, func() *byte { y := byte('N'); return &y }()) && !Lsame(trans, func() *byte { y := byte('T'); return &y }()) && !Lsame(trans, func() *byte { y := byte('C'); return &y }()) {
 		info = 2
-	} else if *n < 0 {
+	} else if *m < 0 {
 		info = 3
-	} else if *kl < 0 {
+	} else if *n < 0 {
 		info = 4
-	} else if *ku < 0 {
+	} else if *kl < 0 {
 		info = 5
+	} else if *ku < 0 {
+		info = 6
 	} else if *lda < (*kl)+(*ku)+1 {
-		info = 8
+		info = 9
 	} else if *incx == 0 {
-		info = 10
+		info = 11
 	} else if *incy == 0 {
-		info = 13
+		info = 14
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zgbmv"; return &y }(), &info)
+		name := "Zgbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

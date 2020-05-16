@@ -216,11 +216,12 @@ func Sgbmv(major, trans *byte, m, n, kl, ku *int, alpha *float32, a *[][]float32
 		info = 14
 	}
 	if info != 0 {
+		name := "Sgbmv"
 		if common.infoc.test {
-			xerblaTest("SGBMV", info)
+			xerblaTest(&name, &info)
 			return
 		}
-		Xerbla(func() *string { y := "SGBMV"; return &y }(), &info)
+		Xerbla(&name, &info)
 		return
 	}
 	//

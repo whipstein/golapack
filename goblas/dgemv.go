@@ -183,7 +183,12 @@ func Dgemv(major, trans *byte, m, n *int, alpha *float64, a *[][]float64, lda *i
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dgemv"; return &y }(), &info)
+		name := "Dgemv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

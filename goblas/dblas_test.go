@@ -1,6 +1,7 @@
 package goblas
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -1085,9 +1086,7 @@ func BenchmarkDsdot(b *testing.B) {
 	sx := func() *[]float32 { y := make([]float32, 7); return &y }()
 	sy := func() *[]float32 { y := make([]float32, 7); return &y }()
 	*n = 4
-	*sx = []float32{0.6000, 0.1000, -0.5000, 0.8000, 0.9000, -0.3000, -0.4000}
 	*incx = 2
-	*sy = []float32{0.5000, -0.9000, 0.3000, 0.7000, -0.6000, 0.2000, 0.8000}
 	*incy = -2
 
 	for i := 0; i < b.N; i++ {
@@ -1104,9 +1103,7 @@ func BenchmarkDsdotFortran(b *testing.B) {
 	sx := func() *[]float32 { y := make([]float32, 7); return &y }()
 	sy := func() *[]float32 { y := make([]float32, 7); return &y }()
 	*n = 4
-	*sx = []float32{0.6000, 0.1000, -0.5000, 0.8000, 0.9000, -0.3000, -0.4000}
 	*incx = 2
-	*sy = []float32{0.5000, -0.9000, 0.3000, 0.7000, -0.6000, 0.2000, 0.8000}
 	*incy = -2
 
 	for i := 0; i < b.N; i++ {
@@ -1248,6 +1245,9 @@ func TestDgemv(t *testing.T) {
 	var als, bls, err, erri, epsf64 float64
 	var transs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -1509,6 +1509,9 @@ func TestDgbmv(t *testing.T) {
 	var als, bls, err, erri float64
 	var transs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	major := new(byte)
 	alpha := new(float64)
@@ -1778,6 +1781,9 @@ func TestDsymv(t *testing.T) {
 	var als, bls, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -1999,6 +2005,9 @@ func TestDsbmv(t *testing.T) {
 	var als, bls, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -2234,6 +2243,9 @@ func TestDspmv(t *testing.T) {
 	var als, bls, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -2451,6 +2463,9 @@ func TestDtrmv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(float64)
 	n := new(int)
@@ -2649,6 +2664,9 @@ func TestDtbmv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(float64)
 	n := new(int)
@@ -2857,6 +2875,9 @@ func TestDtpmv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(float64)
 	n := new(int)
@@ -3048,6 +3069,9 @@ func TestDtrsv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(float64)
 	n := new(int)
@@ -3251,6 +3275,9 @@ func TestDtbsv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(float64)
 	n := new(int)
@@ -3460,6 +3487,9 @@ func TestDtpsv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(float64)
 	n := new(int)
@@ -3656,6 +3686,9 @@ func TestDger(t *testing.T) {
 	var als, err, erri float64
 	var transs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	transl := new(float64)
@@ -3906,6 +3939,9 @@ func TestDsyr(t *testing.T) {
 	var als, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	transl := new(float64)
@@ -4164,6 +4200,9 @@ func TestDspr(t *testing.T) {
 	var als, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	transl := new(float64)
@@ -4379,6 +4418,9 @@ func TestDsyr2(t *testing.T) {
 	var als, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	transl := new(float64)
@@ -4680,6 +4722,9 @@ func TestDspr2(t *testing.T) {
 	var als, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	transl := new(float64)
@@ -4938,6 +4983,9 @@ func TestDgemm(t *testing.T) {
 	var als, bls float64
 	var tranas, tranbs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -5209,6 +5257,9 @@ func TestDsymm(t *testing.T) {
 	var als, bls float64
 	var sides, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -5461,6 +5512,9 @@ func TestDtrmm(t *testing.T) {
 	var als float64
 	var diags, sides, tranas, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -5705,6 +5759,9 @@ func TestDtrsm(t *testing.T) {
 	var als float64
 	var diags, sides, tranas, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	m := new(int)
@@ -5951,6 +6008,9 @@ func TestDsyrk(t *testing.T) {
 	var als, bls float64
 	var transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -6251,6 +6311,9 @@ func TestDsyr2k(t *testing.T) {
 	var als, bls float64
 	var transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(float64)
 	beta := new(float64)
@@ -6658,4 +6721,817 @@ func BenchmarkDsyr2kFortran(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		dsyr2kWrapper(uplo, trans, n, k, alpha, aa, lda, bb, ldb, beta, cc, ldc)
 	}
+}
+
+func TestDerrors(t *testing.T) {
+	var infot *int
+	var srnamt *string
+	var test *bool
+
+	alpha := new(float64)
+	beta := new(float64)
+
+	infot = &common.infoc.infot
+	srnamt = &common.srnamc.srnamt
+	test = &common.infoc.test
+	*test = true
+
+	aa := func() *[]float64 { y := make([]float64, nmax*nmax); return &y }()
+	xx := func() *[]float64 { y := make([]float64, nmax*incmax); return &y }()
+	yy := func() *[]float64 { y := make([]float64, nmax*incmax); return &y }()
+	a := func() *[][]float64 {
+		arr := make([][]float64, nmax)
+		for u := range arr {
+			arr[u] = make([]float64, nmax)
+		}
+		return &arr
+	}()
+	b := func() *[][]float64 {
+		arr := make([][]float64, nmax)
+		for u := range arr {
+			arr[u] = make([]float64, nmax)
+		}
+		return &arr
+	}()
+	c := func() *[][]float64 {
+		arr := make([][]float64, nmax)
+		for u := range arr {
+			arr[u] = make([]float64, nmax)
+		}
+		return &arr
+	}()
+
+	*srnamt = "Dgemv"
+	*infot = 1
+	Dgemv(_X, _N, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Dgemv(_C, _X, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Dgemv(_C, _N, negonei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 4
+	Dgemv(_C, _N, zeroi, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 7
+	Dgemv(_C, _N, twoi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 9
+	Dgemv(_C, _N, zeroi, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 12
+	Dgemv(_C, _N, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dgbmv"
+	*infot = 1
+	Dgbmv(_X, _N, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Dgbmv(_C, _X, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Dgbmv(_C, _N, negonei, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 4
+	Dgbmv(_C, _N, zeroi, negonei, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 5
+	Dgbmv(_C, _N, zeroi, zeroi, negonei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 6
+	Dgbmv(_C, _N, twoi, zeroi, zeroi, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 9
+	Dgbmv(_C, _N, zeroi, zeroi, onei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 11
+	Dgbmv(_C, _N, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 14
+	Dgbmv(_C, _N, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dsymv"
+	*infot = 1
+	Dsymv(_X, _U, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Dsymv(_C, _X, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Dsymv(_C, _U, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 6
+	Dsymv(_C, _U, twoi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 8
+	Dsymv(_C, _U, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 11
+	Dsymv(_C, _U, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dsbmv"
+	*infot = 1
+	Dsbmv(_X, _U, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Dsbmv(_C, _X, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Dsbmv(_C, _U, negonei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 4
+	Dsbmv(_C, _U, zeroi, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 7
+	Dsbmv(_C, _U, zeroi, onei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 9
+	Dsbmv(_C, _U, zeroi, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 12
+	Dsbmv(_C, _U, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dspmv"
+	*infot = 1
+	Dspmv(_X, _U, zeroi, alpha, aa, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Dspmv(_C, _X, zeroi, alpha, aa, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Dspmv(_C, _U, negonei, alpha, aa, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 7
+	Dspmv(_C, _U, zeroi, alpha, aa, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 10
+	Dspmv(_C, _U, zeroi, alpha, aa, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dtrmv"
+	*infot = 1
+	Dtrmv(_X, _U, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Dtrmv(_C, _X, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Dtrmv(_C, _U, _X, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Dtrmv(_C, _U, _N, _X, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Dtrmv(_C, _U, _N, _N, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 7
+	Dtrmv(_C, _U, _N, _N, twoi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 9
+	Dtrmv(_C, _U, _N, _N, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dtbmv"
+	*infot = 1
+	Dtbmv(_X, _U, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Dtbmv(_C, _X, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Dtbmv(_C, _U, _X, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Dtbmv(_C, _U, _N, _X, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Dtbmv(_C, _U, _N, _N, negonei, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 6
+	Dtbmv(_C, _U, _N, _N, zeroi, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Dtbmv(_C, _U, _N, _N, zeroi, onei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 10
+	Dtbmv(_C, _U, _N, _N, zeroi, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dtpmv"
+	*infot = 1
+	Dtpmv(_X, _U, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Dtpmv(_C, _X, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Dtpmv(_C, _U, _X, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Dtpmv(_C, _U, _N, _X, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Dtpmv(_C, _U, _N, _N, negonei, aa, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Dtpmv(_C, _U, _N, _N, zeroi, aa, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dtrsv"
+	*infot = 1
+	Dtrsv(_X, _U, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Dtrsv(_C, _X, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Dtrsv(_C, _U, _X, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Dtrsv(_C, _U, _N, _X, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Dtrsv(_C, _U, _N, _N, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 7
+	Dtrsv(_C, _U, _N, _N, twoi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 9
+	Dtrsv(_C, _U, _N, _N, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dtbsv"
+	*infot = 1
+	Dtbsv(_X, _U, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Dtbsv(_C, _X, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Dtbsv(_C, _U, _X, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Dtbsv(_C, _U, _N, _X, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Dtbsv(_C, _U, _N, _N, negonei, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 6
+	Dtbsv(_C, _U, _N, _N, zeroi, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Dtbsv(_C, _U, _N, _N, zeroi, onei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 10
+	Dtbsv(_C, _U, _N, _N, zeroi, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dtpsv"
+	*infot = 1
+	Dtpsv(_X, _U, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Dtpsv(_C, _X, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Dtpsv(_C, _U, _X, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Dtpsv(_C, _U, _N, _X, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Dtpsv(_C, _U, _N, _N, negonei, aa, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Dtpsv(_C, _U, _N, _N, zeroi, aa, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Dger"
+	*infot = 1
+	Dger(_X, zeroi, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 2
+	Dger(_C, negonei, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 3
+	Dger(_C, zeroi, negonei, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 6
+	Dger(_C, zeroi, zeroi, alpha, xx, zeroi, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 8
+	Dger(_C, zeroi, zeroi, alpha, xx, onei, yy, zeroi, a, onei)
+	chkxer(t)
+	*infot = 10
+	Dger(_C, twoi, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+
+	*srnamt = "Dsyr"
+	*infot = 1
+	Dsyr(_X, _U, zeroi, alpha, xx, onei, a, onei)
+	chkxer(t)
+	*infot = 2
+	Dsyr(_C, _X, zeroi, alpha, xx, onei, a, onei)
+	chkxer(t)
+	*infot = 3
+	Dsyr(_C, _U, negonei, alpha, xx, onei, a, onei)
+	chkxer(t)
+	*infot = 6
+	Dsyr(_C, _U, zeroi, alpha, xx, zeroi, a, onei)
+	chkxer(t)
+	*infot = 8
+	Dsyr(_C, _U, twoi, alpha, xx, onei, a, onei)
+	chkxer(t)
+
+	*srnamt = "Dspr"
+	*infot = 1
+	Dspr(_X, _U, zeroi, alpha, xx, onei, aa)
+	chkxer(t)
+	*infot = 2
+	Dspr(_C, _X, zeroi, alpha, xx, onei, aa)
+	chkxer(t)
+	*infot = 3
+	Dspr(_C, _U, negonei, alpha, xx, onei, aa)
+	chkxer(t)
+	*infot = 6
+	Dspr(_C, _U, zeroi, alpha, xx, zeroi, aa)
+	chkxer(t)
+
+	*srnamt = "Dsyr2"
+	*infot = 1
+	Dsyr2(_X, _U, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 2
+	Dsyr2(_C, _X, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 3
+	Dsyr2(_C, _U, negonei, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 6
+	Dsyr2(_C, _U, zeroi, alpha, xx, zeroi, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 8
+	Dsyr2(_C, _U, zeroi, alpha, xx, onei, yy, zeroi, a, onei)
+	chkxer(t)
+	*infot = 10
+	Dsyr2(_C, _U, twoi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+
+	*srnamt = "Dspr2"
+	*infot = 1
+	Dspr2(_X, _U, zeroi, alpha, xx, onei, yy, onei, aa)
+	chkxer(t)
+	*infot = 2
+	Dspr2(_C, _X, zeroi, alpha, xx, onei, yy, onei, aa)
+	chkxer(t)
+	*infot = 3
+	Dspr2(_C, _U, negonei, alpha, xx, onei, yy, onei, aa)
+	chkxer(t)
+	*infot = 6
+	Dspr2(_C, _U, zeroi, alpha, xx, zeroi, yy, onei, aa)
+	chkxer(t)
+	*infot = 8
+	Dspr2(_C, _U, zeroi, alpha, xx, onei, yy, zeroi, aa)
+	chkxer(t)
+
+	*srnamt = "Dgemm"
+	*infot = 1
+	Dgemm(_X, _N, _T, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Dgemm(_C, _X, _N, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Dgemm(_C, _X, _T, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Dgemm(_C, _N, _X, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Dgemm(_C, _T, _X, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dgemm(_C, _N, _N, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dgemm(_C, _N, _T, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dgemm(_C, _T, _T, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dgemm(_C, _T, _T, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dgemm(_C, _N, _N, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dgemm(_C, _N, _T, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dgemm(_C, _T, _N, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dgemm(_C, _T, _T, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Dgemm(_C, _N, _N, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Dgemm(_C, _N, _T, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Dgemm(_C, _T, _N, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Dgemm(_C, _T, _T, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 9
+	Dgemm(_C, _N, _N, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 9
+	Dgemm(_C, _N, _T, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 9
+	Dgemm(_C, _T, _N, zeroi, zeroi, twoi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 9
+	Dgemm(_C, _T, _T, zeroi, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Dgemm(_C, _N, _N, zeroi, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Dgemm(_C, _T, _N, zeroi, zeroi, twoi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Dgemm(_C, _N, _T, zeroi, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Dgemm(_C, _T, _T, zeroi, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Dgemm(_C, _N, _N, twoi, zeroi, zeroi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Dgemm(_C, _N, _T, twoi, zeroi, zeroi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Dgemm(_C, _T, _N, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Dgemm(_C, _T, _T, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Dsymm"
+	*infot = 1
+	Dsymm(_X, _L, _U, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Dsymm(_C, _X, _U, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Dsymm(_C, _L, _X, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dsymm(_C, _L, _U, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dsymm(_C, _R, _U, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dsymm(_C, _L, _L, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dsymm(_C, _R, _L, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dsymm(_C, _L, _U, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dsymm(_C, _R, _U, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dsymm(_C, _L, _L, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dsymm(_C, _R, _L, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Dsymm(_C, _L, _U, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, twoi)
+	chkxer(t)
+	*infot = 8
+	Dsymm(_C, _R, _U, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Dsymm(_C, _L, _L, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, twoi)
+	chkxer(t)
+	*infot = 8
+	Dsymm(_C, _R, _L, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 10
+	Dsymm(_C, _L, _U, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 10
+	Dsymm(_C, _R, _U, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 10
+	Dsymm(_C, _L, _L, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 10
+	Dsymm(_C, _R, _L, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 13
+	Dsymm(_C, _L, _U, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Dsymm(_C, _R, _U, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Dsymm(_C, _L, _L, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Dsymm(_C, _R, _L, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Dtrmm"
+	*infot = 1
+	Dtrmm(_X, _L, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 2
+	Dtrmm(_C, _X, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 3
+	Dtrmm(_C, _L, _X, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 4
+	Dtrmm(_C, _L, _U, _X, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 5
+	Dtrmm(_C, _L, _U, _N, _X, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 6
+	Dtrmm(_C, _L, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 7
+	Dtrmm(_C, _L, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 10
+	Dtrmm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrmm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 12
+	Dtrmm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrmm(_C, _R, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+
+	*srnamt = "Dtrsm"
+	*infot = 1
+	Dtrsm(_X, _L, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 2
+	Dtrsm(_C, _X, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 3
+	Dtrsm(_C, _L, _X, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 4
+	Dtrsm(_C, _L, _U, _X, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 5
+	Dtrsm(_C, _L, _U, _N, _X, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 6
+	Dtrsm(_C, _L, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 7
+	Dtrsm(_C, _L, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 10
+	Dtrsm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrsm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 12
+	Dtrsm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Dtrsm(_C, _R, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+
+	*srnamt = "Dsyrk"
+	*infot = 1
+	Dsyrk(_X, _U, _N, zeroi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Dsyrk(_C, _X, _N, zeroi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Dsyrk(_C, _U, _X, zeroi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dsyrk(_C, _U, _N, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _U, _T, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _L, _N, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _L, _T, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dsyrk(_C, _U, _N, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _U, _T, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _L, _N, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _L, _T, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Dsyrk(_C, _U, _N, twoi, zeroi, alpha, a, onei, beta, c, twoi)
+	chkxer(t)
+	Dsyrk(_C, _U, _T, zeroi, twoi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _L, _N, twoi, zeroi, alpha, a, onei, beta, c, twoi)
+	chkxer(t)
+	Dsyrk(_C, _L, _T, zeroi, twoi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Dsyrk(_C, _U, _N, twoi, zeroi, alpha, a, twoi, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _U, _T, twoi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _L, _N, twoi, zeroi, alpha, a, twoi, beta, c, onei)
+	chkxer(t)
+	Dsyrk(_C, _L, _T, twoi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Dsyr2k"
+	*infot = 1
+	Dsyr2k(_X, _U, _N, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Dsyr2k(_C, _X, _N, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Dsyr2k(_C, _U, _X, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Dsyr2k(_C, _U, _N, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _U, _T, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _N, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _T, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Dsyr2k(_C, _U, _N, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _U, _T, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _N, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _T, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Dsyr2k(_C, _U, _N, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	Dsyr2k(_C, _U, _T, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _N, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	Dsyr2k(_C, _L, _T, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 10
+	Dsyr2k(_C, _U, _N, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	Dsyr2k(_C, _U, _T, zeroi, twoi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _N, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	Dsyr2k(_C, _L, _T, zeroi, twoi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Dsyr2k(_C, _U, _N, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _U, _T, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _N, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	Dsyr2k(_C, _L, _T, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+
+	*test = false
+	fmt.Println("\t\t\tDblas error tests completed")
 }

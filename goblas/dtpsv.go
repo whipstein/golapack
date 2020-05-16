@@ -170,7 +170,12 @@ func Dtpsv(major, uplo, trans, diag *byte, n *int, ap *[]float64, x *[]float64, 
 		info = 8
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dtpsv"; return &y }(), &info)
+		name := "Dtpsv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

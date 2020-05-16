@@ -150,7 +150,7 @@ func Sspr(major, uplo *byte, n *int, alpha *float32, x *[]float32, incx *int, ap
 	if info != 0 {
 		name := "Sspr"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

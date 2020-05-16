@@ -179,7 +179,12 @@ func Ztrmv(major, uplo, trans, diag *byte, n *int, a *[][]complex128, lda *int, 
 		info = 9
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ztrmv"; return &y }(), &info)
+		name := "Ztrmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

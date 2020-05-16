@@ -206,7 +206,7 @@ func Ssyrk(major, uplo, trans *byte, n, k *int, alpha *float32, a *[][]float32, 
 	if info != 0 {
 		name := "Ssyrk"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

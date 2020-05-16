@@ -221,7 +221,7 @@ func Stbsv(major, uplo, trans, diag *byte, n, k *int, a *[][]float32, lda *int, 
 	if info != 0 {
 		name := "Stbsv"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

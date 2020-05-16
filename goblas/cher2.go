@@ -179,7 +179,12 @@ func Cher2(major, uplo *byte, n *int, alpha *complex64, x *[]complex64, incx *in
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Cher2"; return &y }(), &info)
+		name := "Cher2"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

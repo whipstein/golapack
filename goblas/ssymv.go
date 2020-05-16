@@ -179,7 +179,7 @@ func Ssymv(major, uplo *byte, n *int, alpha *float32, a *[][]float32, lda *int, 
 	if info != 0 {
 		name := "Ssymv"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

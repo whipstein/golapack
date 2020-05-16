@@ -213,7 +213,12 @@ func Zherk(major, uplo, trans *byte, n, k *int, alpha *float64, a *[][]complex12
 		info = 11
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zherk"; return &y }(), &info)
+		name := "Zherk"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

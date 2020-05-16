@@ -224,7 +224,12 @@ func Ctrmm(major, side, uplo, transa, diag *byte, m, n *int, alpha *complex64, a
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ctrmm"; return &y }(), &info)
+		name := "Ctrmm"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

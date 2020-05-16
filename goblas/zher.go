@@ -162,7 +162,12 @@ func Zher(major, uplo *byte, n *int, alpha *float64, x *[]complex128, incx *int,
 		info = 8
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zher"; return &y }(), &info)
+		name := "Zher"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

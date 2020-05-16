@@ -245,7 +245,7 @@ func Sgemm(major, transa, transb *byte, m, n, k *int, alpha *float32, a *[][]flo
 	if info != 0 {
 		name := "Sgemm"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

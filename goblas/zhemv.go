@@ -183,7 +183,12 @@ func Zhemv(major, uplo *byte, n *int, alpha *complex128, a *[][]complex128, lda 
 		info = 11
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zhemv"; return &y }(), &info)
+		name := "Zhemv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

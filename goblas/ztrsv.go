@@ -181,7 +181,12 @@ func Ztrsv(major, uplo, trans, diag *byte, n *int, a *[][]complex128, lda *int, 
 		info = 9
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ztrsv"; return &y }(), &info)
+		name := "Ztrsv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

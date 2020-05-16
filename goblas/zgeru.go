@@ -155,7 +155,12 @@ func Zgeru(major *byte, m *int, n *int, alpha *complex128, x *[]complex128, incx
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zgeru"; return &y }(), &info)
+		name := "Zgeru"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

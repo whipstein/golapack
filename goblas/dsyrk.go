@@ -204,7 +204,12 @@ func Dsyrk(major, uplo, trans *byte, n, k *int, alpha *float64, a *[][]float64, 
 		info = 11
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dsyrk"; return &y }(), &info)
+		name := "Dsyrk"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

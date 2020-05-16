@@ -228,7 +228,12 @@ func Dsymm(major, side, uplo *byte, m, n *int, alpha *float64, a *[][]float64, l
 		info = 13
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dsymm"; return &y }(), &info)
+		name := "Dsymm"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

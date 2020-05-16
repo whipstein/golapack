@@ -148,7 +148,12 @@ func Dspr(major, uplo *byte, n *int, alpha *float64, x *[]float64, incx *int, ap
 		info = 6
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dspr"; return &y }(), &info)
+		name := "Dspr"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

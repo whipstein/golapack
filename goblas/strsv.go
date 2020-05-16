@@ -179,7 +179,7 @@ func Strsv(major, uplo, trans, diag *byte, n *int, a *[][]float32, lda *int, x *
 	if info != 0 {
 		name := "Strsv"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

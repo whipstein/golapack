@@ -170,7 +170,7 @@ func Stpmv(major, uplo, trans, diag *byte, n *int, ap *[]float32, x *[]float32, 
 	if info != 0 {
 		name := "Stpmv"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

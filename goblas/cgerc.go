@@ -159,7 +159,12 @@ func Cgerc(major *byte, m, n *int, alpha *complex64, x *[]complex64, incx *int, 
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Cgerc"; return &y }(), &info)
+		name := "Cgerc"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

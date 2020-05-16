@@ -172,7 +172,12 @@ func Ctpsv(major, uplo, trans, diag *byte, n *int, ap *[]complex64, x *[]complex
 		info = 8
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ctpsv"; return &y }(), &info)
+		name := "Ctpsv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

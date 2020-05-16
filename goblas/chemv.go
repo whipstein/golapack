@@ -183,7 +183,12 @@ func Chemv(major, uplo *byte, n *int, alpha *complex64, a *[][]complex64, lda *i
 		info = 11
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Chemv"; return &y }(), &info)
+		name := "Chemv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

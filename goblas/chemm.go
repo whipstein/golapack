@@ -234,7 +234,12 @@ func Chemm(major, side, uplo *byte, m, n *int, alpha *complex64, a *[][]complex6
 		info = 13
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Chemm"; return &y }(), &info)
+		name := "Chemm"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

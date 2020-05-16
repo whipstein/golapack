@@ -157,7 +157,7 @@ func Ssyr(major, uplo *byte, n *int, alpha *float32, x *[]float32, incx *int, a 
 	if info != 0 {
 		name := "Ssyr"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

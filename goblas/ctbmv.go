@@ -218,7 +218,12 @@ func Ctbmv(major, uplo, trans, diag *byte, n, k *int, a *[][]complex64, lda *int
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ctbmv"; return &y }(), &info)
+		name := "Ctbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

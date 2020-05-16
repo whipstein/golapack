@@ -224,7 +224,7 @@ func Strsm(major, side, uplo, transa, diag *byte, m, n *int, alpha *float32, a *
 	if info != 0 {
 		name := "Strsm"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

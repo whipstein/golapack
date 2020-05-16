@@ -1,7 +1,10 @@
 package goblas
 
 import "C"
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
 type memory struct {
 	combla struct {
@@ -16,6 +19,7 @@ type memory struct {
 	}
 	infoc struct {
 		infot int
+		infox int
 		nout  int
 		ntra  int
 		ndata int
@@ -26,6 +30,7 @@ type memory struct {
 	}
 	srnamc struct {
 		srnamt string
+		srnamx string
 	}
 	beg struct {
 		mi int
@@ -146,7 +151,9 @@ func chkerr(err error) {
 	}
 }
 
-func chkxer(srnamt string, infot *int, nout *int, lerr *bool, ok *bool) {
+func chkxer(t *testing.T) {
+	var infot, infox *int
+	var srnamt, srnamx *string
 	//
 	//  Tests whether XERBLA has detected an error when it should.
 	//
@@ -156,11 +163,17 @@ func chkxer(srnamt string, infot *int, nout *int, lerr *bool, ok *bool) {
 	//     Richard Hanson, Sandia National Labs.
 	//     Jeremy Du Croz, NAG Central Office.
 	//
-	if !*lerr {
-		writeString(*nout, " ***** ILLEGAL VALUE OF PARAMETER NUMBER %2d NOT DETECTED BY %6s *****\n", *infot, srnamt)
-		*ok = false
+	infot = &common.infoc.infot
+	infox = &common.infoc.infox
+	srnamt = &common.srnamc.srnamt
+	srnamx = &common.srnamc.srnamx
+
+	if *srnamt != *srnamx {
+		t.Errorf("Error Exit Test Failed: exit code: {%s} output, {%s} expected", *srnamx, *srnamt)
 	}
-	*lerr = false
+	if *infot != *infox {
+		t.Errorf("Error Exit Test Failed: %s: {%d} output, {%d} expected", *srnamt, *infox, *infot)
+	}
 	return
 }
 
@@ -4371,10 +4384,10 @@ func stest1C(scomp1 *C.float, strue1 *C.float, ssize *[]C.float, sfac *C.float) 
 	return
 }
 
-func xerblaTest(srname string, info int) {
-	var infot, nout *int
-	var lerr, ok *bool
-	var srnamt *string
+func xerblaTest(srname *string, info *int) {
+	var infox *int
+	var lerr *bool
+	var srnamx *string
 	//
 	//  This is a special version of XERBLA to be used only as part of
 	//  the test program for testing error exits from the Level 2 & 3 BLAS
@@ -4393,25 +4406,13 @@ func xerblaTest(srname string, info int) {
 	//     Jeremy Du Croz, Numerical Algorithms Group Ltd.
 	//     Sven Hammarling, Numerical Algorithms Group Ltd.
 	//
-	infot = &common.infoc.infot
-	nout = &common.infoc.nout
-	ok = &common.infoc.ok
+	infox = &common.infoc.infox
 	lerr = &common.infoc.lerr
-	srnamt = &common.srnamc.srnamt
+	srnamx = &common.srnamc.srnamx
 
+	*infox = *info
+	*srnamx = *srname
 	*lerr = true
-	if info != *infot {
-		if *infot != 0 {
-			writeString(*nout, " ******* XERBLA WAS CALLED WITH INFO = %6d INSTEAD OF %2d *******\n", info, *infot)
-		} else {
-			writeString(*nout, " ******* XERBLA WAS CALLED WITH INFO = %6d *******\n", info)
-		}
-		*ok = false
-	}
-	if srname != *srnamt {
-		writeString(*nout, " ******* XERBLA WAS CALLED WITH SRNAME = %6s INSTEAD OF %6s *******\n", srname, *srnamt)
-		*ok = false
-	}
 	return
 }
 

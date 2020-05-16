@@ -148,7 +148,7 @@ func Sger(major *byte, m, n *int, alpha *float32, x *[]float32, incx *int, y *[]
 	} else if *n < 0 {
 		info = 3
 	} else if *incx == 0 {
-		info = 4
+		info = 6
 	} else if *incy == 0 {
 		info = 8
 	} else if *lda < max(1, *m) {
@@ -157,7 +157,7 @@ func Sger(major *byte, m, n *int, alpha *float32, x *[]float32, incx *int, y *[]
 	if info != 0 {
 		name := "Sger"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

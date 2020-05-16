@@ -162,7 +162,12 @@ func Cher(major, uplo *byte, n *int, alpha *float32, x *[]complex64, incx *int, 
 		info = 8
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Cher"; return &y }(), &info)
+		name := "Cher"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

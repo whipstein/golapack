@@ -175,7 +175,12 @@ func Dtrmv(major, uplo, trans, diag *byte, n *int, a *[][]float64, lda *int, x *
 		info = 9
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dtrmv"; return &y }(), &info)
+		name := "Dtrmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

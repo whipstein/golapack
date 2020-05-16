@@ -190,7 +190,12 @@ func Zgemv(major, trans *byte, m, n *int, alpha *complex128, a *[][]complex128, 
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zgemv"; return &y }(), &info)
+		name := "Zgemv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

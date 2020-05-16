@@ -223,7 +223,12 @@ func Ztrmm(major, side, uplo, transa, diag *byte, m, n *int, alpha *complex128, 
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ztrmm"; return &y }(), &info)
+		name := "Ztrmm"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

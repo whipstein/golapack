@@ -223,7 +223,12 @@ func Ctbsv(major, uplo, trans, diag *byte, n, k *int, a *[][]complex64, lda *int
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ctbsv"; return &y }(), &info)
+		name := "Ctbsv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

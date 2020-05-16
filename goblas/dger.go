@@ -155,7 +155,12 @@ func Dger(major *byte, m, n *int, alpha *float64, x *[]float64, incx *int, y *[]
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dger"; return &y }(), &info)
+		name := "Dger"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

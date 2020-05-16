@@ -158,23 +158,21 @@ func Stpsv(major, uplo, trans, diag *byte, n *int, ap *[]float32, x *[]float32, 
 	//
 	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
 		info = 1
-	} else if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
-		info = 2
 	} else if !Lsame(uplo, func() *byte { y := byte('U'); return &y }()) && !Lsame(uplo, func() *byte { y := byte('L'); return &y }()) {
-		info = 3
+		info = 2
 	} else if !Lsame(trans, func() *byte { y := byte('N'); return &y }()) && !Lsame(trans, func() *byte { y := byte('T'); return &y }()) && !Lsame(trans, func() *byte { y := byte('C'); return &y }()) {
-		info = 4
+		info = 3
 	} else if !Lsame(diag, func() *byte { y := byte('U'); return &y }()) && !Lsame(diag, func() *byte { y := byte('N'); return &y }()) {
-		info = 5
+		info = 4
 	} else if *n < 0 {
-		info = 6
+		info = 5
 	} else if *incx == 0 {
-		info = 9
+		info = 8
 	}
 	if info != 0 {
 		name := "Stpsv"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

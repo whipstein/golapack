@@ -232,7 +232,7 @@ func Ssymm(major, side, uplo *byte, m, n *int, alpha *float32, a *[][]float32, l
 	if info != 0 {
 		name := "Ssymm"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

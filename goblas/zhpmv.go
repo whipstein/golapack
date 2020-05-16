@@ -176,7 +176,12 @@ func Zhpmv(major, uplo *byte, n *int, alpha *complex128, ap *[]complex128, x *[]
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zhpmv"; return &y }(), &info)
+		name := "Zhpmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

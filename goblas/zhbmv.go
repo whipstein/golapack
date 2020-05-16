@@ -218,7 +218,12 @@ func Zhbmv(major, uplo *byte, n, k *int, alpha *complex128, a *[][]complex128, l
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zhbmv"; return &y }(), &info)
+		name := "Zhbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

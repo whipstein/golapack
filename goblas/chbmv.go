@@ -218,7 +218,12 @@ func Chbmv(major, uplo *byte, n, k *int, alpha *complex64, a *[][]complex64, lda
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Chbmv"; return &y }(), &info)
+		name := "Chbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

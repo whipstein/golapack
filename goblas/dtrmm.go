@@ -218,7 +218,12 @@ func Dtrmm(major, side, uplo, transa, diag *byte, m *int, n *int, alpha *float64
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dtrmm"; return &y }(), &info)
+		name := "Dtrmm"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

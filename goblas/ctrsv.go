@@ -179,7 +179,12 @@ func Ctrsv(major, uplo, trans, diag *byte, n *int, a *[][]complex64, lda *int, x
 		info = 9
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ctrsv"; return &y }(), &info)
+		name := "Ctrsv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

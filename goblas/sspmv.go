@@ -172,7 +172,7 @@ func Sspmv(major, uplo *byte, n *int, alpha *float32, ap, x *[]float32, incx *in
 	if info != 0 {
 		name := "Sspmv"
 		if common.infoc.test {
-			xerblaTest(name, info)
+			xerblaTest(&name, &info)
 			return
 		}
 		Xerbla(&name, &info)

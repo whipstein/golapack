@@ -225,7 +225,12 @@ func Zsyr2k(major, uplo, trans *byte, n, k *int, alpha *complex128, a *[][]compl
 		info = 13
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zsyr2k"; return &y }(), &info)
+		name := "Zsyr2k"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

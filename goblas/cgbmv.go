@@ -223,7 +223,12 @@ func Cgbmv(major, trans *byte, m, n, kl, ku *int, alpha *complex64, a *[][]compl
 		info = 14
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Cgbmv"; return &y }(), &info)
+		name := "Cgbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

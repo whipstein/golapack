@@ -218,25 +218,31 @@ func Zher2k(major, uplo, trans *byte, n, k *int, alpha *complex128, a *[][]compl
 		nrowa = *k
 	}
 	upper = Lsame(uplo, func() *byte { y := byte('U'); return &y }())
-	//
-	info = 0
-	if !upper && !Lsame(uplo, func() *byte { y := byte('L'); return &y }()) {
+
+	if !Lsame(major, func() *byte { y := byte('C'); return &y }()) && !Lsame(major, func() *byte { y := byte('R'); return &y }()) {
 		info = 1
-	} else if !Lsame(trans, func() *byte { y := byte('N'); return &y }()) && !Lsame(trans, func() *byte { y := byte('C'); return &y }()) {
+	} else if !upper && !Lsame(uplo, func() *byte { y := byte('L'); return &y }()) {
 		info = 2
-	} else if *n < 0 {
+	} else if !Lsame(trans, func() *byte { y := byte('N'); return &y }()) && !Lsame(trans, func() *byte { y := byte('C'); return &y }()) {
 		info = 3
-	} else if *k < 0 {
+	} else if *n < 0 {
 		info = 4
+	} else if *k < 0 {
+		info = 5
 	} else if *lda < max(1, nrowa) {
-		info = 7
+		info = 8
 	} else if *ldb < max(1, nrowa) {
-		info = 9
+		info = 10
 	} else if *ldc < max(1, *n) {
-		info = 12
+		info = 13
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zher2k"; return &y }(), &info)
+		name := "Zher2k"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

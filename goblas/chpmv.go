@@ -174,7 +174,12 @@ func Chpmv(major, uplo *byte, n *int, alpha *complex64, ap *[]complex64, x *[]co
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Chpmv"; return &y }(), &info)
+		name := "Chpmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

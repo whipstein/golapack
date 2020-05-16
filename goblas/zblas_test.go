@@ -1,6 +1,7 @@
 package goblas
 
 import (
+	"fmt"
 	"math/cmplx"
 	"testing"
 )
@@ -794,6 +795,9 @@ func TestZgemv(t *testing.T) {
 	var err, erri, epsf64 float64
 	var transs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -1057,6 +1061,9 @@ func TestZgbmv(t *testing.T) {
 	var err, erri float64
 	var transs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -1340,6 +1347,9 @@ func TestZhemv(t *testing.T) {
 	var err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -1564,6 +1574,9 @@ func TestZhbmv(t *testing.T) {
 	var err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -1802,6 +1815,9 @@ func TestZhpmv(t *testing.T) {
 	var err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -2018,6 +2034,9 @@ func TestZtrmv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(complex128)
 	n := new(int)
@@ -2221,6 +2240,9 @@ func TestZtbmv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(complex128)
 	n := new(int)
@@ -2433,6 +2455,9 @@ func TestZtpmv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(complex128)
 	n := new(int)
@@ -2623,6 +2648,9 @@ func TestZtrsv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(complex128)
 	n := new(int)
@@ -2828,6 +2856,9 @@ func TestZtbsv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(complex128)
 	n := new(int)
@@ -3041,6 +3072,9 @@ func TestZtpsv(t *testing.T) {
 	var err, erri float64
 	var diags, transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	transl := new(complex128)
 	n := new(int)
@@ -3235,6 +3269,9 @@ func TestZgerc(t *testing.T) {
 	var err, erri float64
 	var transs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	transl := new(complex128)
@@ -3493,6 +3530,9 @@ func TestZgeru(t *testing.T) {
 	var err, erri float64
 	var transs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	transl := new(complex128)
@@ -3749,6 +3789,9 @@ func TestZher(t *testing.T) {
 	var rals, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	ralpha := new(float64)
 	alpha := new(complex128)
@@ -3983,6 +4026,9 @@ func TestZhpr(t *testing.T) {
 	var rals, err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	ralpha := new(float64)
 	alpha := new(complex128)
@@ -4201,6 +4247,9 @@ func TestZher2(t *testing.T) {
 	var err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	transl := new(complex128)
@@ -4483,6 +4532,9 @@ func TestZhpr2(t *testing.T) {
 	var err, erri float64
 	var uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	transl := new(complex128)
@@ -4747,6 +4799,9 @@ func TestZgemm(t *testing.T) {
 	var als, bls complex128
 	var tranas, tranbs byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -5030,6 +5085,9 @@ func TestZhemm(t *testing.T) {
 	var als, bls complex128
 	var sides, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -5293,6 +5351,9 @@ func TestZsymm(t *testing.T) {
 	var als, bls complex128
 	var sides, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -5556,6 +5617,9 @@ func TestZtrmm(t *testing.T) {
 	var als complex128
 	var diags, sides, tranas, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	m := new(int)
@@ -5804,6 +5868,9 @@ func TestZtrsm(t *testing.T) {
 	var als complex128
 	var diags, sides, tranas, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	m := new(int)
@@ -6058,6 +6125,9 @@ func TestZherk(t *testing.T) {
 	var rals, rbls float64
 	var transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	ralpha := new(float64)
 	rbeta := new(float64)
@@ -6375,6 +6445,9 @@ func TestZsyrk(t *testing.T) {
 	var als, bls complex128
 	var transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -6687,6 +6760,9 @@ func TestZher2k(t *testing.T) {
 	var als complex128
 	var transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	rbeta := new(float64)
 	alpha := new(complex128)
@@ -7082,6 +7158,9 @@ func TestZsyr2k(t *testing.T) {
 	var als, bls complex128
 	var transs, uplos byte
 	var null bool
+	var test *bool
+	test = &common.infoc.test
+	*test = false
 
 	alpha := new(complex128)
 	beta := new(complex128)
@@ -7466,4 +7545,998 @@ func BenchmarkZsyr2kFortran(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		zsyr2kWrapper(uplo, trans, n, k, alpha, aa, lda, bb, ldb, beta, cc, ldc)
 	}
+}
+
+func TestZerrors(t *testing.T) {
+	var infot *int
+	var srnamt *string
+	var test *bool
+
+	alpha := new(complex128)
+	beta := new(complex128)
+	ralpha := new(float64)
+	rbeta := new(float64)
+
+	infot = &common.infoc.infot
+	srnamt = &common.srnamc.srnamt
+	test = &common.infoc.test
+	*test = true
+
+	aa := func() *[]complex128 { y := make([]complex128, nmax*nmax); return &y }()
+	xx := func() *[]complex128 { y := make([]complex128, nmax*incmax); return &y }()
+	yy := func() *[]complex128 { y := make([]complex128, nmax*incmax); return &y }()
+	a := func() *[][]complex128 {
+		arr := make([][]complex128, nmax)
+		for u := range arr {
+			arr[u] = make([]complex128, nmax)
+		}
+		return &arr
+	}()
+	b := func() *[][]complex128 {
+		arr := make([][]complex128, nmax)
+		for u := range arr {
+			arr[u] = make([]complex128, nmax)
+		}
+		return &arr
+	}()
+	c := func() *[][]complex128 {
+		arr := make([][]complex128, nmax)
+		for u := range arr {
+			arr[u] = make([]complex128, nmax)
+		}
+		return &arr
+	}()
+
+	*srnamt = "Zgemv"
+	*infot = 1
+	Zgemv(_X, _N, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Zgemv(_C, _X, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Zgemv(_C, _N, negonei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 4
+	Zgemv(_C, _N, zeroi, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 7
+	Zgemv(_C, _N, twoi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 9
+	Zgemv(_C, _N, zeroi, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 12
+	Zgemv(_C, _N, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Zgbmv"
+	*infot = 1
+	Zgbmv(_X, _N, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Zgbmv(_C, _X, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Zgbmv(_C, _N, negonei, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 4
+	Zgbmv(_C, _N, zeroi, negonei, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 5
+	Zgbmv(_C, _N, zeroi, zeroi, negonei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 6
+	Zgbmv(_C, _N, twoi, zeroi, zeroi, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 9
+	Zgbmv(_C, _N, zeroi, zeroi, onei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 11
+	Zgbmv(_C, _N, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 14
+	Zgbmv(_C, _N, zeroi, zeroi, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Zhemv"
+	*infot = 1
+	Zhemv(_X, _U, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Zhemv(_C, _X, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Zhemv(_C, _U, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 6
+	Zhemv(_C, _U, twoi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 8
+	Zhemv(_C, _U, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 11
+	Zhemv(_C, _U, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Zhbmv"
+	*infot = 1
+	Zhbmv(_X, _U, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Zhbmv(_C, _X, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Zhbmv(_C, _U, negonei, zeroi, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 4
+	Zhbmv(_C, _U, zeroi, negonei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 7
+	Zhbmv(_C, _U, zeroi, onei, alpha, a, onei, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 9
+	Zhbmv(_C, _U, zeroi, zeroi, alpha, a, onei, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 12
+	Zhbmv(_C, _U, zeroi, zeroi, alpha, a, onei, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Zhpmv"
+	*infot = 1
+	Zhpmv(_X, _U, zeroi, alpha, aa, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 2
+	Zhpmv(_C, _X, zeroi, alpha, aa, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 3
+	Zhpmv(_C, _U, negonei, alpha, aa, xx, onei, beta, yy, onei)
+	chkxer(t)
+	*infot = 7
+	Zhpmv(_C, _U, zeroi, alpha, aa, xx, zeroi, beta, yy, onei)
+	chkxer(t)
+	*infot = 10
+	Zhpmv(_C, _U, zeroi, alpha, aa, xx, onei, beta, yy, zeroi)
+	chkxer(t)
+
+	*srnamt = "Ztrmv"
+	*infot = 1
+	Ztrmv(_X, _U, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Ztrmv(_C, _X, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Ztrmv(_C, _U, _X, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Ztrmv(_C, _U, _N, _X, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Ztrmv(_C, _U, _N, _N, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 7
+	Ztrmv(_C, _U, _N, _N, twoi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 9
+	Ztrmv(_C, _U, _N, _N, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Ztbmv"
+	*infot = 1
+	Ztbmv(_X, _U, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Ztbmv(_C, _X, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Ztbmv(_C, _U, _X, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Ztbmv(_C, _U, _N, _X, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Ztbmv(_C, _U, _N, _N, negonei, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 6
+	Ztbmv(_C, _U, _N, _N, zeroi, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Ztbmv(_C, _U, _N, _N, zeroi, onei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 10
+	Ztbmv(_C, _U, _N, _N, zeroi, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Ztpmv"
+	*infot = 1
+	Ztpmv(_X, _U, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Ztpmv(_C, _X, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Ztpmv(_C, _U, _X, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Ztpmv(_C, _U, _N, _X, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Ztpmv(_C, _U, _N, _N, negonei, aa, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Ztpmv(_C, _U, _N, _N, zeroi, aa, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Ztrsv"
+	*infot = 1
+	Ztrsv(_X, _U, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Ztrsv(_C, _X, _N, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Ztrsv(_C, _U, _X, _N, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Ztrsv(_C, _U, _N, _X, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Ztrsv(_C, _U, _N, _N, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 7
+	Ztrsv(_C, _U, _N, _N, twoi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 9
+	Ztrsv(_C, _U, _N, _N, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Ztbsv"
+	*infot = 1
+	Ztbsv(_X, _U, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Ztbsv(_C, _X, _N, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Ztbsv(_C, _U, _X, _N, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Ztbsv(_C, _U, _N, _X, zeroi, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Ztbsv(_C, _U, _N, _N, negonei, zeroi, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 6
+	Ztbsv(_C, _U, _N, _N, zeroi, negonei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Ztbsv(_C, _U, _N, _N, zeroi, onei, a, onei, xx, onei)
+	chkxer(t)
+	*infot = 10
+	Ztbsv(_C, _U, _N, _N, zeroi, zeroi, a, onei, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Ztpsv"
+	*infot = 1
+	Ztpsv(_X, _U, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 2
+	Ztpsv(_C, _X, _N, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 3
+	Ztpsv(_C, _U, _X, _N, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 4
+	Ztpsv(_C, _U, _N, _X, zeroi, aa, xx, onei)
+	chkxer(t)
+	*infot = 5
+	Ztpsv(_C, _U, _N, _N, negonei, aa, xx, onei)
+	chkxer(t)
+	*infot = 8
+	Ztpsv(_C, _U, _N, _N, zeroi, aa, xx, zeroi)
+	chkxer(t)
+
+	*srnamt = "Zgerc"
+	*infot = 1
+	Zgerc(_X, zeroi, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 2
+	Zgerc(_C, negonei, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 3
+	Zgerc(_C, zeroi, negonei, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 6
+	Zgerc(_C, zeroi, zeroi, alpha, xx, zeroi, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 8
+	Zgerc(_C, zeroi, zeroi, alpha, xx, onei, yy, zeroi, a, onei)
+	chkxer(t)
+	*infot = 10
+	Zgerc(_C, twoi, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+
+	*srnamt = "Zgeru"
+	*infot = 1
+	Zgeru(_X, zeroi, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 2
+	Zgeru(_C, negonei, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 3
+	Zgeru(_C, zeroi, negonei, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 6
+	Zgeru(_C, zeroi, zeroi, alpha, xx, zeroi, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 8
+	Zgeru(_C, zeroi, zeroi, alpha, xx, onei, yy, zeroi, a, onei)
+	chkxer(t)
+	*infot = 10
+	Zgeru(_C, twoi, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+
+	*srnamt = "Zher"
+	*infot = 1
+	Zher(_X, _U, zeroi, ralpha, xx, onei, a, onei)
+	chkxer(t)
+	*infot = 2
+	Zher(_C, _X, zeroi, ralpha, xx, onei, a, onei)
+	chkxer(t)
+	*infot = 3
+	Zher(_C, _U, negonei, ralpha, xx, onei, a, onei)
+	chkxer(t)
+	*infot = 6
+	Zher(_C, _U, zeroi, ralpha, xx, zeroi, a, onei)
+	chkxer(t)
+	*infot = 8
+	Zher(_C, _U, zeroi, ralpha, xx, onei, a, zeroi)
+	chkxer(t)
+
+	*srnamt = "Zhpr"
+	*infot = 1
+	Zhpr(_X, _U, zeroi, ralpha, xx, onei, aa)
+	chkxer(t)
+	*infot = 2
+	Zhpr(_C, _X, zeroi, ralpha, xx, onei, aa)
+	chkxer(t)
+	*infot = 3
+	Zhpr(_C, _U, negonei, ralpha, xx, onei, aa)
+	chkxer(t)
+	*infot = 6
+	Zhpr(_C, _U, zeroi, ralpha, xx, zeroi, aa)
+	chkxer(t)
+
+	*srnamt = "Zher2"
+	*infot = 1
+	Zher2(_X, _U, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 2
+	Zher2(_C, _X, zeroi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 3
+	Zher2(_C, _U, negonei, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 6
+	Zher2(_C, _U, zeroi, alpha, xx, zeroi, yy, onei, a, onei)
+	chkxer(t)
+	*infot = 8
+	Zher2(_C, _U, zeroi, alpha, xx, onei, yy, zeroi, a, onei)
+	chkxer(t)
+	*infot = 10
+	Zher2(_C, _U, twoi, alpha, xx, onei, yy, onei, a, onei)
+	chkxer(t)
+
+	*srnamt = "Zhpr2"
+	*infot = 1
+	Zhpr2(_X, _U, zeroi, alpha, xx, onei, yy, onei, aa)
+	chkxer(t)
+	*infot = 2
+	Zhpr2(_C, _X, zeroi, alpha, xx, onei, yy, onei, aa)
+	chkxer(t)
+	*infot = 3
+	Zhpr2(_C, _U, negonei, alpha, xx, onei, yy, onei, aa)
+	chkxer(t)
+	*infot = 6
+	Zhpr2(_C, _U, zeroi, alpha, xx, zeroi, yy, onei, aa)
+	chkxer(t)
+	*infot = 8
+	Zhpr2(_C, _U, zeroi, alpha, xx, onei, yy, zeroi, aa)
+	chkxer(t)
+
+	*srnamt = "Zgemm"
+	*infot = 1
+	Zgemm(_X, _N, _T, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zgemm(_C, _X, _N, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zgemm(_C, _X, _T, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zgemm(_C, _N, _X, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zgemm(_C, _T, _X, zeroi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zgemm(_C, _N, _N, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zgemm(_C, _N, _T, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zgemm(_C, _T, _T, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zgemm(_C, _T, _T, negonei, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zgemm(_C, _N, _N, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zgemm(_C, _N, _T, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zgemm(_C, _T, _N, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zgemm(_C, _T, _T, zeroi, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Zgemm(_C, _N, _N, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Zgemm(_C, _N, _T, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Zgemm(_C, _T, _N, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 6
+	Zgemm(_C, _T, _T, zeroi, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 9
+	Zgemm(_C, _N, _N, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 9
+	Zgemm(_C, _N, _T, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 9
+	Zgemm(_C, _T, _N, zeroi, zeroi, twoi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 9
+	Zgemm(_C, _T, _T, zeroi, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Zgemm(_C, _N, _N, zeroi, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Zgemm(_C, _T, _N, zeroi, zeroi, twoi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Zgemm(_C, _N, _T, zeroi, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Zgemm(_C, _T, _T, zeroi, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Zgemm(_C, _N, _N, twoi, zeroi, zeroi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Zgemm(_C, _N, _T, twoi, zeroi, zeroi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Zgemm(_C, _T, _N, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 14
+	Zgemm(_C, _T, _T, twoi, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Zhemm"
+	*infot = 1
+	Zhemm(_X, _L, _U, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zhemm(_C, _X, _U, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zhemm(_C, _L, _X, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zhemm(_C, _L, _U, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _U, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _L, _L, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _L, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zhemm(_C, _L, _U, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _U, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _L, _L, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _L, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Zhemm(_C, _L, _U, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _U, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _L, _L, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _L, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 10
+	Zhemm(_C, _L, _U, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	Zhemm(_C, _R, _U, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	Zhemm(_C, _L, _L, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	Zhemm(_C, _R, _L, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 13
+	Zhemm(_C, _L, _U, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _U, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _L, _L, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	Zhemm(_C, _R, _L, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Zsymm"
+	*infot = 1
+	Zsymm(_X, _L, _U, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zsymm(_C, _X, _U, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zsymm(_C, _L, _X, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zsymm(_C, _L, _U, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zsymm(_C, _R, _U, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zsymm(_C, _L, _L, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zsymm(_C, _R, _L, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zsymm(_C, _L, _U, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zsymm(_C, _R, _U, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zsymm(_C, _L, _L, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zsymm(_C, _R, _L, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Zsymm(_C, _L, _U, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, twoi)
+	chkxer(t)
+	*infot = 8
+	Zsymm(_C, _R, _U, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Zsymm(_C, _L, _L, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, twoi)
+	chkxer(t)
+	*infot = 8
+	Zsymm(_C, _R, _L, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 10
+	Zsymm(_C, _L, _U, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 10
+	Zsymm(_C, _R, _U, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 10
+	Zsymm(_C, _L, _L, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 10
+	Zsymm(_C, _R, _L, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	*infot = 13
+	Zsymm(_C, _L, _U, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Zsymm(_C, _R, _U, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Zsymm(_C, _L, _L, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Zsymm(_C, _R, _L, twoi, zeroi, alpha, a, onei, b, twoi, beta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Ztrmm"
+	*infot = 1
+	Ztrmm(_X, _L, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 2
+	Ztrmm(_C, _X, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 3
+	Ztrmm(_C, _L, _X, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 4
+	Ztrmm(_C, _L, _U, _X, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 5
+	Ztrmm(_C, _L, _U, _N, _X, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 6
+	Ztrmm(_C, _L, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 7
+	Ztrmm(_C, _L, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 10
+	Ztrmm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrmm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 12
+	Ztrmm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrmm(_C, _R, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+
+	*srnamt = "Ztrsm"
+	*infot = 1
+	Ztrsm(_X, _L, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 2
+	Ztrsm(_C, _X, _U, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 3
+	Ztrsm(_C, _L, _X, _N, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 4
+	Ztrsm(_C, _L, _U, _X, _N, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 5
+	Ztrsm(_C, _L, _U, _N, _X, zeroi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 6
+	Ztrsm(_C, _L, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _N, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _T, _N, negonei, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 7
+	Ztrsm(_C, _L, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _N, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _T, _N, zeroi, negonei, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 10
+	Ztrsm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrsm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, twoi)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _N, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _T, _N, zeroi, twoi, alpha, a, onei, b, onei)
+	chkxer(t)
+	*infot = 12
+	Ztrsm(_C, _L, _U, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _U, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _U, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _N, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _L, _L, _T, _N, twoi, zeroi, alpha, a, twoi, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _N, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+	Ztrsm(_C, _R, _L, _T, _N, twoi, zeroi, alpha, a, onei, b, onei)
+	chkxer(t)
+
+	*srnamt = "Zherk"
+	*infot = 1
+	Zherk(_X, _U, _N, zeroi, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zherk(_C, _X, _N, zeroi, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zherk(_C, _U, _T, zeroi, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zherk(_C, _U, _N, negonei, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _U, _C, negonei, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _L, _N, negonei, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _L, _C, negonei, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zherk(_C, _U, _N, zeroi, negonei, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _U, _C, zeroi, negonei, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _L, _N, zeroi, negonei, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _L, _C, zeroi, negonei, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Zherk(_C, _U, _N, twoi, zeroi, ralpha, a, onei, rbeta, c, twoi)
+	chkxer(t)
+	Zherk(_C, _U, _C, zeroi, twoi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _L, _N, twoi, zeroi, ralpha, a, onei, rbeta, c, twoi)
+	chkxer(t)
+	Zherk(_C, _L, _C, zeroi, twoi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Zherk(_C, _U, _N, twoi, zeroi, ralpha, a, twoi, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _U, _C, twoi, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _L, _N, twoi, zeroi, ralpha, a, twoi, rbeta, c, onei)
+	chkxer(t)
+	Zherk(_C, _L, _C, twoi, zeroi, ralpha, a, onei, rbeta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Zsyrk"
+	*infot = 1
+	Zsyrk(_X, _U, _N, zeroi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zsyrk(_C, _X, _N, zeroi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zsyrk(_C, _U, _X, zeroi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zsyrk(_C, _U, _N, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _U, _T, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _L, _N, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _L, _T, negonei, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zsyrk(_C, _U, _N, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _U, _T, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _L, _N, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _L, _T, zeroi, negonei, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Zsyrk(_C, _U, _N, twoi, zeroi, alpha, a, onei, beta, c, twoi)
+	chkxer(t)
+	Zsyrk(_C, _U, _T, zeroi, twoi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _L, _N, twoi, zeroi, alpha, a, onei, beta, c, twoi)
+	chkxer(t)
+	Zsyrk(_C, _L, _T, zeroi, twoi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 11
+	Zsyrk(_C, _U, _N, twoi, zeroi, alpha, a, twoi, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _U, _T, twoi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _L, _N, twoi, zeroi, alpha, a, twoi, beta, c, onei)
+	chkxer(t)
+	Zsyrk(_C, _L, _T, twoi, zeroi, alpha, a, onei, beta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Zher2k"
+	*infot = 1
+	Zher2k(_X, _U, _N, zeroi, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zher2k(_C, _X, _N, zeroi, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zher2k(_C, _U, _T, zeroi, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zher2k(_C, _U, _N, negonei, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _U, _C, negonei, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _N, negonei, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _C, negonei, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zher2k(_C, _U, _N, zeroi, negonei, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _U, _C, zeroi, negonei, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _N, zeroi, negonei, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _C, zeroi, negonei, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Zher2k(_C, _U, _N, twoi, zeroi, alpha, a, onei, b, onei, rbeta, c, twoi)
+	chkxer(t)
+	Zher2k(_C, _U, _C, zeroi, twoi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _N, twoi, zeroi, alpha, a, onei, b, onei, rbeta, c, twoi)
+	chkxer(t)
+	Zher2k(_C, _L, _C, zeroi, twoi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 10
+	Zher2k(_C, _U, _N, twoi, zeroi, alpha, a, twoi, b, onei, rbeta, c, twoi)
+	chkxer(t)
+	Zher2k(_C, _U, _C, zeroi, twoi, alpha, a, twoi, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _N, twoi, zeroi, alpha, a, twoi, b, onei, rbeta, c, twoi)
+	chkxer(t)
+	Zher2k(_C, _L, _C, zeroi, twoi, alpha, a, twoi, b, onei, rbeta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Zher2k(_C, _U, _N, twoi, zeroi, alpha, a, twoi, b, twoi, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _U, _C, twoi, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _N, twoi, zeroi, alpha, a, twoi, b, twoi, rbeta, c, onei)
+	chkxer(t)
+	Zher2k(_C, _L, _C, twoi, zeroi, alpha, a, onei, b, onei, rbeta, c, onei)
+	chkxer(t)
+
+	*srnamt = "Zsyr2k"
+	*infot = 1
+	Zsyr2k(_X, _U, _N, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 2
+	Zsyr2k(_C, _X, _N, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 3
+	Zsyr2k(_C, _U, _X, zeroi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 4
+	Zsyr2k(_C, _U, _N, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _U, _T, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _N, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _T, negonei, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 5
+	Zsyr2k(_C, _U, _N, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _U, _T, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _N, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _T, zeroi, negonei, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 8
+	Zsyr2k(_C, _U, _N, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	Zsyr2k(_C, _U, _T, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _N, twoi, zeroi, alpha, a, onei, b, onei, beta, c, twoi)
+	chkxer(t)
+	Zsyr2k(_C, _L, _T, zeroi, twoi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 10
+	Zsyr2k(_C, _U, _N, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	Zsyr2k(_C, _U, _T, zeroi, twoi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _N, twoi, zeroi, alpha, a, twoi, b, onei, beta, c, twoi)
+	chkxer(t)
+	Zsyr2k(_C, _L, _T, zeroi, twoi, alpha, a, twoi, b, onei, beta, c, onei)
+	chkxer(t)
+	*infot = 13
+	Zsyr2k(_C, _U, _N, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _U, _T, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _N, twoi, zeroi, alpha, a, twoi, b, twoi, beta, c, onei)
+	chkxer(t)
+	Zsyr2k(_C, _L, _T, twoi, zeroi, alpha, a, onei, b, onei, beta, c, onei)
+	chkxer(t)
+
+	*test = false
+	fmt.Println("\t\t\tZblas error tests completed")
 }

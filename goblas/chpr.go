@@ -153,7 +153,12 @@ func Chpr(major, uplo *byte, n *int, alpha *float32, x *[]complex64, incx *int, 
 		info = 6
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Chpr"; return &y }(), &info)
+		name := "Chpr"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

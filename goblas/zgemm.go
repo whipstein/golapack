@@ -244,7 +244,12 @@ func Zgemm(major, transa, transb *byte, m, n, k *int, alpha *complex128, a *[][]
 		info = 14
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zgemm"; return &y }(), &info)
+		name := "Zgemm"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

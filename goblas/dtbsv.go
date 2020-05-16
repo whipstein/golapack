@@ -219,7 +219,12 @@ func Dtbsv(major, uplo, trans, diag *byte, n, k *int, a *[][]float64, lda *int, 
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dtbsv"; return &y }(), &info)
+		name := "Dtbsv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

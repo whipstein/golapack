@@ -190,7 +190,12 @@ func Cgemv(major, trans *byte, m, n *int, alpha *complex64, a *[][]complex64, ld
 		info = 12
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Cgemv"; return &y }(), &info)
+		name := "Cgemv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

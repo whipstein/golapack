@@ -229,7 +229,12 @@ func Dsyr2k(major, uplo, trans *byte, n, k *int, alpha *float64, a *[][]float64,
 		info = 13
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Dsyr2k"; return &y }(), &info)
+		name := "Dsyr2k"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

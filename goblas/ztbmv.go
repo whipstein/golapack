@@ -220,7 +220,12 @@ func Ztbmv(major, uplo, trans, diag *byte, n, k *int, a *[][]complex128, lda *in
 		info = 10
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Ztbmv"; return &y }(), &info)
+		name := "Ztbmv"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//

@@ -228,7 +228,12 @@ func Zsymm(major, side, uplo *byte, m, n *int, alpha *complex128, a *[][]complex
 		info = 13
 	}
 	if info != 0 {
-		Xerbla(func() *string { y := "Zsymm"; return &y }(), &info)
+		name := "Zsymm"
+		if common.infoc.test {
+			xerblaTest(&name, &info)
+			return
+		}
+		Xerbla(&name, &info)
 		return
 	}
 	//
