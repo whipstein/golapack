@@ -1,2 +1,2 @@
 # golapack
-Go port of lapACK
+Go port of LAPACK
