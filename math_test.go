@@ -6,15 +6,54 @@ import (
 	"testing"
 )
 
+func TestAbsc64(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		mult := 1
+		if i%2 == 0 {
+			mult = -1
+		}
+		val := complex(-0.25*float32(i*mult), 0.25*float32(i*mult))
+		if got, want := absc64(val), float32(cmplx.Abs(complex128(val))); got != want {
+			t.Errorf("absc64: values do not match: expected %6.4f got %6.4f", want, got)
+		}
+	}
+}
+
+func TestAbsc128(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		mult := 1
+		if i%2 == 0 {
+			mult = -1
+		}
+		val := complex(-0.25*float64(i*mult), 0.25*float64(i*mult))
+		if got, want := absc128(val), cmplx.Abs(val); got != want {
+			t.Errorf("absc128: values do not match: expected %6.4f got %6.4f", want, got)
+		}
+	}
+}
+
 func TestAbsf32(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		mult := 1
 		if i%2 == 0 {
 			mult = -1
 		}
-		valf32 := 0.25 * float32(i*mult)
-		if got, want := absf32(valf32), float32(math.Abs(float64(valf32))); got != want {
+		val := 0.25 * float32(i*mult)
+		if got, want := absf32(val), float32(math.Abs(float64(val))); got != want {
 			t.Errorf("absf32: values do not match: expected %6.4f got %6.4f", want, got)
+		}
+	}
+}
+
+func TestAbsf64(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		mult := 1
+		if i%2 == 0 {
+			mult = -1
+		}
+		val := 0.25 * float64(i*mult)
+		if got, want := absf64(val), math.Abs(val); got != want {
+			t.Errorf("absf64: values do not match: expected %6.4f got %6.4f", want, got)
 		}
 	}
 }
@@ -32,71 +71,54 @@ func TestAbsint(t *testing.T) {
 	}
 }
 
-func TestAbssum(t *testing.T) {
+func TestAbssumc64(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		mult := 1
 		if i%2 == 0 {
 			mult = -1
 		}
-		valc64 := complex(-0.25*float32(i*mult), 0.25*float32(i*mult))
-		valc128 := complex(-0.25*float64(i*mult), 0.25*float64(i*mult))
-		if got, want := abssum(valc64).(float32), float32(math.Abs(float64(real(valc64)))+math.Abs(float64(imag(valc64)))); got != want {
-			t.Errorf("abssum: complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := abssum(&valc64).(float32), float32(math.Abs(float64(real(valc64)))+math.Abs(float64(imag(valc64)))); got != want {
-			t.Errorf("abssum: *complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := abssum(valc128).(float64), math.Abs(real(valc128))+math.Abs(imag(valc128)); got != want {
-			t.Errorf("abssum: complex128 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := abssum(&valc128).(float64), math.Abs(real(valc128))+math.Abs(imag(valc128)); got != want {
-			t.Errorf("abssum: *complex128 values do not match: expected %6.4f got %6.4f", want, got)
+		val := complex(-0.25*float32(i*mult), 0.25*float32(i*mult))
+		if got, want := abssumc64(val), float32(math.Abs(float64(real(val)))+math.Abs(float64(imag(val)))); got != want {
+			t.Errorf("abssumc64: values do not match: expected %6.4f got %6.4f", want, got)
 		}
 	}
 }
 
-func TestConj(t *testing.T) {
+func TestAbssumc128(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		mult := 1
 		if i%2 == 0 {
 			mult = -1
 		}
-		valc64 := complex(-0.25*float32(i*mult), 0.25*float32(i*mult))
-		valc128 := complex(-0.25*float64(i*mult), 0.25*float64(i*mult))
-		if got, want := conj(valc64).(complex64), complex64(cmplx.Conj(complex128(valc64))); got != want {
-			t.Errorf("conj: complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := conj(&valc64).(complex64), complex64(cmplx.Conj(complex128(valc64))); got != want {
-			t.Errorf("conj: *complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := conj(valc128).(complex128), cmplx.Conj(valc128); got != want {
-			t.Errorf("conj: complex128 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := conj(&valc128).(complex128), cmplx.Conj(valc128); got != want {
-			t.Errorf("conj: *complex128 values do not match: expected %6.4f got %6.4f", want, got)
+		val := complex(-0.25*float64(i*mult), 0.25*float64(i*mult))
+		if got, want := abssumc128(val), math.Abs(real(val))+math.Abs(imag(val)); got != want {
+			t.Errorf("abssumc128: values do not match: expected %6.4f got %6.4f", want, got)
 		}
 	}
 }
 
-func TestComplx(t *testing.T) {
+func TestConjc64(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		mult := 1
 		if i%2 == 0 {
 			mult = -1
 		}
-		valf32 := 0.25 * float32(i*mult)
-		valf64 := 0.25 * float64(i*mult)
-		if got, want := complx(valf32, valf32).(complex64), complex64(complex(float64(valf32), float64(valf32))); got != want {
-			t.Errorf("complx: float32 values do not match: expected %6.4f got %6.4f", want, got)
+		val := complex(-0.25*float32(i*mult), 0.25*float32(i*mult))
+		if got, want := conjc64(val), complex64(cmplx.Conj(complex128(val))); got != want {
+			t.Errorf("conjc64: values do not match: expected %6.4f got %6.4f", want, got)
 		}
-		if got, want := complx(&valf32, &valf32).(complex64), complex64(complex(float64(valf32), float64(valf32))); got != want {
-			t.Errorf("complx: *float32 values do not match: expected %6.4f got %6.4f", want, got)
+	}
+}
+
+func TestConjc128(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		mult := 1
+		if i%2 == 0 {
+			mult = -1
 		}
-		if got, want := complx(valf64, valf64).(complex128), complex(valf64, valf64); got != want {
-			t.Errorf("complx: float64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := complx(&valf64, &valf64).(complex128), complex(valf64, valf64); got != want {
-			t.Errorf("complx: *float64 values do not match: expected %6.4f got %6.4f", want, got)
+		val := complex(-0.25*float64(i*mult), 0.25*float64(i*mult))
+		if got, want := conjc128(val), cmplx.Conj(val); got != want {
+			t.Errorf("conjc128: values do not match: expected %6.4f got %6.4f", want, got)
 		}
 	}
 }
@@ -120,29 +142,6 @@ func TestExpf32(t *testing.T) {
 		valf32 := 0.25 * float32(i*mult)
 		if got, want := expf32(valf32), float32(math.Exp(float64(valf32))); got != want {
 			t.Errorf("expf32: values do not match: expected %6.4f got %6.4f", want, got)
-		}
-	}
-}
-
-func TestIm(t *testing.T) {
-	for i := 0; i < 100; i++ {
-		mult := 1
-		if i%2 == 0 {
-			mult = -1
-		}
-		valc64 := complex(-0.25*float32(i*mult), 0.25*float32(i*mult))
-		valc128 := complex(-0.25*float64(i*mult), 0.25*float64(i*mult))
-		if got, want := im(valc64).(float32), imag(valc64); got != want {
-			t.Errorf("im: complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := im(&valc64).(float32), imag(valc64); got != want {
-			t.Errorf("im: *complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := im(valc128).(float64), imag(valc128); got != want {
-			t.Errorf("im: complex128 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := im(&valc128).(float64), imag(valc128); got != want {
-			t.Errorf("im: *complex128 values do not match: expected %6.4f got %6.4f", want, got)
 		}
 	}
 }
@@ -260,29 +259,6 @@ func TestPowint(t *testing.T) {
 			if got, want := powint(i, j), int(math.Pow(float64(i), float64(j))); got != want {
 				t.Errorf("powint: values do not match: expected %d got %d", want, got)
 			}
-		}
-	}
-}
-
-func TestRe(t *testing.T) {
-	for i := 0; i < 100; i++ {
-		mult := 1
-		if i%2 == 0 {
-			mult = -1
-		}
-		valc64 := complex(-0.25*float32(i*mult), 0.25*float32(i*mult))
-		valc128 := complex(-0.25*float64(i*mult), 0.25*float64(i*mult))
-		if got, want := re(valc64).(float32), real(valc64); got != want {
-			t.Errorf("re: complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := re(&valc64).(float32), real(valc64); got != want {
-			t.Errorf("re: *complex64 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := re(valc128).(float64), real(valc128); got != want {
-			t.Errorf("re: complex128 values do not match: expected %6.4f got %6.4f", want, got)
-		}
-		if got, want := re(&valc128).(float64), real(valc128); got != want {
-			t.Errorf("re: *complex128 values do not match: expected %6.4f got %6.4f", want, got)
 		}
 	}
 }

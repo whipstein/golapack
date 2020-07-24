@@ -1,6 +1,6 @@
 package golapack
 
-// Sasum ...
+// Zscal ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,13 +10,14 @@ package golapack
 //  Definition:
 //  ===========
 //
-//       REAL FUNCTION SASUM(N,SX,INCX)
+//       SUBROUTINE ZSCAL(N,ZA,ZX,INCX)
 //
 //       .. Scalar Arguments ..
+//       COMPLEX*16 ZA
 //       INTEGER INCX,N
 //       ..
 //       .. Array Arguments ..
-//       REAL SX(*)
+//       COMPLEX*16 ZX(*)
 //       ..
 //
 //
@@ -25,8 +26,7 @@ package golapack
 //
 // \verbatim
 //
-//    SASUM takes the sum of the absolute values.
-//    uses unrolled loops for increment equal to one.
+//    ZSCAL scales a vector by a constant.
 // \endverbatim
 //
 //  Arguments:
@@ -38,15 +38,21 @@ package golapack
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] SX
+// \param[in] ZA
 // \verbatim
-//          SX is REAL array, dimension ( 1 + ( N - 1 )*absf32( INCX ) )
+//          ZA is COMPLEX*16
+//           On entry, ZA specifies the scalar alpha.
+// \endverbatim
+//
+// \param[in,out] ZX
+// \verbatim
+//          ZX is COMPLEX*16 array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 // \endverbatim
 //
 // \param[in] INCX
 // \verbatim
 //          INCX is INTEGER
-//         storage spacing between elements of SX
+//         storage spacing between elements of ZX
 // \endverbatim
 //
 //  Authors:
@@ -59,43 +65,31 @@ package golapack
 //
 // \date November 2017
 //
-// \ingroup single_blas_level1
+// \ingroup complex16_blas_level1
 //
 // \par Further Details:
 //  =====================
 //
 // \verbatim
 //
-//     jack dongarra, linpack, 3/11/78.
+//     jack dongarra, 3/11/78.
 //     modified 3/93 to return if incx .le. 0.
 //     modified 12/3/93, array(1) declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Sasum(n *int, sx *[]float32, sxoff, incx *int) (sasumReturn float32) {
-	var i, m, mp1, nincx int
+func Zscal(n *int, za *complex128, zx *[]complex128, zxoff, incx *int) {
+	var i, nincx int
 
 	if (*n) <= 0 || (*incx) <= 0 {
 		return
 	}
 	if (*incx) == 1 {
+		//
 		//        code for increment equal to 1
 		//
-		//
-		//        clean-up loop
-		//
-		m = modint(*n, int(6))
-		if m != 0 {
-			for i = 1; i <= m; i++ {
-				sasumReturn = sasumReturn + absf32((*sx)[i-1+(*sxoff)])
-			}
-			if (*n) < 6 {
-				return
-			}
-		}
-		mp1 = m + 1
-		for i = mp1; i <= (*n); i += 6 {
-			sasumReturn = sasumReturn + absf32((*sx)[i-1+(*sxoff)]) + absf32((*sx)[i+1-1+(*sxoff)]) + absf32((*sx)[i+2-1+(*sxoff)]) + absf32((*sx)[i+3-1+(*sxoff)]) + absf32((*sx)[i+4-1+(*sxoff)]) + absf32((*sx)[i+5-1+(*sxoff)])
+		for i = 1; i <= (*n); i++ {
+			(*zx)[i-1+(*zxoff)] = (*za) * (*zx)[i-1+(*zxoff)]
 		}
 	} else {
 		//
@@ -103,8 +97,7 @@ func Sasum(n *int, sx *[]float32, sxoff, incx *int) (sasumReturn float32) {
 		//
 		nincx = (*n) * (*incx)
 		for i = 1; i <= nincx; i += (*incx) {
-			sasumReturn = sasumReturn + absf32((*sx)[i-1+(*sxoff)])
+			(*zx)[i-1+(*zxoff)] = (*za) * (*zx)[i-1+(*zxoff)]
 		}
 	}
-	return
 }

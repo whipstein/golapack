@@ -1,6 +1,6 @@
 package golapack
 
-// Sasum ...
+// Izamax ...
 //
 //  =========== DOCUMENTATION ===========
 //
@@ -10,13 +10,13 @@ package golapack
 //  Definition:
 //  ===========
 //
-//       REAL FUNCTION SASUM(N,SX,INCX)
+//       INTEGER FUNCTION IZAMAX(N,ZX,INCX)
 //
 //       .. Scalar Arguments ..
 //       INTEGER INCX,N
 //       ..
 //       .. Array Arguments ..
-//       REAL SX(*)
+//       COMPLEX*16 ZX(*)
 //       ..
 //
 //
@@ -25,8 +25,7 @@ package golapack
 //
 // \verbatim
 //
-//    SASUM takes the sum of the absolute values.
-//    uses unrolled loops for increment equal to one.
+//    IZAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
 // \endverbatim
 //
 //  Arguments:
@@ -38,15 +37,15 @@ package golapack
 //         number of elements in input vector(s)
 // \endverbatim
 //
-// \param[in] SX
+// \param[in] ZX
 // \verbatim
-//          SX is REAL array, dimension ( 1 + ( N - 1 )*absf32( INCX ) )
+//          ZX is COMPLEX*16 array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 // \endverbatim
 //
 // \param[in] INCX
 // \verbatim
 //          INCX is INTEGER
-//         storage spacing between elements of SX
+//         storage spacing between elements of ZX
 // \endverbatim
 //
 //  Authors:
@@ -59,51 +58,55 @@ package golapack
 //
 // \date November 2017
 //
-// \ingroup single_blas_level1
+// \ingroup aux_blas
 //
 // \par Further Details:
 //  =====================
 //
 // \verbatim
 //
-//     jack dongarra, linpack, 3/11/78.
+//     jack dongarra, 1/15/85.
 //     modified 3/93 to return if incx .le. 0.
 //     modified 12/3/93, array(1) declarations changed to array(*)
 // \endverbatim
 //
 //  =====================================================================
-func Sasum(n *int, sx *[]float32, sxoff, incx *int) (sasumReturn float32) {
-	var i, m, mp1, nincx int
+func Izamax(n *int, zx *[]complex128, zxoff, incx *int) (izamaxReturn int) {
+	var dmax float64
+	var i, ix int
 
-	if (*n) <= 0 || (*incx) <= 0 {
+	izamaxReturn = 0
+	if (*n) < 1 || (*incx) <= 0 {
+		return
+	}
+	izamaxReturn = 1
+	if (*n) == 1 {
 		return
 	}
 	if (*incx) == 1 {
+		//
 		//        code for increment equal to 1
 		//
-		//
-		//        clean-up loop
-		//
-		m = modint(*n, int(6))
-		if m != 0 {
-			for i = 1; i <= m; i++ {
-				sasumReturn = sasumReturn + absf32((*sx)[i-1+(*sxoff)])
+		dmax = abssumc128((*zx)[0+(*zxoff)])
+		for i = 2; i <= (*n); i++ {
+			if abssumc128((*zx)[i-1+(*zxoff)]) > dmax {
+				izamaxReturn = i
+				dmax = abssumc128((*zx)[i-1+(*zxoff)])
 			}
-			if (*n) < 6 {
-				return
-			}
-		}
-		mp1 = m + 1
-		for i = mp1; i <= (*n); i += 6 {
-			sasumReturn = sasumReturn + absf32((*sx)[i-1+(*sxoff)]) + absf32((*sx)[i+1-1+(*sxoff)]) + absf32((*sx)[i+2-1+(*sxoff)]) + absf32((*sx)[i+3-1+(*sxoff)]) + absf32((*sx)[i+4-1+(*sxoff)]) + absf32((*sx)[i+5-1+(*sxoff)])
 		}
 	} else {
 		//
 		//        code for increment not equal to 1
 		//
-		nincx = (*n) * (*incx)
-		for i = 1; i <= nincx; i += (*incx) {
-			sasumReturn = sasumReturn + absf32((*sx)[i-1+(*sxoff)])
+		ix = 1
+		dmax = abssumc128((*zx)[0+(*zxoff)])
+		ix = ix + (*incx)
+		for i = 2; i <= (*n); i++ {
+			if abssumc128((*zx)[ix-1+(*zxoff)]) > dmax {
+				izamaxReturn = i
+				dmax = abssumc128((*zx)[ix-1+(*zxoff)])
+			}
+			ix = ix + (*incx)
 		}
 	}
 	return

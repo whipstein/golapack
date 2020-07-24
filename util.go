@@ -1,18 +1,12 @@
 package golapack
 
 type memory struct {
-	combla struct {
-		icase int
-		n     int
-		incx  int
-		incy  int
-		off   int
-		pass  bool
-	}
 	begc struct {
 		mi int
+		mj int
 		ic int
 		i  int
+		j  int
 	}
 }
 
